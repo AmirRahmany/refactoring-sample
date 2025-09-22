@@ -28,6 +28,8 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<junit.version>5.10.0</junit.version>
+		<jgiven.version>1.2.3</jgiven.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -103,7 +105,30 @@
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- JGiven Core -->
+		<dependency>
+			<groupId>com.tngtech.jgiven</groupId>
+			<artifactId>jgiven-core</artifactId>
+			<version>${jgiven.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- JGiven JUnit 5 Support -->
+		<dependency>
+			<groupId>com.tngtech.jgiven</groupId>
+			<artifactId>jgiven-junit5</artifactId>
+			<version>${jgiven.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>5.20.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

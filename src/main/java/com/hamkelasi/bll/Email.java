@@ -46,7 +46,7 @@ public class Email {
     public int send() {
         Validation validation = new Validation();
 
-        if (validation.emailValidator(this.to)) {
+        if (validation.isEmailValid(this.to)) {
             try {
                 String fromEmail = EmailSettings.getDefault().getEmailAddress();
                 String host = EmailSettings.getDefault().getEmailHost();

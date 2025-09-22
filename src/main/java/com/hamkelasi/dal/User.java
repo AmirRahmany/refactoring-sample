@@ -1,14 +1,11 @@
 package com.hamkelasi.dal;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-
 import java.sql.Types;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class User extends Base {
+public class User extends Base{
 
     public boolean add(String username, String password, String firstname, String lastname, String profilePicture,
                        String email, String website, int permission, LocalDateTime registerDate, boolean isPMActive) {

@@ -1,0 +1,637 @@
+{
+  "className": "com.hamkelasi.bll.unit.when_registering_user",
+  "name": "when _registering _user",
+  "scenarios": [
+    {
+      "className": "com.hamkelasi.bll.unit.when_registering_user",
+      "testMethodName": "every_user_signup_with_unique_email",
+      "description": "every user signup with unique email",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [],
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "there is a user with email",
+              "words": [
+                {
+                  "value": "Given",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "there is a user with email"
+                },
+                {
+                  "value": "test@example.com",
+                  "argumentInfo": {
+                    "argumentName": "email",
+                    "formattedValue": "test@example.com"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 312597800,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "someone validates the registration",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "someone validates the registration"
+                },
+                {
+                  "value": "Admin",
+                  "argumentInfo": {
+                    "argumentName": "username",
+                    "formattedValue": "Admin"
+                  }
+                },
+                {
+                  "value": "test@example.com",
+                  "argumentInfo": {
+                    "argumentName": "email",
+                    "formattedValue": "test@example.com"
+                  }
+                },
+                {
+                  "value": "www.google.com",
+                  "argumentInfo": {
+                    "argumentName": "website",
+                    "formattedValue": "www.google.com"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 37598000,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "he should be get duplicate email error",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "he should be get duplicate email error"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 219958100,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [],
+          "status": "SUCCESS",
+          "durationInNanos": 694849000
+        }
+      ],
+      "casesAsTable": false,
+      "durationInNanos": 694849000
+    },
+    {
+      "className": "com.hamkelasi.bll.unit.when_registering_user",
+      "testMethodName": "every_user_signup_with_unique_username",
+      "description": "every user signup with unique username",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [],
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "there is a user with username",
+              "words": [
+                {
+                  "value": "Given",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "there is a user with username"
+                },
+                {
+                  "value": "hasan",
+                  "argumentInfo": {
+                    "argumentName": "username",
+                    "formattedValue": "hasan"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 3491300,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "someone validates the registration",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "someone validates the registration"
+                },
+                {
+                  "value": "hasan",
+                  "argumentInfo": {
+                    "argumentName": "username",
+                    "formattedValue": "hasan"
+                  }
+                },
+                {
+                  "value": "email@example.com",
+                  "argumentInfo": {
+                    "argumentName": "email",
+                    "formattedValue": "email@example.com"
+                  }
+                },
+                {
+                  "value": "www.google.com",
+                  "argumentInfo": {
+                    "argumentName": "website",
+                    "formattedValue": "www.google.com"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 2613500,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "he should be get duplicate username error",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "he should be get duplicate username error"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 1129100,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [],
+          "status": "SUCCESS",
+          "durationInNanos": 15316400
+        }
+      ],
+      "casesAsTable": false,
+      "durationInNanos": 15316400
+    },
+    {
+      "className": "com.hamkelasi.bll.unit.when_registering_user",
+      "testMethodName": "every_user_signup_with_valid_website_if_they_have",
+      "description": "every user signup with valid website if they have",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [
+        "website"
+      ],
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "someone validates the registration",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "someone validates the registration"
+                },
+                {
+                  "value": "Admin",
+                  "argumentInfo": {
+                    "argumentName": "username",
+                    "formattedValue": "Admin"
+                  }
+                },
+                {
+                  "value": "email@example.com",
+                  "argumentInfo": {
+                    "argumentName": "email",
+                    "formattedValue": "email@example.com"
+                  }
+                },
+                {
+                  "value": "example",
+                  "argumentInfo": {
+                    "parameterName": "website",
+                    "argumentName": "website",
+                    "formattedValue": "example"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 6001900,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "he should be get invalid website format error",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "he should be get invalid website format error"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 1311100,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [
+            "example"
+          ],
+          "status": "SUCCESS",
+          "durationInNanos": 32739600
+        },
+        {
+          "caseNr": 2,
+          "steps": [
+            {
+              "name": "someone validates the registration",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "someone validates the registration"
+                },
+                {
+                  "value": "Admin",
+                  "argumentInfo": {
+                    "argumentName": "username",
+                    "formattedValue": "Admin"
+                  }
+                },
+                {
+                  "value": "email@example.com",
+                  "argumentInfo": {
+                    "argumentName": "email",
+                    "formattedValue": "email@example.com"
+                  }
+                },
+                {
+                  "value": "http://example.com",
+                  "argumentInfo": {
+                    "parameterName": "website",
+                    "argumentName": "website",
+                    "formattedValue": "http://example.com"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 3135000,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "he should be get invalid website format error",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "he should be get invalid website format error"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 881600,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [
+            "http://example.com"
+          ],
+          "status": "SUCCESS",
+          "durationInNanos": 4838800
+        }
+      ],
+      "casesAsTable": true,
+      "durationInNanos": 37578400
+    },
+    {
+      "className": "com.hamkelasi.bll.unit.when_registering_user",
+      "testMethodName": "every_user_signup_with_valid_email",
+      "description": "every user signup with valid email",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [],
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "someone validates the registration",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "someone validates the registration"
+                },
+                {
+                  "value": "Admin",
+                  "argumentInfo": {
+                    "argumentName": "username",
+                    "formattedValue": "Admin"
+                  }
+                },
+                {
+                  "value": "example.com",
+                  "argumentInfo": {
+                    "argumentName": "email",
+                    "formattedValue": "example.com"
+                  }
+                },
+                {
+                  "value": "www.google.com",
+                  "argumentInfo": {
+                    "argumentName": "website",
+                    "formattedValue": "www.google.com"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 3448100,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "he should be get invalid email format error",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "he should be get invalid email format error"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 914200,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [],
+          "status": "SUCCESS",
+          "durationInNanos": 5584200
+        }
+      ],
+      "casesAsTable": false,
+      "durationInNanos": 5584200
+    },
+    {
+      "className": "com.hamkelasi.bll.unit.when_registering_user",
+      "testMethodName": "user_can_be_pass_empty_and_null_website_and_registration_gets_validated",
+      "description": "user can be pass empty and null website and registration gets validated",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [
+        "website"
+      ],
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "someone validates the registration",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "someone validates the registration"
+                },
+                {
+                  "value": "Admin",
+                  "argumentInfo": {
+                    "argumentName": "username",
+                    "formattedValue": "Admin"
+                  }
+                },
+                {
+                  "value": "email@example.com",
+                  "argumentInfo": {
+                    "argumentName": "email",
+                    "formattedValue": "email@example.com"
+                  }
+                },
+                {
+                  "value": "null",
+                  "argumentInfo": {
+                    "parameterName": "website",
+                    "argumentName": "website",
+                    "formattedValue": "null"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 2728900,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "he should be registered successfully",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "he should be registered successfully"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 972900,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [
+            "null"
+          ],
+          "status": "SUCCESS",
+          "durationInNanos": 4913100
+        },
+        {
+          "caseNr": 2,
+          "steps": [
+            {
+              "name": "someone validates the registration",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "someone validates the registration"
+                },
+                {
+                  "value": "Admin",
+                  "argumentInfo": {
+                    "argumentName": "username",
+                    "formattedValue": "Admin"
+                  }
+                },
+                {
+                  "value": "email@example.com",
+                  "argumentInfo": {
+                    "argumentName": "email",
+                    "formattedValue": "email@example.com"
+                  }
+                },
+                {
+                  "value": "",
+                  "argumentInfo": {
+                    "parameterName": "website",
+                    "argumentName": "website",
+                    "formattedValue": ""
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 2712300,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "he should be registered successfully",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "he should be registered successfully"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 815900,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [
+            ""
+          ],
+          "status": "SUCCESS",
+          "durationInNanos": 4357900
+        }
+      ],
+      "casesAsTable": true,
+      "durationInNanos": 9271000
+    },
+    {
+      "className": "com.hamkelasi.bll.unit.when_registering_user",
+      "testMethodName": "user_can_be_pass_empty_website_and_registration_gets_validated",
+      "description": "user can be pass empty website and registration gets validated",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [],
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "someone validates the registration",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "someone validates the registration"
+                },
+                {
+                  "value": "Admin",
+                  "argumentInfo": {
+                    "argumentName": "username",
+                    "formattedValue": "Admin"
+                  }
+                },
+                {
+                  "value": "email@example.com",
+                  "argumentInfo": {
+                    "argumentName": "email",
+                    "formattedValue": "email@example.com"
+                  }
+                },
+                {
+                  "value": "www.yahoo.com",
+                  "argumentInfo": {
+                    "argumentName": "website",
+                    "formattedValue": "www.yahoo.com"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 7264400,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "he should be registered successfully",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "he should be registered successfully"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 1977500,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [],
+          "status": "SUCCESS",
+          "durationInNanos": 10784000
+        }
+      ],
+      "casesAsTable": false,
+      "durationInNanos": 10784000
+    }
+  ],
+  "tagMap": {}
+}

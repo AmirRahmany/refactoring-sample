@@ -1,13 +1,17 @@
 package com.hamkelasi.bll;
 
+import com.hamkelasi.bll.refactored.UserValidationResults;
+import com.hamkelasi.dal.refactored.AdoUserRepository;
+import com.hamkelasi.dal.refactored.UserRepository;
 import com.hamkelasi.dal.Base;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static com.hamkelasi.bll.refactored.UserValidationResults.*;
 
 public class User {
     //regionClassProperties
@@ -22,6 +26,8 @@ public class User {
     private int permission;
     private LocalDateTime registerDate;
     private boolean isPmActivate;
+    private UserRepository userRepository;
+
 
     public int getId() {
         return id;
@@ -113,7 +119,11 @@ public class User {
     //endregion
 
     public User() {
+        this.userRepository = new AdoUserRepository();
+    }
 
+    public User(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public User(int id) {
@@ -130,7 +140,7 @@ public class User {
         this.email = dt.getFirst().get("email").toString();
         this.website = dt.getFirst().get("website").toString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.S]");
-        this.registerDate = LocalDateTime.parse(dt.getFirst().get("registerDate").toString(),formatter);
+        this.registerDate = LocalDateTime.parse(dt.getFirst().get("registerDate").toString(), formatter);
         this.isPmActivate = Boolean.parseBoolean(dt.getFirst().get("isPmActivate").toString());
     }
 
@@ -255,115 +265,97 @@ public class User {
 
     public int isValid(String username, String email, String website) {
         Validation validator = new Validation();
-        final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
-        int retValue = 0;
 
-        if (user.getUserCountByEmail(email) != 0) {
+        if (userRepository.getUserCountByEmail(email) != 0) return EMAIL_IS_DUPLICATED;
+        if (userRepository.getUserCountByUsername(username) != 0) return USERNAME_IS_DUPLICATED;
+        if (validator.isEmailNotValid(email)) return INVALID_EMAIL_FORMAT;
+        if (website != null && !website.isEmpty() && validator.isUrlNotValid(website)) return INVALID_WEBSITE_FORMAT;
+
+        return UserValidationResults.SUCCESSFUL;
+}
+
+public int isUpdateValid(String oldUsername, String newUsername, String oldEmail, String newEmail, String website) {
+    Validation validator = new Validation();
+    final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
+    int retValue = 0;
+
+    if (!oldEmail.equals(newEmail)) {
+        if (user.getUserCountByEmail(newEmail) != 0) {
             retValue = 1; //ایمیل تکراری است
         }
+    }
 
-        if (retValue == 0 && user.getUserCountByUsername(username) != 0) {
+    if (!oldUsername.equals(newUsername)) {
+        if (retValue == 0 && user.getUserCountByUsername(newUsername) != 0) {
             retValue = 2; //نام کاربری تکراری است
         }
+    }
 
-        if (retValue == 0 && !validator.emailValidator(email)) {
-            retValue = 3; //فرمت ایمیل اشتباه است
-        }
+    if (retValue == 0 && validator.isEmailValid(newEmail) == false) {
+        retValue = 3; //فرمت ایمیل اشتباه است
+    }
 
-        if (retValue == 0) {
-            if (website != null && !website.equals("")) {
-                if (!validator.urlValidator(website)) {
-                    retValue = 4; //فرمت وب سایت اشتباه است
-                }
+    if (retValue == 0) {
+        if (!website.equals("")) {
+            if (validator.isUrlValid(website) == false) {
+                retValue = 4; //فرمت وب سایت اشتباه است
             }
         }
-
-        return retValue;
     }
 
-    public int isUpdateValid(String oldUsername, String newUsername, String oldEmail, String newEmail, String website) {
-        Validation validator = new Validation();
-        final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
-        int retValue = 0;
+    return retValue;
+}
 
-        if (!oldEmail.equals(newEmail)) {
-            if (user.getUserCountByEmail(newEmail) != 0) {
-                retValue = 1; //ایمیل تکراری است
-            }
-        }
+public List<User> getOrderedList() {
+    List<User> userList = new ArrayList<User>();
 
-        if (!oldUsername.equals(newUsername)) {
-            if (retValue == 0 && user.getUserCountByUsername(newUsername) != 0) {
-                retValue = 2; //نام کاربری تکراری است
-            }
-        }
+    final List<Base.Row> dt = new com.hamkelasi.dal.User().getOrderedListID();// Assuming returns List<Integer>
 
-        if (retValue == 0 && validator.emailValidator(newEmail) == false) {
-            retValue = 3; //فرمت ایمیل اشتباه است
-        }
-
-        if (retValue == 0) {
-            if (!website.equals("")) {
-                if (validator.urlValidator(website) == false) {
-                    retValue = 4; //فرمت وب سایت اشتباه است
-                }
-            }
-        }
-
-        return retValue;
+    for (int i = 0; i < dt.size(); i++) {
+        int id = Integer.parseInt(dt.get(i).get("id").toString());
+        User tempUser = new User(id);
+        userList.add(tempUser);
     }
 
-    public List<User> getOrderedList() {
-        List<User> userList = new ArrayList<User>();
+    return userList;
+}
 
-        final List<Base.Row> dt = new com.hamkelasi.dal.User().getOrderedListID();// Assuming returns List<Integer>
-
-        for (int i = 0; i < dt.size(); i++) {
-            int id = Integer.parseInt(dt.get(i).get("id").toString());
-            User tempUser = new User(id);
-            userList.add(tempUser);
-        }
-
-        return userList;
+public List<User> getListByType(int typeId) {
+    final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
+    // Assuming returns List<User> directly
+    final List<Base.Row> dt = user.getListByType(typeId);
+    List<User> userlist = new ArrayList<>();
+    for (int i = 0; i < dt.size(); i++) {
+        int tempid = Integer.parseInt(dt.get(i).get("id").toString());
+        User temp = new User(tempid);
+        userlist.add(temp);
     }
+    return userlist;
+}
 
-    public List<User> getListByType(int typeId) {
-        final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
-        // Assuming returns List<User> directly
-        final List<Base.Row> dt = user.getListByType(typeId);
-        List<User> userlist = new ArrayList<>();
-        for (int i = 0; i < dt.size(); i++)
-        {
-            int tempid = Integer.parseInt(dt.get(i).get("id").toString());
-            User temp = new User(tempid);
-            userlist.add(temp);
-        }
-        return userlist;
+public int getPostCount(int userID) {
+    final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
+    int count = user.getTextPostCount(userID);
+    return count;
+}
+
+public int getPostCount(int userID, Date start, Date end) {
+    final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
+    int count = user.getTextPostCount(userID, start, end);
+    return count;
+}
+
+public List<User> getRegisteredList(Date startDate, Date endDate) {
+    final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
+    // Assuming returns List<Integer> IDs
+    final List<Base.Row> dt = user.getRegisteredList(startDate, endDate);
+    List<User> userList = new ArrayList<>();
+
+    for (int i = 0; i < dt.size(); i++) {
+        int userId = Integer.parseInt(dt.get(i).get("id").toString());
+        User tempUser = new User(userId);
+        userList.add(tempUser);
     }
-
-    public int getPostCount(int userID) {
-        final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
-        int count = user.getTextPostCount(userID);
-        return count;
-    }
-
-    public int getPostCount(int userID, Date start, Date end) {
-        final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
-        int count = user.getTextPostCount(userID, start, end);
-        return count;
-    }
-
-    public List<User> getRegisteredList(Date startDate, Date endDate) {
-        final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
-        // Assuming returns List<Integer> IDs
-        final List<Base.Row> dt = user.getRegisteredList(startDate, endDate);
-        List<User> userList = new ArrayList<>();
-
-        for (int i = 0; i < dt.size(); i++) {
-            int userId = Integer.parseInt(dt.get(i).get("id").toString());
-            User tempUser = new User(userId);
-            userList.add(tempUser);
-        }
-        return userList;
-    }
+    return userList;
+}
 }

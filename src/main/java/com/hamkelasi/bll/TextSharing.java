@@ -1,11 +1,9 @@
 package com.hamkelasi.bll;
 
 import com.hamkelasi.dal.Base;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class TextSharing {
@@ -70,7 +68,7 @@ public class TextSharing {
         }
 
         if (this.url != null && !this.url.isEmpty()) {
-            if (!validation.urlValidator(this.url)) {
+            if (!validation.isUrlValid(this.url)) {
                 valid = false;
             }
         }
