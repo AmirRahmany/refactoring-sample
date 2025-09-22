@@ -1,6 +1,7 @@
 package com.hamkelasi.bll;
 
 import com.hamkelasi.dal.Base;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -85,7 +86,7 @@ public class TextSharing {
         com.hamkelasi.dal.TextSharing newPost = new com.hamkelasi.dal.TextSharing();
         int lastId = getLastId();
         lastId++;
-        boolean isInsert = newPost.insert(lastId, userId, schoolYearId, text, url, postDate);
+        boolean isInsert = newPost.insert(userId, schoolYearId, text, url, postDate);
 
         if (isInsert) {
             return 1; // ثبت داده با موفقیت انجام شد

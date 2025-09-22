@@ -31,6 +31,7 @@ public class SchoolRegistration {
     }
 
     public SchoolRegistration() {
+
     }
 
     public SchoolRegistration(int id, int userId, int schoolYearId) {
@@ -43,7 +44,7 @@ public class SchoolRegistration {
         com.hamkelasi.dal.SchoolRegistration registration = new com.hamkelasi.dal.SchoolRegistration();
         this.id = registration.getLastID();
 
-        boolean retVal = registration.add(this.id, this.userId, this.schoolYearId);
+        boolean retVal = registration.add(this.userId, this.schoolYearId);
 
         if (retVal) {
             return 1; // ثبت داده با موفقیت انجام گردید

@@ -1,7 +1,9 @@
 package com.hamkelasi.bll;
 
 import com.hamkelasi.dal.Base;
+import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,8 +16,10 @@ public class Message {
     private int receiverUser;
     private String subject;
     private String text;
-    private Date date;
+    private LocalDateTime date;
     private MessageStatus status;
+
+
 
     // Getters and Setters
     public int getId() {
@@ -54,11 +58,11 @@ public class Message {
         this.text = text;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -83,7 +87,7 @@ public class Message {
             this.receiverUser = Integer.parseInt(dt.get(0).get("toUser").toString());
             this.subject = dt.get(0).get("subject").toString();
             this.text = dt.get(0).get("pmText").toString();
-            this.date = new Date(Long.parseLong(dt.get(0).get("SendDate").toString()));
+            this.date = LocalDateTime.parse(dt.get(0).get("SendDate").toString());
             this.status = MessageStatus.fromValue(Integer.parseInt(dt.get(0).get("Status").toString()));
         } else {
             this.id = -1;
@@ -129,7 +133,7 @@ public class Message {
         return add(this.receiverUser, this.senderUser, this.date, this.text, this.subject);
     }
 
-    public int add(int receiverId, int senderId, Date date, String text, String subject) {
+    public int add(int receiverId, int senderId, LocalDateTime date, String text, String subject) {
         com.hamkelasi.dal.Message dalMessage = new com.hamkelasi.dal.Message();
         boolean isAdd = dalMessage.add(receiverId, senderId, date, text, subject);
 

@@ -4,45 +4,39 @@ import java.sql.Types;
 import java.util.List;
 
 public class Province extends Base {
+
     public boolean add(String provinceName) {
-        Object last = executeScalar(Types.INTEGER, "{ call province_GetLastID() }");
-        int lastId = (last instanceof Number) ? ((Number) last).intValue() : 0;
-        lastId++;
-        return executeNonQuery(Types.NULL, "{ call province_AddProvince(?,?) }",
-                SqlParameter.in(1, Types.INTEGER, lastId),
-                SqlParameter.in(2, Types.VARCHAR, provinceName));
+        Integer lastId = jdbcTemplate.queryForObject("SELECT MAX(ID) FROM Province", Integer.class);
+        int id = (lastId == null) ? 1 : lastId + 1;
+        return jdbcTemplate.update("INSERT INTO Province (ID, ProvinceName) VALUES (?, ?)",
+                id, provinceName) > 0;
     }
 
     public boolean update(int id, String provinceName) {
-        return executeNonQuery(Types.NULL, "{ call province_UpdateProvince(?,?) }",
-                SqlParameter.in(1, Types.INTEGER, id),
-                SqlParameter.in(2, Types.VARCHAR, provinceName));
+        return jdbcTemplate.update("UPDATE Province SET ProvinceName = ? WHERE ID = ?",
+                provinceName, id) > 0;
     }
 
     public boolean delete(int id) {
-        return executeNonQuery(Types.NULL, "{ call province_DeleteProvince(?) }",
-                SqlParameter.in(1, Types.INTEGER, id));
+        return jdbcTemplate.update("DELETE FROM Province WHERE ID = ?",
+                id) > 0;
     }
 
     public List<Row> getList() {
-        return executeSelect(Types.NULL, "{ call province_GetList() }");
+        return executeQuery("SELECT * FROM Province", null);
     }
 
     public int getCount() {
-        Object count = executeScalar(Types.INTEGER, "{ call province_GetCount() }");
-        return count == null ? 0 : ((Number) count).intValue();
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Province", Integer.class);
     }
 
     public int getCountByName(String provinceName) {
-        Object count = executeScalar(Types.INTEGER, "{ call province_GetProvinceCountByName(?) }",
-                SqlParameter.in(1, Types.VARCHAR, provinceName));
-        return count == null ? 0 : ((Number) count).intValue();
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Province WHERE ProvinceName = ?",
+                new Object[]{provinceName}, new int[]{Types.VARCHAR}, Integer.class);
     }
 
     public List<Row> get(int id) {
-        return executeSelect(Types.NULL, "{ call province_Get(?) }",
+        return executeSelect(Types.NULL, "SELECT * FROM Province WHERE ID = ?",
                 SqlParameter.in(1, Types.INTEGER, id));
     }
 }
-
-

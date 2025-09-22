@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>صندوق ارسال</title>
+    <style>
+        #page { width: 100%; max-width: 960px; margin: 0 auto; }
+        #content { float: left; width: 70%; }
+        .post { margin-bottom: 20px; }
+        .title { font-size: 24px; text-align: right; }
+        .entry { padding: 10px; }
+        .errorBig { color: red; font-size: 16px; text-align: center; display: block; margin: 10px 0; }
+
+        /* Table Styles */
+        .TableResult {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-family: Tahoma, sans-serif;
+            text-align: right;
+            direction: rtl;
+        }
+
+        .TableResult .headerRow {
+            background-color: #2e5cb8;
+            color: white;
+            font-weight: bold;
+        }
+
+        .TableResult th, .TableResult td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+
+        .TableResult tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .TableResult tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        .TableResult tr:last-of-type {
+            border-bottom: 2px solid #2e5cb8;
+        }
+
+        .TableResult tr:hover {
+            background-color: #e9f0ff;
+        }
+
+        .action-button {
+            background-color: #2e5cb8;
+            color: white;
+            padding: 6px 12px;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .action-button:hover {
+            background-color: #1e4080;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .pagination {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .pagination a {
+            color: #2e5cb8;
+            padding: 8px 16px;
+            text-decoration: none;
+            border: 1px solid #ddd;
+            margin: 0 4px;
+            border-radius: 4px;
+        }
+
+        .pagination a.active {
+            background-color: #2e5cb8;
+            color: white;
+            border: 1px solid #2e5cb8;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div id="page">
+    <div id="content">
+        <div class="post">
+            <h3 class="title">صندوق ارسال</h3>
+            <div class="entry">
+                <div th:if="${labelError != null and labelError != ''}"
+                     class="errorBig" th:text="${labelError}"></div>
+
+                <table class="TableResult" th:if="${not #lists.isEmpty(messages)}">
+                    <tr class="headerRow">
+                        <th>گیرنده</th>
+                        <th>موضوع</th>
+                        <th>تاریخ ارسال</th>
+                        <th>مشاهده</th>
+                    </tr>
+                    <tr th:each="message : ${messages}">
+                        <td th:text="${message.recipientName}">گیرنده</td>
+                        <td>
+                            <span th:if="${message.isRead}" th:text="${message.subject}">موضوع</span>
+                            <strong th:unless="${message.isRead}" th:text="${message.subject}">موضوع</strong>
+                        </td>
+                        <td th:text="${#temporals.format(message.sentDate, 'yyyy/MM/dd HH:mm')}">تاریخ ارسال</td>
+                        <td>
+                            <a th:href="@{/message/view/{id}(id=${message.id})}" class="action-button">مشاهده</a>
+                        </td>
+                    </tr>
+                </table>
+
+                <div th:if="${#lists.isEmpty(messages)}" class="empty-message">
+                    هیچ پیامی در صندوق ارسال وجود ندارد.
+                </div>
+
+                <div th:if="${totalPages > 1}" class="pagination">
+                    <a th:if="${currentPage > 1}" th:href="@{/outbox(page=${currentPage - 1})}">قبلی</a>
+
+                    <a th:each="i : ${#numbers.sequence(1, totalPages)}"
+                       th:href="@{/outbox(page=${i})}"
+                       th:text="${i}"
+                       th:classappend="${i == currentPage} ? 'active' : ''"></a>
+
+                    <a th:if="${currentPage < totalPages}" th:href="@{/outbox(page=${currentPage + 1})}">بعدی</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

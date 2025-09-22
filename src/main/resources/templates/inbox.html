@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle}">صندوق دریافت</title>
+    <style>
+        .TableResult { width: 100%; border-collapse: collapse; }
+        .TableResult th, .TableResult td { border: 1px solid #ddd; padding: 8px; text-align: right; }
+        .headerRow { background-color: #f2f2f2; }
+        .errorBig { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div th:replace="~{layout :: content}">
+    <div id="page">
+        <div id="content">
+            <div class="post">
+                <h3 class="title">صندوق دریافت</h3>
+                <div class="entry">
+                    <p th:if="${errorMessage}" class="errorBig" th:text="${errorMessage}"></p>
+                    <table class="TableResult">
+                        <thead>
+                        <tr class="headerRow">
+                            <th></th>
+                            <th>فرستنده</th>
+                            <th>موضوع</th>
+                            <th>تاریخ دریافت</th>
+                            <th>مشاهده</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="message : ${inboxMessages}">
+                            <td th:text="${message.status == 0} ? 'جدید' : ''"></td>
+                            <td th:text="${message.senderUsername}"></td>
+                            <td th:text="${message.subject}"></td>
+                            <td th:text="${message.sendDate}"></td>
+                            <td>
+                                <a th:href="@{/inbox/view(id=${message.id})}">مشاهده</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

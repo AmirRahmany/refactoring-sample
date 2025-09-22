@@ -1,6 +1,7 @@
 package com.hamkelasi.bll;
 
 import com.hamkelasi.dal.Base;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.ArrayList;
 import java.util.Date;

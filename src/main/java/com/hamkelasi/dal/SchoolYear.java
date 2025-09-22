@@ -1,32 +1,30 @@
 package com.hamkelasi.dal;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+
 import java.sql.Types;
 import java.util.List;
 
 public class SchoolYear extends Base {
+
     public List<Row> getSchoolYear(int schoolID, int yearID) {
-        return executeSelect(Types.NULL, "{ call schoolYear_Get(?,?) }",
+        return executeSelect(Types.NULL, "SELECT * FROM SchoolYear WHERE SchoolID = ? AND YearID = ?",
                 SqlParameter.in(1, Types.INTEGER, schoolID),
                 SqlParameter.in(2, Types.INTEGER, yearID));
     }
 
     public List<Row> getSchoolYear(int id) {
-        return executeSelect(Types.NULL, "{ call schoolYear_GetByID(?) }",
+        return executeSelect(Types.NULL, "SELECT * FROM SchoolYear WHERE ID = ?",
                 SqlParameter.in(1, Types.INTEGER, id));
     }
 
     public boolean add(int id, int schoolId, int yearId) {
-        return executeNonQuery(Types.NULL, "{ call schoolYear_Add(?,?,?) }",
-                SqlParameter.in(1, Types.INTEGER, id),
-                SqlParameter.in(2, Types.INTEGER, schoolId),
-                SqlParameter.in(3, Types.INTEGER, yearId));
+        return jdbcTemplate.update("INSERT INTO SchoolYear (ID, SchoolID, YearID) VALUES (?, ?, ?)",
+                id, schoolId, yearId) > 0;
     }
 
     public int getLastID() {
-        Object obj = executeScalar(Types.INTEGER, "{ call schoolYear_GetLastID() }");
-        int last = (obj instanceof Number) ? ((Number) obj).intValue() : 0;
-        return last + 1;
+        Integer last = jdbcTemplate.queryForObject("SELECT MAX(ID) FROM SchoolYear", Integer.class);
+        return (last == null) ? 1 : last + 1;
     }
 }
-
-

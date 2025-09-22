@@ -1,14 +1,15 @@
 package com.hamkelasi.bll;
 
 import com.hamkelasi.dal.Base;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-// Enum equivalent to C# FriendShipStatus
+// Enum equivalent to C# FriendshipStatus
 public class Friendship {
-    public void add(int userId, int friendId, FriendShipStatus friendshipStatus) {
+
+    public void add(int userId, int friendId, FriendshipStatus friendshipStatus) {
         com.hamkelasi.dal.Friendship friendship = new com.hamkelasi.dal.Friendship();
         int status = friendshipStatus.getValue();
         friendship.add(userId, friendId, status);
@@ -16,8 +17,8 @@ public class Friendship {
 
     public void confirmFriendship(int userId, int friendId) {
         com.hamkelasi.dal.Friendship friendship = new com.hamkelasi.dal.Friendship();
-        friendship.update(userId, friendId, FriendShipStatus.FRIEND.getValue());
-        friendship.update(friendId, userId, FriendShipStatus.FRIEND.getValue());
+        friendship.update(userId, friendId, FriendshipStatus.FRIEND.getValue());
+        friendship.update(friendId, userId, FriendshipStatus.FRIEND.getValue());
     }
 
     public List<User> getWaitingUsers(int userId) {
@@ -45,18 +46,18 @@ public class Friendship {
         return users;
     }
 
-    public FriendShipStatus getFriendshipStatus(int userId, int friendId) {
+    public FriendshipStatus getFriendshipStatus(int userId, int friendId) {
         com.hamkelasi.dal.Friendship friendship = new com.hamkelasi.dal.Friendship();
         int sts = friendship.getFriendshipStatus(userId, friendId);
 
         if (sts == 0) {
-            return FriendShipStatus.NOT_FRIEND;
+            return FriendshipStatus.NOT_FRIEND;
         } else if (sts == 1) {
-            return FriendShipStatus.FRIEND;
+            return FriendshipStatus.FRIEND;
         } else if (sts == 2) {
-            return FriendShipStatus.WAITING_FOR_RESPONSE;
+            return FriendshipStatus.WAITING_FOR_RESPONSE;
         } else {
-            return FriendShipStatus.WAITING_FOR_CONFIRM;
+            return FriendshipStatus.WAITING_FOR_CONFIRM;
         }
     }
 
@@ -72,7 +73,7 @@ public class Friendship {
         }
     }
 
-    public enum FriendShipStatus {
+    public enum FriendshipStatus {
         NOT_FRIEND(0),
         FRIEND(1),
         WAITING_FOR_RESPONSE(2),
@@ -80,7 +81,7 @@ public class Friendship {
 
         private final int value;
 
-        FriendShipStatus(int value) {
+        FriendshipStatus(int value) {
             this.value = value;
         }
 
@@ -89,13 +90,13 @@ public class Friendship {
         }
 
         // Convert integer to enum
-        public static FriendShipStatus fromValue(int value) {
-            for (FriendShipStatus status : FriendShipStatus.values()) {
+        public static FriendshipStatus fromValue(int value) {
+            for (FriendshipStatus status : FriendshipStatus.values()) {
                 if (status.value == value) {
                     return status;
                 }
             }
-            throw new IllegalArgumentException("Invalid FriendShipStatus value: " + value);
+            throw new IllegalArgumentException("Invalid FriendshipStatus value: " + value);
         }
     }
 }

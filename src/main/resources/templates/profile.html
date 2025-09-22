@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>پروفایل</title>
+    <style>
+        #page { width: 100%; max-width: 960px; margin: 0 auto; }
+        #content { float: left; width: 70%; }
+        .post { margin-bottom: 20px; }
+        .title { font-size: 24px; }
+        .entry { padding: 10px; }
+        table { border: 0; }
+        td { padding: 15px; }
+        .errorBig { color: red; font-size: 16px; }
+        .GreenButton {
+            background-color: green;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .GreenButton:hover { background-color: darkgreen; }
+        .GreenButton:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .noUnderline { text-decoration: none; }
+        .friend-table { width: 100%; border-collapse: collapse; }
+        .friend-table td, .friend-table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+        }
+        .friend-table tr:nth-child(even){ background-color: #f2f2f2; }
+        .friend-table tr:hover { background-color: #ddd; }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div id="page">
+    <div id="content">
+        <div class="post">
+            <h3 class="title">پروفایل</h3>
+            <div class="entry">
+                <div th:if="${labelNotification != null and labelNotification != ''}"
+                     class="errorBig" th:text="${labelNotification}"></div>
+                <br />
+
+                <table width="100%" border="0" cellpadding="15" cellspacing="15">
+                    <tr>
+                        <td>
+                            <h3 class="noUnderline" th:text="${labelUsername}">Username</h3>
+                        </td>
+                        <td>
+                            <button th:if="${buttonAddFriendVisible}"
+                                    class="GreenButton"
+                                    th:onclick="'addFriend(\'' + ${profileUserId} + '\')'">
+                                اضافه کردن به لیست دوستان
+                            </button>
+                        </td>
+                        <td>
+                            <button th:if="${buttonConfirmFriendVisible}"
+                                    class="GreenButton"
+                                    th:onclick="'confirmFriend(\'' + ${profileUserId} + '\')'">
+                                تایید درخواست دوستی
+                            </button>
+                        </td>
+                        <td>
+                            <button th:if="${buttonRejectFriendVisible}"
+                                    class="GreenButton"
+                                    th:onclick="'rejectFriend(\'' + ${profileUserId} + '\')'">
+                                رد درخواست دوستی
+                            </button>
+                            <button th:if="${buttonWaitingForConfirmVisible}"
+                                    class="GreenButton"
+                                    disabled>
+                                در انتظار تایید درخواست دوستی
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>نام : </label>
+                            <span th:text="${labelFirstName}">First Name</span>
+                        </td>
+                        <td></td>
+                        <td rowspan="6">
+                            <img th:if="${imageProfile != null}"
+                                 th:src="${imageProfile}"
+                                 height="100" width="100"
+                                 alt="Profile Image" />
+                            <img th:unless="${imageProfile != null}"
+                                 src="/images/default-profile.png"
+                                 height="100" width="100"
+                                 alt="Default Profile" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>نام خانوادگی : </label>
+                            <span th:text="${labelLastname}">Last Name</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>سطح کاربری : </label>
+                            <span th:text="${LabelPermission}">Permission Level</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>ایمیل : </label>
+                            <span th:text="${labelEmail}">Email</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>وب سایت : </label>
+                            <a th:if="${labelWebsite != null}"
+                               th:href="${labelWebsite}"
+                               th:text="${labelWebsite}">Website</a>
+                            <span th:unless="${labelWebsite != null}">--</span>
+                        </td>
+                    </tr>
+                </table>
+
+                <br /><br />
+                <h3>لیست دوستان</h3>
+                <table class="friend-table" th:if="${not #lists.isEmpty(friendsList)}">
+                    <tr>
+                        <th>نام کاربری</th>
+                        <th>نام</th>
+                        <th>نام خانوادگی</th>
+                        <th>عملیات</th>
+                    </tr>
+                    <tr th:each="friend : ${friendsList}">
+                        <td th:text="${friend.username}">Username</td>
+                        <td th:text="${friend.firstName}">First Name</td>
+                        <td th:text="${friend.lastName}">Last Name</td>
+                        <td>
+                            <button class="GreenButton"
+                                    th:onclick="'viewProfile(\'' + ${friend.id} + '\')'">
+                                مشاهده پروفایل
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+                <p th:if="${#lists.isEmpty(friendsList)}">هیچ دوستی وجود ندارد</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addFriend(userId) {
+        // AJAX call to add friend
+        fetch('/profile/add-friend/' + userId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': getCsrfToken()
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('خطا در افزودن دوست');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function confirmFriend(userId) {
+        // AJAX call to confirm friend request
+        fetch('/profile/confirm-friend/' + userId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': getCsrfToken()
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('خطا در تایید دوستی');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function rejectFriend(userId) {
+        // AJAX call to reject friend request
+        fetch('/profile/reject-friend/' + userId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': getCsrfToken()
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('خطا در رد درخواست دوستی');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function viewProfile(userId) {
+        window.location.href = '/profile/' + userId;
+    }
+
+    function getCsrfToken() {
+        // This is a simplified example - you might need to adjust based on your CSRF implementation
+        return document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    }
+</script>
+</body>
+</html>

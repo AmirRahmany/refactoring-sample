@@ -1,12 +1,14 @@
 package com.hamkelasi.bll;
 
 import com.hamkelasi.dal.Base;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +25,7 @@ public class MediaShare {
     private String serverMap;
     private String url;
     private String thumbnailUrl;
-    private Date postDate;
+    private LocalDateTime postDate;
     private Types shareType;
 
     // Getters and Setters
@@ -91,11 +93,11 @@ public class MediaShare {
         this.thumbnailUrl = thumbnailUrl;
     }
 
-    public Date getPostDate() {
+    public LocalDateTime getPostDate() {
         return postDate;
     }
 
-    public void setPostDate(Date postDate) {
+    public void setPostDate(LocalDateTime postDate) {
         this.postDate = postDate;
     }
 
@@ -122,7 +124,7 @@ public class MediaShare {
             this.description = dt.get(0).get("Description").toString();
             this.url = dt.get(0).get("URL").toString();
             this.thumbnailUrl = dt.get(0).get("thumbURL").toString();
-            this.postDate = new Date(Long.parseLong(dt.get(0).get("PostDate").toString()));
+            this.postDate = LocalDateTime.parse(dt.get(0).get("PostDate").toString());
             this.shareType = Types.fromValue(Integer.parseInt(dt.get(0).get("ShareType").toString()));
         } else {
             this.id = -1;

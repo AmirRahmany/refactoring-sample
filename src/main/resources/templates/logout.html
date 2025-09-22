@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle}">خروج</title>
+    <style>
+        .errorBig { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div th:replace="~{layout :: content}">
+    <div id="page">
+        <div id="content">
+            <div class="post">
+                <h3 class="title">خروج</h3>
+                <div class="entry">
+                    <p th:if="${errorMessage}" class="errorBig" th:text="${errorMessage}"></p>
+                    <p>شما با موفقیت از حساب کاربری خارج شدید.</p>
+                    <a th:href="@{/login}">ورود مجدد</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,10 +1,15 @@
 package com.hamkelasi.bll;
 import com.hamkelasi.dal.Base;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 public class City {
     private int id;
     private String name;
     private int provinceId;
+
+    public City() {
+     
+    }
 
     // Getters and Setters
     public int getId() {
@@ -30,9 +35,7 @@ public class City {
     public void setProvinceId(int provinceId) {
         this.provinceId = provinceId;
     }
-
-    public City() {
-    }
+    
 
     public City(int id) {
         final com.hamkelasi.dal.City city = new com.hamkelasi.dal.City();

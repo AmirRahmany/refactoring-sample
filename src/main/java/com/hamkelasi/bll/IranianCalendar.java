@@ -3,6 +3,7 @@ package com.hamkelasi.bll;
 
 import com.ibm.icu.util.PersianCalendar;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class IranianCalendar {
@@ -21,6 +22,10 @@ public class IranianCalendar {
 
     public IranianCalendar() {
         persianCalendar = new PersianCalendar();
+    }
+
+    public IranianCalendar(LocalDateTime registerDate) {
+
     }
 
     public Date convertToDateTime(int year, int month, int day) {

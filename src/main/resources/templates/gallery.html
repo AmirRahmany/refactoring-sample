@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle}">گالری</title>
+    <!-- Add CSS or other head content as needed -->
+    <style>
+        .memberTable { width: 100%; border-collapse: collapse; }
+        .memberTable th, .memberTable td { border: 1px solid #ddd; padding: 8px; text-align: right; }
+        .GreenButton { background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+        .GreenButton:hover { background-color: #45a049; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+<div th:replace="~{layout :: content}">
+    <div id="page">
+        <div id="content">
+            <div class="post">
+                <h3 th:text="${pageTitle}"></h3>
+                <h3 class="noUnderline" th:text="${headerGalleryType}"></h3>
+
+                <div class="entry">
+                    <!-- Gallery Table -->
+                    <table class="memberTable">
+                        <thead>
+                        <tr>
+                            <th>موضوع</th>
+                            <th>توضیحات</th>
+                            <th>فایل</th>
+                            <th>تاریخ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${galleryItems}">
+                            <td th:text="${item.subject}"></td>
+                            <td th:text="${item.description}"></td>
+                            <td>
+                                <a th:href="${item.url}" th:text="'دانلود'"></a>
+                            </td>
+                            <td th:text="${item.postDate}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Form for New Post -->
+                    <form th:action="@{/gallery}" th:object="${newPost}" method="post" enctype="multipart/form-data">
+                        <table>
+                            <tr>
+                                <td>موضوع :</td>
+                                <td>
+                                    <input type="text" th:field="*{subject}" id="textSubject" />
+                                    <span th:errors="*{subject}" class="error">*</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>توضیحات :</td>
+                                <td>
+                                    <input type="text" th:field="*{description}" id="textDescription" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>فایل :</td>
+                                <td>
+                                    <input type="file" th:field="*{file}" id="uploadFile" />
+                                    <span th:errors="*{file}" class="error">*</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="center">
+                                    <button type="submit" class="GreenButton">ارسال</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,37 +1,38 @@
 package com.hamkelasi.dal;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Base {
-    private static final HikariDataSource dataSource = createDataSource();
+    private static final Logger logger = LoggerFactory.getLogger(Base.class.getName());
+    private static final DriverManagerDataSource dataSource = createDataSource();
+    protected final JdbcTemplate jdbcTemplate;
 
-    private static HikariDataSource createDataSource() {
-        String url = System.getProperty("db.url", System.getenv("DB_URL"));
-        String user = System.getProperty("db.user", System.getenv("DB_USER"));
-        String pass = System.getProperty("db.password", System.getenv("DB_PASSWORD"));
-
-        Objects.requireNonNull(url, "Database URL must be provided via -Ddb.url or DB_URL");
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(url);
-        if (user != null) config.setUsername(user);
-        if (pass != null) config.setPassword(pass);
-        config.setMaximumPoolSize(5);
-        config.setMinimumIdle(1);
-        config.setPoolName("HamkelasiDAL");
-        return new HikariDataSource(config);
+    public Base() {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    protected Connection getConnection() throws SQLException {
+    private static DriverManagerDataSource createDataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("org.mariadb.jdbc.Driver");
+        dataSource.setUrl("jdbc:mariadb://localhost:3306/hamkelasi?useSSL=false&serverTimezone=UTC");
+        dataSource.setUsername("springstudent");
+        dataSource.setPassword("springstudent"); // Replace with your MariaDB password
+        return dataSource;
+    }
+
+    protected static Connection getConnection() throws SQLException {
         return dataSource.getConnection();
     }
 
-    public boolean executeNonQuery(int sqlType, String commandText, SqlParameter... parameters) {
+    // Existing executeNonQuery for stored procedures (unchanged)
+    public boolean executeNonQuery(int type, String commandText, SqlParameter... parameters) {
         try (Connection conn = getConnection();
              CallableStatement stmt = conn.prepareCall(commandText)) {
             stmt.setEscapeProcessing(true);
@@ -39,35 +40,78 @@ public class Base {
             stmt.execute();
             return true;
         } catch (SQLException ex) {
+            ex.printStackTrace();
             return false;
         }
     }
 
-    public Object executeScalar(int sqlType, String commandText, SqlParameter... parameters) {
+    // NEW METHOD: For plain SQL non-queries (INSERT/UPDATE/DELETE) using PreparedStatement
+    public boolean executeNonQueryPrepared(String sql, SqlParameter... parameters) {
         try (Connection conn = getConnection();
-             CallableStatement stmt = conn.prepareCall(commandText)) {
-            bindParameters(stmt, parameters);
-            boolean hasResult = stmt.execute();
-            if (hasResult) {
-                try (ResultSet rs = stmt.getResultSet()) {
-                    if (rs.next()) {
-                        return rs.getObject(1);
-                    }
-                }
-            }
-            // If scalar is returned via output parameter, try to read first OUT param
-            for (SqlParameter p : parameters) {
-                if (p.direction == SqlParameter.Direction.OUT || p.direction == SqlParameter.Direction.INOUT) {
-                    return stmt.getObject(p.index);
-                }
-            }
-            return null;
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            bindParametersToPreparedStatement(stmt, parameters);
+            int rowsAffected = stmt.executeUpdate();
+            logger.info("Executed non-query: {} (affected rows: {})", sql, rowsAffected);
+            return rowsAffected > 0;
         } catch (SQLException ex) {
-            return null;
+            logger.error("Failed to execute non-query: " + sql, ex);
+            return false;
         }
     }
 
-    public List<Row> executeSelect(int sqlType, String commandText, SqlParameter... parameters) {
+    // Rest of the class remains unchanged...
+    public Object executeScalar(int type, String sql, List<SqlParameter> params) {
+        try {
+            if (params == null || params.isEmpty()) {
+                // For parameterless calls (e.g., CALL user_GetCount())
+                return jdbcTemplate.queryForObject(sql, Integer.class);
+            } else {
+                // For parameterized calls (e.g., CALL province_GetProvinceCountByName(?))
+                Object[] args = params.stream().map(SqlParameter::getValue).toArray();
+                int[] argTypes = params.stream().mapToInt(SqlParameter::getSqlType).toArray();
+                return jdbcTemplate.queryForObject(sql, args, argTypes, Integer.class);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to execute scalar query: " + sql, e);
+        }
+    }
+
+    public List<Row> executeQuery(String sql, SqlParameter... parameters) {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            bindParametersToPreparedStatement(stmt, parameters);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                List<Row> rows = new ArrayList<>();
+                ResultSetMetaData meta = rs.getMetaData();
+                int cols = meta.getColumnCount();
+                while (rs.next()) {
+                    Row row = new Row(cols);
+                    for (int i = 1; i <= cols; i++) {
+                        row.add(meta.getColumnLabel(i), rs.getObject(i));
+                    }
+                    rows.add(row);
+                }
+                return rows;
+            }
+        } catch (SQLException ex) {
+            logger.error("Failed to execute query: " + sql, ex);
+            throw new RuntimeException("Query execution failed", ex);
+        }
+    }
+
+    private void bindParametersToPreparedStatement(PreparedStatement stmt, SqlParameter... parameters) throws SQLException {
+        if (parameters == null) return;
+        for (SqlParameter p : parameters) {
+            if (p.direction != SqlParameter.Direction.IN) {
+                throw new IllegalArgumentException("PreparedStatement only supports IN parameters");
+            }
+            stmt.setObject(p.index, p.value, p.sqlType);
+        }
+    }
+
+    public List<Row> executeSelect(int type, String commandText, SqlParameter... parameters) {
         try (Connection conn = getConnection();
              CallableStatement stmt = conn.prepareCall(commandText)) {
             bindParameters(stmt, parameters);
@@ -85,7 +129,8 @@ public class Base {
                 return rows;
             }
         } catch (SQLException ex) {
-            return null;
+            ex.printStackTrace();
+            return new ArrayList<>();
         }
     }
 
@@ -105,6 +150,7 @@ public class Base {
 
     public static class SqlParameter {
         public enum Direction { IN, OUT, INOUT }
+
         public final int index;
         public final int sqlType;
         public final Object value;
@@ -128,6 +174,14 @@ public class Base {
         public static SqlParameter inOut(int index, int sqlType, Object value) {
             return new SqlParameter(index, sqlType, value, Direction.INOUT);
         }
+
+        public int getSqlType() {
+            return sqlType;
+        }
+
+        public Object getValue() {
+            return value;
+        }
     }
 
     public static class Row {
@@ -144,7 +198,10 @@ public class Base {
             values.add(value);
         }
 
-        public Object get(int index) { return values.get(index); }
+        public Object get(int index) {
+            return values.get(index);
+        }
+
         public Object get(String column) {
             for (int i = 0; i < columnNames.size(); i++) {
                 if (columnNames.get(i).equalsIgnoreCase(column)) return values.get(i);
@@ -153,5 +210,3 @@ public class Base {
         }
     }
 }
-
-

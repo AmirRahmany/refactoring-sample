@@ -1,11 +1,14 @@
 package com.hamkelasi.bll;
 
 import com.hamkelasi.dal.Base;
+import org.springframework.jdbc.core.JdbcTemplate;
+
 import java.util.List;
 
 public class Province {
     private int id;
     private String name;
+
 
     // Getters and Setters
     public int getId() {
@@ -86,7 +89,7 @@ public class Province {
         }
     }
 
-    public Province[] getList() {
+    public static Province[] getList() {
         com.hamkelasi.dal.Province province = new com.hamkelasi.dal.Province();
         List<Base.Row> dt = province.getList();
         Province[] provinceList = new Province[dt.size()];

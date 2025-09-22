@@ -1,6 +1,7 @@
 package com.hamkelasi.bll;
 
 import com.hamkelasi.dal.Base;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,9 @@ import java.util.Map;
 public class Permission {
     private int id;
     private String permissionName;
+
+
+    
 
     // Getters and Setters
     public int getId() {

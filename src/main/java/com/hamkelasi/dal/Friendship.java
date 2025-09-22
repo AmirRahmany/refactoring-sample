@@ -1,53 +1,47 @@
 package com.hamkelasi.dal;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Friendship extends Base {
+
     public boolean add(int userID, int friendID, int friendshipStatus) {
-        return executeNonQuery(Types.NULL, "{ call friendship_Add(?,?,?,?) }",
-                SqlParameter.in(1, Types.INTEGER, getLastID()),
-                SqlParameter.in(2, Types.INTEGER, userID),
-                SqlParameter.in(3, Types.INTEGER, friendID),
-                SqlParameter.in(4, Types.INTEGER, friendshipStatus));
+        Integer lastId = jdbcTemplate.queryForObject("SELECT MAX(ID) FROM Friendship", Integer.class);
+        int id = (lastId == null) ? 1 : lastId + 1;
+        return jdbcTemplate.update("INSERT INTO Friendship (ID, UserID, FriendID, FriendshipStatus) VALUES (?, ?, ?, ?)",
+                id, userID, friendID, friendshipStatus) > 0;
     }
 
     public boolean update(int userID, int friendID, int friendshipStatus) {
-        return executeNonQuery(Types.NULL, "{ call friendship_update(?,?,?) }",
-                SqlParameter.in(1, Types.INTEGER, userID),
-                SqlParameter.in(2, Types.INTEGER, friendID),
-                SqlParameter.in(3, Types.INTEGER, friendshipStatus));
+        return jdbcTemplate.update("UPDATE Friendship SET FriendshipStatus = ? WHERE UserID = ? AND FriendID = ?",
+                friendshipStatus, userID, friendID) > 0;
     }
 
     public boolean delete(int userID, int friendID) {
-        return executeNonQuery(Types.NULL, "{ call friendship_Delete(?,?) }",
-                SqlParameter.in(1, Types.INTEGER, userID),
-                SqlParameter.in(2, Types.INTEGER, friendID));
+        return jdbcTemplate.update("DELETE FROM Friendship WHERE UserID = ? AND FriendID = ?",
+                userID, friendID) > 0;
     }
 
     private int getLastID() {
-        Object last = executeScalar(Types.INTEGER, "{ call friendship_GetLastID() }");
-        if (last == null) return 1;
-        int id = (last instanceof Number) ? ((Number) last).intValue() : 1;
-        return id + 1;
+        Integer last = jdbcTemplate.queryForObject("SELECT MAX(ID) FROM Friendship", Integer.class);
+        return (last == null) ? 1 : last + 1;
     }
 
     public List<Row> getWaitingList(int userID) {
-        return executeSelect(Types.NULL, "{ call friendship_GetWaitingList(?) }",
+        return executeSelect(Types.NULL, "SELECT * FROM Friendship WHERE UserID = ? AND FriendshipStatus = 0",
                 SqlParameter.in(1, Types.INTEGER, userID));
     }
 
     public List<Row> getFriendList(int userID) {
-        return executeSelect(Types.NULL, "{ call friendship_GetFriendList(?) }",
+        return executeSelect(Types.NULL, "SELECT * FROM Friendship WHERE UserID = ? AND FriendshipStatus = 1",
                 SqlParameter.in(1, Types.INTEGER, userID));
     }
 
     public int getFriendshipStatus(int userID, int friendID) {
-        Object obj = executeScalar(Types.INTEGER, "{ call friendship_GetFriendshipStatus(?,?) }",
-                SqlParameter.in(1, Types.INTEGER, userID),
-                SqlParameter.in(2, Types.INTEGER, friendID));
-        return obj == null ? 0 : ((Number) obj).intValue();
+        Integer status = jdbcTemplate.queryForObject("SELECT FriendshipStatus FROM Friendship WHERE UserID = ? AND FriendID = ?",
+                new Object[]{userID, friendID}, new int[]{Types.INTEGER, Types.INTEGER}, Integer.class);
+        return status == null ? 0 : status;
     }
 }
-
-

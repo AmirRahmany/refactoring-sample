@@ -1,90 +1,72 @@
 package com.hamkelasi.dal;
 
+
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.List;
 
 public class School extends Base {
+
     public List<Row> getList(int cityID, int schoolType) {
-        return executeSelect(Types.NULL, "{ call school_GetList(?,?) }",
+        return executeSelect(Types.NULL, "SELECT * FROM School WHERE CityID = ? AND SchoolType = ?",
                 SqlParameter.in(1, Types.INTEGER, cityID),
                 SqlParameter.in(2, Types.INTEGER, schoolType));
     }
 
     public List<Row> getSchool(int id) {
-        return executeSelect(Types.NULL, "{ call school_GetSchool(?) }",
+        return executeSelect(Types.NULL, "SELECT * FROM School WHERE ID = ?",
                 SqlParameter.in(1, Types.INTEGER, id));
     }
 
     public int getCount() {
-        Object count = executeScalar(Types.INTEGER, "{ call school_GetCount() }");
-        return count == null ? 0 : ((Number) count).intValue();
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM School", Integer.class);
     }
 
     public int getCountByProvince(int provinceID) {
-        Object count = executeScalar(Types.INTEGER, "{ call school_GetCountByProvince(?) }",
-                SqlParameter.in(1, Types.INTEGER, provinceID));
-        return count == null ? 0 : ((Number) count).intValue();
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM School s JOIN City c ON s.CityID = c.ID WHERE c.ProvinceID = ?",
+                new Object[]{provinceID}, new int[]{Types.INTEGER}, Integer.class);
     }
 
     public int getCount(int provinceID, int cityID) {
-        Object count = executeScalar(Types.INTEGER, "{ call school_GetCountByProvinceAndCity(?,?) }",
-                SqlParameter.in(1, Types.INTEGER, provinceID),
-                SqlParameter.in(2, Types.INTEGER, cityID));
-        return count == null ? 0 : ((Number) count).intValue();
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM School s JOIN City c ON s.CityID = c.ID WHERE c.ProvinceID = ? AND s.CityID = ?",
+                new Object[]{provinceID, cityID}, new int[]{Types.INTEGER, Types.INTEGER}, Integer.class);
     }
 
     public List<Row> getListByCity(int cityID) {
-        return executeSelect(Types.NULL, "{ call school_GetListByCity(?) }",
+        return executeSelect(Types.NULL, "SELECT * FROM School WHERE CityID = ?",
                 SqlParameter.in(1, Types.INTEGER, cityID));
     }
 
     public int getUserCount(int schoolID) {
-        Object count = executeScalar(Types.INTEGER, "{ call school_GetUserCount(?) }",
-                SqlParameter.in(1, Types.INTEGER, schoolID));
-        return count == null ? 0 : ((Number) count).intValue();
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM SchoolRegistration sr JOIN SchoolYear sy ON sr.SchoolYearID = sy.ID WHERE sy.SchoolID = ?",
+                new Object[]{schoolID}, new int[]{Types.INTEGER}, Integer.class);
     }
 
     public int getCount(String schoolName, int cityID) {
-        Object count = executeScalar(Types.INTEGER, "{ call school_GetCountByName(?,?) }",
-                SqlParameter.in(1, Types.VARCHAR, schoolName),
-                SqlParameter.in(2, Types.INTEGER, cityID));
-        return count == null ? 0 : ((Number) count).intValue();
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM School WHERE SchoolName = ? AND CityID = ?",
+                new Object[]{schoolName, cityID}, new int[]{Types.VARCHAR, Types.INTEGER}, Integer.class);
     }
 
     public boolean add(String schoolName, int schoolType, int cityID) {
-        int lastID = getLastID() + 1;
-        return executeNonQuery(Types.NULL, "{ call school_Add(?,?,?,?) }",
-                SqlParameter.in(1, Types.INTEGER, lastID),
-                SqlParameter.in(2, Types.VARCHAR, schoolName),
-                SqlParameter.in(3, Types.INTEGER, schoolType),
-                SqlParameter.in(4, Types.INTEGER, cityID));
+        Integer lastID = jdbcTemplate.queryForObject("SELECT MAX(ID) FROM School", Integer.class);
+        int id = (lastID == null) ? 1 : lastID + 1;
+        return jdbcTemplate.update("INSERT INTO School (ID, SchoolName, SchoolType, CityID) VALUES (?, ?, ?, ?)",
+                id, schoolName, schoolType, cityID) > 0;
     }
 
-    private int getLastID() {
-        Object last = executeScalar(Types.INTEGER, "{ call school_GetLastID() }");
-        return (last instanceof Number) ? ((Number) last).intValue() : 0;
+    public boolean update(int schoolID, String schoolName, int schoolType, int cityID) {
+        return jdbcTemplate.update("UPDATE School SET SchoolName = ?, SchoolType = ?, CityID = ? WHERE ID = ?",
+                schoolName, schoolType, cityID, schoolID) > 0;
     }
 
-    public boolean update(int schoolID, String schoolname, int schooltype, int cityid) {
-        return executeNonQuery(Types.NULL, "{ call school_Update(?,?,?,?) }",
-                SqlParameter.in(1, Types.INTEGER, schoolID),
-                SqlParameter.in(2, Types.VARCHAR, schoolname),
-                SqlParameter.in(3, Types.INTEGER, schooltype),
-                SqlParameter.in(4, Types.INTEGER, cityid));
-    }
-
-    public int getPostCount(int schoolID, java.util.Date startdate, java.util.Date enddate) {
-        Object count = executeScalar(Types.INTEGER, "{ call school_GetPostCount(?,?,?) }",
-                SqlParameter.in(1, Types.INTEGER, schoolID),
-                SqlParameter.in(2, Types.TIMESTAMP, startdate),
-                SqlParameter.in(3, Types.TIMESTAMP, enddate));
-        return count == null ? 0 : ((Number) count).intValue();
+    public int getPostCount(int schoolID, java.util.Date startDate, java.util.Date endDate) {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM TextShare ts JOIN SchoolYear sy ON ts.SchoolYearID = sy.ID WHERE sy.SchoolID = ? AND ts.PostDate BETWEEN ? AND ?",
+                new Object[]{schoolID, new Timestamp(startDate.getTime()), new Timestamp(endDate.getTime())},
+                new int[]{Types.INTEGER, Types.TIMESTAMP, Types.TIMESTAMP}, Integer.class);
     }
 
     public boolean delete(int schoolID) {
-        return executeNonQuery(Types.NULL, "{ call school_Delete(?) }",
-                SqlParameter.in(1, Types.INTEGER, schoolID));
+        return jdbcTemplate.update("DELETE FROM School WHERE ID = ?",
+                schoolID) > 0;
     }
 }
-
-

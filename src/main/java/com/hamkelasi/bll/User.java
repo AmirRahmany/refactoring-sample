@@ -1,8 +1,10 @@
 package com.hamkelasi.bll;
 
 import com.hamkelasi.dal.Base;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -111,6 +113,7 @@ public class User {
     //endregion
 
     public User() {
+
     }
 
     public User(int id) {
@@ -126,7 +129,8 @@ public class User {
         this.permission = Integer.parseInt(dt.getFirst().get("permission").toString());
         this.email = dt.getFirst().get("email").toString();
         this.website = dt.getFirst().get("website").toString();
-        this.registerDate = LocalDateTime.parse(dt.getFirst().get("registerDate").toString());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.S]");
+        this.registerDate = LocalDateTime.parse(dt.getFirst().get("registerDate").toString(),formatter);
         this.isPmActivate = Boolean.parseBoolean(dt.getFirst().get("isPmActivate").toString());
     }
 

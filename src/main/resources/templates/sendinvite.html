@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لیست مدارس</title>
+    <style>
+        :root {
+            --primary-color: #2e5cb8;
+            --secondary-color: #4CAF50;
+            --accent-color: #ff9800;
+            --light-gray: #f5f5f5;
+            --border-color: #ddd;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        #page {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        #content {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .post {
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 24px;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .entry {
+            padding: 10px;
+        }
+
+        .errorBig {
+            color: #d9534f;
+            font-size: 16px;
+            text-align: center;
+            display: block;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+        }
+
+        /* City and School Styles */
+        .city-container {
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .city-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .city-header:hover {
+            background-color: #1e4080;
+        }
+
+        .schools-list {
+            padding: 0;
+            margin: 0;
+            background-color: white;
+        }
+
+        .school-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s;
+        }
+
+        .school-item:hover {
+            background-color: var(--light-gray);
+        }
+
+        .school-item:last-child {
+            border-bottom: none;
+        }
+
+        .school-info {
+            flex: 1;
+        }
+
+        .school-name {
+            font-weight: bold;
+            font-size: 18px;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+
+        .school-details {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .school-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-button {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        .action-button:hover {
+            background-color: #3d8b40;
+        }
+
+        .view-button {
+            background-color: var(--primary-color);
+        }
+
+        .view-button:hover {
+            background-color: #1e4080;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+            font-size: 18px;
+        }
+
+        .search-container {
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-input {
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+            width: 300px;
+            margin-left: 10px;
+        }
+
+        .search-button {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .search-button:hover {
+            background-color: #e68900;
+        }
+
+        /* Accordion animation */
+        .schools-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .city-container.active .schools-container {
+            max-height: 1000px;
+        }
+
+        .accordion-icon {
+            transition: transform 0.3s;
+        }
+
+        .city-container.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .school-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .school-actions {
+                margin-top: 15px;
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .search-input {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #content {
+                padding: 15px;
+            }
+
+            .title {
+                font-size: 20px;
+            }
+
+            .city-header {
+                padding: 12px 15px;
+                font-size: 18px;
+            }
+
+            .school-item {
+                padding: 12px 15px;
+            }
+
+            .action-button {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div id="page">
+    <div id="content">
+        <div class="post">
+            <h3 class="title" id="pagetitle">لیست مدارس</h3>
+            <div class="entry">
+                <div th:if="${labelError != null and labelError != ''}"
+                     class="errorBig" th:text="${labelError}"></div>
+
+                <div class="search-container">
+                    <input type="text" id="searchInput" class="search-input" placeholder="جستجوی مدرسه..." />
+                    <button class="search-button" onclick="filterSchools()">جستجو</button>
+                </div>
+
+                <div class="loading-spinner" id="loadingSpinner">
+                    <div class="spinner"></div>
+                    <p>در حال بارگذاری...</p>
+                </div>
+
+                <div th:if="${not #maps.isEmpty(citiesWithSchools)}">
+                    <div th:each="cityEntry : ${citiesWithSchools}" class="city-container">
+                        <div class="city-header" onclick="toggleSchools(this)">
+                            <span th:text="${cityEntry.key}">نام شهر</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="schools-container">
+                            <div th:each="school : ${cityEntry.value}" class="school-item">
+                                <div class="school-info">
+                                    <div class="school-name" th:text="${school.name}">نام مدرسه</div>
+                                    <div class="school-details">
+                                        <span th:text="${school.address}">آدرس</span> |
+                                        <span th:text="${school.phone}">تلفن</span>
+                                    </div>
+                                </div>
+                                <div class="school-actions">
+                                    <a th:href="@{/schools/{id}(id=${school.id})}" class="action-button view-button">مشاهده جزئیات</a>
+                                    <a th:href="@{/schools/{id}/students(id=${school.id})}" class="action-button">لیست دانش آموزان</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${#maps.isEmpty(citiesWithSchools)}" class="empty-message">
+                    هیچ مدرسه‌ای یافت نشد.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleSchools(element) {
+        const cityContainer = element.parentElement;
+        cityContainer.classList.toggle('active');
+    }
+
+    function filterSchools() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const schoolItems = document.querySelectorAll('.school-item');
+        const cityContainers = document.querySelectorAll('.city-container');
+
+        // Show loading spinner
+        document.getElementById('loadingSpinner').style.display = 'block';
+
+        // Simulate loading (in real application, this would be an API call)
+        setTimeout(() => {
+            let anySchoolVisible = false;
+            let anyCityVisible = false;
+
+            cityContainers.forEach(cityContainer => {
+                const cityName = cityContainer.querySelector('.city-header span').textContent;
+                const schools = cityContainer.querySelectorAll('.school-item');
+                let cityHasVisibleSchools = false;
+
+                schools.forEach(school => {
+                    const schoolName = school.querySelector('.school-name').textContent.toLowerCase();
+                    const isVisible = schoolName.includes(searchTerm) || cityName.includes(searchTerm);
+
+                    school.style.display = isVisible ? 'flex' : 'none';
+
+                    if (isVisible) {
+                        cityHasVisibleSchools = true;
+                        anySchoolVisible = true;
+                    }
+                });
+
+                // Show/hide city based on whether it has visible schools
+                cityContainer.style.display = cityHasVisibleSchools || searchTerm === '' ? 'block' : 'none';
+
+                if (cityHasVisibleSchools || searchTerm === '') {
+                    anyCityVisible = true;
+                }
+
+                // Expand cities that have matching schools
+                if (cityHasVisibleSchools) {
+                    cityContainer.classList.add('active');
+                }
+            });
+
+            // Show message if no results found
+            const emptyMessage = document.querySelector('.empty-message');
+            if (emptyMessage) {
+                emptyMessage.style.display = anySchoolVisible ? 'none' : 'block';
+            }
+
+            // Hide loading spinner
+            document.getElementById('loadingSpinner').style.display = 'none';
+        }, 500);
+    }
+
+    // Initialize page - expand first city by default
+    document.addEventListener('DOMContentLoaded', function() {
+        const firstCity = document.querySelector('.city-container');
+        if (firstCity) {
+            firstCity.classList.add('active');
+        }
+
+        // Add keyboard event for search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                filterSchools();
+            }
+        });
+    });
+</script>
+</body>
+</html>
