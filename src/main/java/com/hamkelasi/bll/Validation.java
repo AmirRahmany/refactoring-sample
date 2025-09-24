@@ -9,7 +9,7 @@ public class Validation {
         return regex.matcher(email).matches();
     }
 
-    public boolean isEmailNotValid(String email) {
+    public boolean isEmailInvalid(String email) {
         return !isEmailValid(email);
     }
 
@@ -18,7 +18,7 @@ public class Validation {
         return regex.matcher(url).matches();
     }
 
-    public boolean isUrlNotValid(String website) {
+    public boolean isUrlInvalid(String website) {
         return !isUrlValid(website);
     }
 }

@@ -268,10 +268,10 @@ public class User {
 
         if (userRepository.getUserCountByEmail(email) != 0) return EMAIL_IS_DUPLICATED;
         if (userRepository.getUserCountByUsername(username) != 0) return USERNAME_IS_DUPLICATED;
-        if (validator.isEmailNotValid(email)) return INVALID_EMAIL_FORMAT;
-        if (website != null && !website.isEmpty() && validator.isUrlNotValid(website)) return INVALID_WEBSITE_FORMAT;
+        if (validator.isEmailInvalid(email)) return INVALID_EMAIL_FORMAT;
+        if (website != null && !website.isEmpty() && validator.isUrlInvalid(website)) return INVALID_WEBSITE_FORMAT;
 
-        return UserValidationResults.SUCCESSFUL;
+        return SUCCESSFUL;
 }
 
 public int isUpdateValid(String oldUsername, String newUsername, String oldEmail, String newEmail, String website) {

@@ -2,17 +2,28 @@ package com.hamkelasi.ui;
 
 
 import com.hamkelasi.bll.User;
+import com.hamkelasi.ui.refactored.RegistrationView;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
 @WebServlet("/register")
 @MultipartConfig
-public class RegisterServlet extends HttpServlet {
+public class RegisterServlet extends HttpServlet implements RegistrationView {
+
+    private String labelError = "";
+    private HttpServletRequest request;
+    private ServletResponse response;
+
+    public RegisterServlet(HttpServletRequest request) {
+        this.request = request;
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -93,20 +104,25 @@ public class RegisterServlet extends HttpServlet {
                         response.sendRedirect(request.getContextPath() + "/register?action=successfull");
                         return;
                     } else if (valInsert == 9) {
-                        request.setAttribute("labelError", "خطا در ثبت داده");
+                        labelError = "خطا در ثبت داده";
+                        request.setAttribute("labelError", labelError);
                     }
                     break;
                 case 1:
-                    request.setAttribute("labelError", "ایمیل وارد شده تکراری می باشد");
+                    labelError = "ایمیل وارد شده تکراری می باشد";
+                    request.setAttribute("labelError", labelError);
                     break;
                 case 2:
-                    request.setAttribute("labelError", "نام کاربری وارد شده تکراری می باشد");
+                    labelError = "نام کاربری وارد شده تکراری می باشد";
+                    request.setAttribute("labelError", labelError);
                     break;
                 case 3:
-                    request.setAttribute("labelError", "فرمت ایمیل وارد شده نادرست می باشد");
+                    labelError = "فرمت ایمیل وارد شده نادرست می باشد";
+                    request.setAttribute("labelError", labelError);
                     break;
                 case 4:
-                    request.setAttribute("labelError", "فرمت وب سایت وارد شده نادرست می باشد");
+                    labelError = "فرمت وب سایت وارد شده نادرست می باشد";
+                    request.setAttribute("labelError", labelError);
                     break;
             }
         }
@@ -122,5 +138,61 @@ public class RegisterServlet extends HttpServlet {
                 request.getParameter("textEmail") != null &&
                 !request.getParameter("textFirstname").isEmpty() &&
                 !request.getParameter("textLastname").isEmpty();
+    }
+
+    @Override
+    public String username() {
+        return request.getParameter("textUsername");
+    }
+
+    @Override
+    public String password() {
+        return request.getParameter("textPassword");
+    }
+
+    @Override
+    public String firstname() {
+        return request.getParameter("textFirstname");
+    }
+
+    @Override
+    public String lastname() {
+        return request.getParameter("textLastname");
+    }
+
+    @Override
+    public String email() {
+        return request.getParameter("textEmail");
+    }
+
+    @Override
+    public String website() {
+        return request.getParameter("textWebsite");
+    }
+
+    @Override
+    public boolean isPmActivate() {
+        return "on".equals(request.getParameter("checkPmActivate"));
+    }
+
+    @Override
+    public void showError(String errorText) {
+        request.setAttribute("labelError", labelError);
+    }
+
+    @Override
+    public void redirectToSuccessfulView(String to) {
+        try {
+            request.getRequestDispatcher("/WEB-INF/templates/register.jsp").forward(request, response);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean isPageValid() {
+        return isValidForm(request);
     }
 }
