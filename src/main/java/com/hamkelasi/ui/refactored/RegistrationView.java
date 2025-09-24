@@ -1,5 +1,7 @@
 package com.hamkelasi.ui.refactored;
 
+import com.hamkelasi.ui.refactored.file_upload.Uploader;
+
 public interface RegistrationView {
     String username();
     String password();
@@ -11,4 +13,5 @@ public interface RegistrationView {
     void showError(String errorText);
     void redirectToSuccessfulView(String to);
     boolean isPageValid();
+    Uploader profileImage();
 }

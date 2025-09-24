@@ -144,6 +144,7 @@ public class User {
         this.isPmActivate = Boolean.parseBoolean(dt.getFirst().get("isPmActivate").toString());
     }
 
+
     public int add(String username, String password, String firstname, String lastname, String profilePicture, String email, String website, int permission, LocalDateTime registerDate, boolean isPmActivate) {
         final com.hamkelasi.dal.User newUser = new com.hamkelasi.dal.User();
         int retValue = 0;
@@ -262,6 +263,7 @@ public class User {
             }
         }
     }
+
 
     public int isValid(String username, String email, String website) {
         Validation validator = new Validation();

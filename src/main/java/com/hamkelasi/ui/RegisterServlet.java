@@ -3,6 +3,8 @@ package com.hamkelasi.ui;
 
 import com.hamkelasi.bll.User;
 import com.hamkelasi.ui.refactored.RegistrationView;
+import com.hamkelasi.ui.refactored.file_upload.RealProfileUploader;
+import com.hamkelasi.ui.refactored.file_upload.Uploader;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -20,6 +22,7 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
     private String labelError = "";
     private HttpServletRequest request;
     private ServletResponse response;
+    private Part uploadPicture;
 
     public RegisterServlet(HttpServletRequest request) {
         this.request = request;
@@ -81,15 +84,15 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
                     newUser.setPermission(3); // Regular user
 
                     // Handle file upload
-                    Part filePart = request.getPart("uploadPicture");
-                    if (filePart != null && filePart.getSize() > 0) {
-                        String filename = filePart.getSubmittedFileName();
+                    uploadPicture = request.getPart("uploadPicture");
+                    if (uploadPicture != null && uploadPicture.getSize() > 0) {
+                        String filename = uploadPicture.getSubmittedFileName();
                         String savePath = getServletContext().getRealPath("/UserImages/") + File.separator + filename;
                         File uploadDir = new File(getServletContext().getRealPath("/UserImages/"));
                         if (!uploadDir.exists()) {
                             uploadDir.mkdirs();
                         }
-                        filePart.write(savePath);
+                        uploadPicture.write(savePath);
                         newUser.setProfilePicture("/UserImages/" + filename);
                     } else {
                         newUser.setProfilePicture("");
@@ -183,7 +186,7 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
     @Override
     public void redirectToSuccessfulView(String to) {
         try {
-            request.getRequestDispatcher("/WEB-INF/templates/register.jsp").forward(request, response);
+            request.getRequestDispatcher(to).forward(request, response);
         } catch (ServletException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -194,5 +197,10 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
     @Override
     public boolean isPageValid() {
         return isValidForm(request);
+    }
+
+    @Override
+    public Uploader profileImage() {
+        return new RealProfileUploader(uploadPicture);
     }
 }
