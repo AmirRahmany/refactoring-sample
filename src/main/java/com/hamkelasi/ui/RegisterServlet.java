@@ -2,6 +2,7 @@ package com.hamkelasi.ui;
 
 
 import com.hamkelasi.bll.User;
+import com.hamkelasi.ui.refactored.RegistrationPresenter;
 import com.hamkelasi.ui.refactored.RegistrationView;
 import com.hamkelasi.ui.refactored.file_upload.RealProfileUploader;
 import com.hamkelasi.ui.refactored.file_upload.Uploader;
@@ -23,6 +24,7 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
     private HttpServletRequest request;
     private ServletResponse response;
     private Part uploadPicture;
+    private RegistrationPresenter presenter;
 
     public RegisterServlet(HttpServletRequest request) {
         this.request = request;
@@ -186,7 +188,7 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
     @Override
     public void redirectToSuccessfulView(String to) {
         try {
-            request.getRequestDispatcher(to).forward(request, response);
+            request.getRequestDispatcher(request.getContextPath() + to).forward(request, response);
         } catch (ServletException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -201,6 +203,6 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
 
     @Override
     public Uploader profileImage() {
-        return new RealProfileUploader(uploadPicture);
+        return new RealProfileUploader(uploadPicture,this);
     }
 }

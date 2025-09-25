@@ -120,7 +120,7 @@
 
                     <!-- Error message -->
                     <c:if test="${not empty labelError}">
-                        <div class="error-big">${errorMessage}</div>
+                        <div class="error-big">${labelError}</div>
                     </c:if>
 
                     <form action="/register" method="post" enctype="multipart/form-data">

@@ -3,12 +3,24 @@ package com.hamkelasi.bll.refactored;
 import com.hamkelasi.bll.User;
 
 public class RealUserService implements UserService {
-    private User user;
+    private final User user;
 
+    public RealUserService(User user) {
+        this.user = user;
+    }
+
+    public RealUserService() {
+        this.user = new User();
+    }
 
     @Override
     public int isValid(String username, String email, String website) {
         return user.isValid(username,email,website);
+    }
+
+    @Override
+    public int getId() {
+        return user.getId();
     }
 
     @Override
