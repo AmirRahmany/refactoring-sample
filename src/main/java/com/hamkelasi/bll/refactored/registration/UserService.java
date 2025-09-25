@@ -1,4 +1,4 @@
-package com.hamkelasi.bll.refactored;
+package com.hamkelasi.bll.refactored.registration;
 
 public interface UserService {
     int register(RegisterUserDTO registerUserDto);

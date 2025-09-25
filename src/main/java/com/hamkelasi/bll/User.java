@@ -1,6 +1,5 @@
 package com.hamkelasi.bll;
 
-import com.hamkelasi.bll.refactored.UserValidationResults;
 import com.hamkelasi.dal.refactored.AdoUserRepository;
 import com.hamkelasi.dal.refactored.UserRepository;
 import com.hamkelasi.dal.Base;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.hamkelasi.bll.refactored.UserValidationResults.*;
+import static com.hamkelasi.bll.refactored.registration.UserValidationResults.*;
 
 public class User {
     //regionClassProperties

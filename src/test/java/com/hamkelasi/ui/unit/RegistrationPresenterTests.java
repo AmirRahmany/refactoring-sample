@@ -1,5 +1,6 @@
 package com.hamkelasi.ui.unit;
 
+import com.hamkelasi.ui.test_utils.RegistrationTestInfo.Mehdi;
 import com.tngtech.jgiven.junit5.ScenarioTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,12 +24,12 @@ public class RegistrationPresenterTests extends ScenarioTest<RegistrationSteps, 
     @Test
     void registration_successful_when_user_entered_valid_data() {
         given().user_entered_following_information(d -> {
-                    d.withUsername("admin")
-                            .withPassword("12345")
-                            .withFirstname("hadi")
-                            .withLastname("jabbari")
-                            .withEmail("admin@yahoo.com")
-                            .withWebsite("www.hadijabbari.com")
+                    d.withUsername(Mehdi.USERNAME)
+                            .withPassword(Mehdi.PASSWORD)
+                            .withFirstname(Mehdi.FIRST_NAME)
+                            .withLastname(Mehdi.LAST_NAME)
+                            .withEmail(Mehdi.EMAIL)
+                            .withWebsite(Mehdi.WEBSITE)
                             .withPmActivate(true);
 
                 })
@@ -36,13 +37,13 @@ public class RegistrationPresenterTests extends ScenarioTest<RegistrationSteps, 
                 .and().user_does_not_provide_any_profile_picture();
         when().userTriesToRegister();
         then().user_registered_successfully(dto -> {
-            dto.username = "admin";
-            dto.password = "12345";
-            dto.firstName = "hadi";
-            dto.lastName = "jabbari";
-            dto.email = "admin@yahoo.com";
-            dto.website = "www.hadijabbari.com";
-            dto.isPmActive = true;
+            dto.username = Mehdi.USERNAME;
+            dto.password = Mehdi.PASSWORD;
+            dto.firstName = Mehdi.FIRST_NAME;
+            dto.lastName = Mehdi.LAST_NAME;
+            dto.email = Mehdi.EMAIL;
+            dto.website = Mehdi.WEBSITE;
+            dto.isPmActive = Mehdi.IS_PM_ACTIVE;
         });
     }
 

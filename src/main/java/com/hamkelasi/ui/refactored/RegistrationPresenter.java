@@ -1,14 +1,11 @@
 package com.hamkelasi.ui.refactored;
 
-import com.hamkelasi.bll.refactored.RealUserService;
-import com.hamkelasi.bll.refactored.RegisterUserDTO;
-import com.hamkelasi.bll.refactored.UserService;
+import com.hamkelasi.bll.refactored.permissions.Permissions;
+import com.hamkelasi.bll.refactored.registration.RealUserService;
+import com.hamkelasi.bll.refactored.registration.RegisterUserDTO;
+import com.hamkelasi.bll.refactored.registration.UserService;
 import com.hamkelasi.ui.refactored.cookies.MyCookie;
-import com.hamkelasi.ui.refactored.file_upload.Uploader;
 import com.hamkelasi.ui.refactored.session_management.Session;
-
-import java.io.File;
-import java.time.LocalDateTime;
 
 public class RegistrationPresenter {
     public static final int REGULAR_USER = 3;
@@ -41,18 +38,18 @@ public class RegistrationPresenter {
 
             final RegisterUserDTO dto = new RegisterUserDTO();
             switch (retVal) {
-              case 0:
+                case 0:
                     dto.username = username;
                     dto.password = view.password();
                     dto.firstName = view.firstname();
                     dto.lastName = view.lastname();
                     dto.email = view.email();
                     dto.website = view.website();
-                  dto.isPmActive = view.isPmActivate();
-                  dto.permission=3;
+                    dto.isPmActive = view.isPmActivate();
+                    dto.permission = Permissions.NORMAL_USER;
 
-                  userService.register(dto);
-                  // dto.registerDate = LocalDateTime.now();
+                    userService.register(dto);
+                    // dto.registerDate = LocalDateTime.now();
                     //dto.permission = REGULAR_USER;
 //
 //                    // Handle file upload
@@ -71,10 +68,10 @@ public class RegistrationPresenter {
 //                    }
                     break;
                 case 1:
-                  view.showError("ایمیل وارد شده تکراری می باشد");
+                    view.showError("ایمیل وارد شده تکراری می باشد");
                     break;
                 case 2:
-                   view.showError("نام کاربری وارد شده تکراری می باشد");
+                    view.showError("نام کاربری وارد شده تکراری می باشد");
                     break;
                 case REGULAR_USER:
                     view.showError("فرمت ایمیل وارد شده نادرست می باشد");

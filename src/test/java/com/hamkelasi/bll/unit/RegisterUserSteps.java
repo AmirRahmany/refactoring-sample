@@ -1,7 +1,7 @@
 package com.hamkelasi.bll.unit;
 
 import com.hamkelasi.bll.User;
-import com.hamkelasi.bll.refactored.UserValidationResults;
+import com.hamkelasi.bll.refactored.registration.UserValidationResults;
 import com.hamkelasi.dal.refactored.UserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;

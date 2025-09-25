@@ -1,17 +1,15 @@
 package com.hamkelasi.ui.unit;
 
-import com.hamkelasi.bll.refactored.RegisterUserDTO;
-import com.hamkelasi.bll.refactored.UserService;
+import com.hamkelasi.bll.refactored.permissions.Permissions;
+import com.hamkelasi.bll.refactored.registration.RegisterUserDTO;
 import com.hamkelasi.ui.refactored.RegistrationPresenter;
 import com.hamkelasi.ui.test_double.*;
 import com.tngtech.jgiven.Stage;
-import org.mockito.Mockito;
 
 import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 public class RegistrationSteps extends Stage<RegistrationSteps> {
 
@@ -69,6 +67,6 @@ public class RegistrationSteps extends Stage<RegistrationSteps> {
     public void user_registered_with_normal_permission() {
         final RegisterUserDTO actualDto = userService.getRegisteredDto();
 
-        assertThat(actualDto.permission).isEqualTo(3);
+        assertThat(actualDto.permission).isEqualTo(Permissions.NORMAL_USER);
     }
 }
