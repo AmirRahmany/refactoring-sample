@@ -11,11 +11,16 @@ public class RealProfileUploader implements Uploader {
     HttpServlet httpServlet;
     private final Part filePart;
 
-    public RealProfileUploader(Part filePart,HttpServlet httpServlet) {
+    public RealProfileUploader(Part filePart, HttpServlet httpServlet) {
         this.filePart = filePart;
         this.httpServlet = httpServlet;
     }
 
+
+    @Override
+    public boolean hasFile() {
+        return (filePart != null && filePart.getSize() > 0);
+    }
 
     @Override
     public String getFileName() {
@@ -23,8 +28,8 @@ public class RealProfileUploader implements Uploader {
     }
 
     @Override
-    public String write(String dir){
-        if (filePart == null || filePart.getSize() <= 0) return "";
+    public String write(String dir) {
+        if (!hasFile()) return "";
         String savedPath = "";
         final String realPath = httpServlet.getServletContext().getRealPath(dir);
         File uploadDir = new File(realPath);

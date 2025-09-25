@@ -4,7 +4,11 @@ import com.hamkelasi.bll.refactored.RealUserService;
 import com.hamkelasi.bll.refactored.RegisterUserDTO;
 import com.hamkelasi.bll.refactored.UserService;
 import com.hamkelasi.ui.refactored.cookies.MyCookie;
+import com.hamkelasi.ui.refactored.file_upload.Uploader;
 import com.hamkelasi.ui.refactored.session_management.Session;
+
+import java.io.File;
+import java.time.LocalDateTime;
 
 public class RegistrationPresenter {
     public static final int REGULAR_USER = 3;
@@ -37,31 +41,34 @@ public class RegistrationPresenter {
 
             final RegisterUserDTO dto = new RegisterUserDTO();
             switch (retVal) {
-                case 0:
-                    /*dto.username = username;
+              case 0:
+                    dto.username = username;
                     dto.password = view.password();
                     dto.firstName = view.firstname();
                     dto.lastName = view.lastname();
                     dto.email = view.email();
                     dto.website = view.website();
-                    dto.registerDate = LocalDateTime.now();
-                    dto.isPmActive = view.isPmActivate();
-                    dto.permission = REGULAR_USER;
+                  dto.isPmActive = view.isPmActivate();
+                  dto.permission=3;
 
-                    // Handle file upload
-                    final Uploader profilePicture = view.profileImage();
-                    dto.profilePicture = profilePicture.write("/UserImages/");
-
-
-                    int valInsert = userService.register(dto);
-                    if (valInsert == 0) {
-                        session.set("UserID", userService.getId());
-                        final int expiredTime = 30 * 24 * 60 * 60;// 1 month in seconds
-                        cookie.add("UserID",userService.getId(),expiredTime);
-                        view.redirectToSuccessfulView("/register?action=successfull");
-                    } else if (valInsert == 9) {
-                        view.showError("خطا در ثبت داده");
-                    }*/
+                  userService.register(dto);
+                  // dto.registerDate = LocalDateTime.now();
+                    //dto.permission = REGULAR_USER;
+//
+//                    // Handle file upload
+//                    uploadPicture = request.getPart("uploadPicture");
+//                    if (uploadPicture != null && uploadPicture.getSize() > 0) {
+//                        String filename = uploadPicture.getSubmittedFileName();
+//                        String savePath = getServletContext().getRealPath("/UserImages/") + File.separator + filename;
+//                        File uploadDir = new File(getServletContext().getRealPath("/UserImages/"));
+//                        if (!uploadDir.exists()) {
+//                            uploadDir.mkdirs();
+//                        }
+//                        uploadPicture.write(savePath);
+//                        newUser.setProfilePicture("/UserImages/" + filename);
+//                    } else {
+//                        newUser.setProfilePicture("");
+//                    }
                     break;
                 case 1:
                   view.showError("ایمیل وارد شده تکراری می باشد");

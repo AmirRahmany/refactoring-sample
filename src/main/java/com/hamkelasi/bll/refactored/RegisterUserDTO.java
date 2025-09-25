@@ -13,4 +13,20 @@ public class RegisterUserDTO {
     public boolean isPmActive;
     public int permission;
     public LocalDateTime registerDate;
+
+    @Override
+    public String toString() {
+        return "RegisterUserDTO{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", profilePicture='" + profilePicture + '\'' +
+                ", website='" + website + '\'' +
+                ", isPmActive=" + isPmActive +
+                ", permission=" + permission +
+                ", registerDate=" + registerDate +
+                '}';
+    }
 }

@@ -14,4 +14,5 @@ public interface RegistrationView {
     void redirectToSuccessfulView(String to);
     boolean isPageValid();
     Uploader profileImage();
+    void setProfileImage(Uploader uploader);
 }

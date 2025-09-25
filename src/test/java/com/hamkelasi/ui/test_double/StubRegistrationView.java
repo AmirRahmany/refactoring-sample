@@ -12,40 +12,82 @@ import static org.mockito.Mockito.when;
 
 public class StubRegistrationView implements RegistrationView {
     private final List<String> errors = new ArrayList<>();
+    private String username;
+    private String password;
+    private String firstname;
+    private String lastname;
+    private String email;
+    private String website;
+    private boolean isPmActivate;
+
+    public StubRegistrationView withUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public StubRegistrationView withPassword(String password){
+        this.password = password;
+        return this;
+    }
+
+    public StubRegistrationView withFirstname(String firstname) {
+        this.firstname = firstname;
+        return this;
+    }
+
+    public StubRegistrationView withLastname(String lastname) {
+        this.lastname = lastname;
+        return this;
+    }
+
+    public StubRegistrationView withEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public StubRegistrationView withWebsite(String website) {
+        this.website = website;
+        return this;
+    }
+
+    public StubRegistrationView withPmActivate(boolean isPmActivate) {
+        this.isPmActivate = isPmActivate;
+        return this;
+    }
 
     @Override
     public String username() {
-        return "foo";
+        return username;
     }
 
     @Override
     public String password() {
-        return "foo123";
+        return password;
     }
 
     @Override
     public String firstname() {
-        return "foo1";
+        return firstname;
     }
 
     @Override
     public String lastname() {
-        return "foo2";
+        return lastname;
     }
 
     @Override
     public String email() {
-        return "foo@gmail.com";
+        return email;
     }
 
     @Override
     public String website() {
-        return "";
+        return website;
     }
 
     @Override
     public boolean isPmActivate() {
-        return true;
+        return isPmActivate;
     }
 
     @Override
@@ -71,7 +113,12 @@ public class StubRegistrationView implements RegistrationView {
         return uploader;
     }
 
-    public List<String> getDisplayErrors(){
+    @Override
+    public void setProfileImage(Uploader uploader) {
+
+    }
+
+    public List<String> getDisplayErrors() {
         return errors;
     }
 }

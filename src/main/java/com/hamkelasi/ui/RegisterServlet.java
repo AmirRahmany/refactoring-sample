@@ -25,6 +25,7 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
     private ServletResponse response;
     private Part uploadPicture;
     private RegistrationPresenter presenter;
+    private Uploader profileImage;
 
     public RegisterServlet(HttpServletRequest request) {
         this.request = request;
@@ -204,5 +205,9 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
     @Override
     public Uploader profileImage() {
         return new RealProfileUploader(uploadPicture,this);
+    }
+
+    public void setProfileImage(Uploader uploader){
+        profileImage = uploader;
     }
 }

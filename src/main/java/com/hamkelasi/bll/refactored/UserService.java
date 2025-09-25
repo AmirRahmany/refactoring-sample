@@ -6,4 +6,6 @@ public interface UserService {
     int isValid(String username, String email, String website);
 
     int getId();
+
+    RegisterUserDTO getRegisteredDto();
 }
