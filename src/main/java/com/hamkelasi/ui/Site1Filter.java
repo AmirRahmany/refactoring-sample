@@ -57,7 +57,7 @@ public class Site1Filter implements Filter {
             request.setAttribute("linkSendInviteVisible", true);
             request.setAttribute("loginVisible", false);
 
-            int userId = Integer.parseInt((String) session.getAttribute("UserID"));
+            int userId = Integer.parseInt(session.getAttribute("UserID").toString());
             User user = new User(userId);
             request.setAttribute("welcomeMessage", "خوش آمدید، " + user.getUsername());
             request.setAttribute("linkAdminPanelVisible", user.getPermission() == 1);

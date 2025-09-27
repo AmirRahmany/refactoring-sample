@@ -9,6 +9,8 @@ import com.hamkelasi.bll.refactored.shared.Clock;
 import com.hamkelasi.bll.refactored.shared.SystemClock;
 import com.hamkelasi.ui.refactored.cookies.MyCookie;
 import com.hamkelasi.ui.refactored.file_upload.MyFile;
+import com.hamkelasi.ui.refactored.file_upload.RealFile;
+import com.hamkelasi.ui.refactored.file_upload.RealProfileUploader;
 import com.hamkelasi.ui.refactored.session_management.Session;
 
 public class RegistrationPresenter {
@@ -67,22 +69,21 @@ public class RegistrationPresenter {
                             uploadDir.makeDir();
                         }
                         profileImage.upload(savePath);
-                        dto.profilePicture = ("/UserImages/" + filename);
+                        dto.profilePicture = ("/images/" + filename);
                     } else {
-                        dto.profilePicture = ("/UserImages/default.png");
+                        dto.profilePicture = ("/images/default.png");
                     }
                     final RegistrationResult registrationResult = userService.register(dto);
                     final int result = registrationResult.resultCode;
                     if (result == 0) {
                         session.set("UserID", registrationResult.userId);
                         cookie.add("UserID", registrationResult.userId, clock.now().plusMonths(1));
+                        view.setMessage("ثبت نام شما با موفقیت انجام شد");
                         view.redirectToSuccessfulPage();
                         return;
                     } else if (result == 9) {
                         view.showError("خطا در ثبت داده");
                     }
-
-                    view.setMessage("ثبت نام شما با موفقیت انجام شد");
                     break;
                 case 1:
                     view.showError("ایمیل وارد شده تکراری می باشد");

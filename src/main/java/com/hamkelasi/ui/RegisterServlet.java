@@ -22,19 +22,12 @@ import java.io.IOException;
 @MultipartConfig
 public class RegisterServlet extends HttpServlet implements RegistrationView {
 
-    private String labelError = "";
     private HttpServletRequest request;
     private HttpServletResponse response;
     private Part uploadPicture;
     private RegistrationPresenter presenter;
     private Uploader profileImage;
     private MyFile directoryFile;
-
-    public RegisterServlet(HttpServletRequest request) {
-        this.request = request;
-        profileImage = new RealProfileUploader(uploadPicture, this);
-        this.directoryFile = new RealFile(getServletContext().getRealPath("/UserImages"));
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -70,6 +63,7 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         initPresenter(request, response);
         presenter.register();
 /*        this.request=request;
@@ -148,10 +142,15 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
         //request.getRequestDispatcher("/WEB-INF/templates/register.jsp").forward(request, response);
     }
 
-    private void initPresenter(HttpServletRequest request, HttpServletResponse response) {
+    private void initPresenter(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         this.request = request;
         this.response = response;
-        this.presenter = new RegistrationPresenter(this, new RealRegistrationService(), new RealCookie(this.request, this.response), new RealSession(this.request), new SystemClock());
+        this.presenter = new RegistrationPresenter(this, new RealRegistrationService(),
+                new RealCookie(this.request, this.response),
+                new RealSession(this.request),
+                new SystemClock());
+        setFileDirectoryMaker(new RealFile(getServletContext().getRealPath("/images/")));
+        setProfileImage(new RealProfileUploader(request.getPart("profilePicture")));
     }
 
     private boolean isValidForm(HttpServletRequest request) {
@@ -206,10 +205,10 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
     @Override
     public void redirectToSuccessfulPage() {
         try {
-            request.getRequestDispatcher(request.getContextPath() + "/register").forward(request, response);
-        } catch (ServletException e) {
-            throw new RuntimeException(e);
+            request.getRequestDispatcher("/WEB-INF/templates/register.jsp").forward(request, response);
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ServletException e) {
             throw new RuntimeException(e);
         }
     }

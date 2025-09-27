@@ -32,10 +32,10 @@ public class ProfileServlet extends HttpServlet {
         String queryString = request.getParameter("ID");
         String action = request.getParameter("action");
         int userID;
-        User user;
+        User user = new User();
         String labelNotification = null;
         boolean labelNotificationVisible = false;
-        String labelUsername = "";
+        String labelUsername ;
         String labelFirstName = "";
         String labelLastName = "";
         String labelEmail = "";
@@ -132,7 +132,7 @@ public class ProfileServlet extends HttpServlet {
 
         // Handle friendship status and button visibility
         if (session.getAttribute("UserID") != null) {
-            int sessionUserId = Integer.parseInt((String) session.getAttribute("UserID"));
+            int sessionUserId = Integer.parseInt(session.getAttribute("UserID").toString());
             if (sessionUserId != user.getId()) {
                 FriendshipStatus status = friendship.getFriendshipStatus(sessionUserId, user.getId());
                 if (status == Friendship.FriendshipStatus.NOT_FRIEND) {

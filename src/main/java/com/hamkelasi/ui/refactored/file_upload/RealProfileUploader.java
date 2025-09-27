@@ -1,19 +1,15 @@
 package com.hamkelasi.ui.refactored.file_upload;
 
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.Part;
 
-import java.io.File;
 import java.io.IOException;
 
 public class RealProfileUploader implements Uploader {
 
-    HttpServlet httpServlet;
     private final Part filePart;
 
-    public RealProfileUploader(Part filePart, HttpServlet httpServlet) {
+    public RealProfileUploader(Part filePart) {
         this.filePart = filePart;
-        this.httpServlet = httpServlet;
     }
 
 

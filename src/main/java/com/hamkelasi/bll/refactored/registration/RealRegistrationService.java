@@ -31,10 +31,6 @@ public class RealRegistrationService implements RegistrationService {
         var result = new RegistrationResult();
         result.resultCode = 0;
 
-        if (dto.profilePicture == null || dto.profilePicture.isEmpty()) {
-            dto.profilePicture = "/UserImages/default.png";
-        }
-
         boolean inserted = repository.add(dto.username, dto.password, dto.firstName, dto.lastName, dto.profilePicture, dto.email, dto.website, dto.permission, dto.registerDate, dto.isPmActive);
 
         if (!inserted) {

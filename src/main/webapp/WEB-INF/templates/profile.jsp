@@ -223,8 +223,8 @@
                         <td></td>
                         <td rowspan="6">
                             <c:choose>
-                                <c:when test="${not empty imageProfile}">
-                                    <img src="${imageProfile}" class="profile-image" alt="Profile Image" />
+                                <c:when test="${not empty imageProfileUrl}">
+                                    <img src="${imageProfileUrl}" class="profile-image" alt="Profile Image" />
                                 </c:when>
                                 <c:otherwise>
                                     <img src="/images/default-profile.png" class="profile-image" alt="Default Profile" />
@@ -235,13 +235,13 @@
                     <tr>
                         <td>
                             <label>نام خانوادگی : </label>
-                            <span>${labelLastname}</span>
+                            <span>${labelLastName}</span>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <label>سطح کاربری : </label>
-                            <span>${LabelPermission}</span>
+                            <span>${labelPermission}</span>
                         </td>
                     </tr>
                     <tr>
