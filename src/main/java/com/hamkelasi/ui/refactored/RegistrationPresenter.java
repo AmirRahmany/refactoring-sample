@@ -12,6 +12,7 @@ import com.hamkelasi.ui.refactored.session_management.Session;
 
 public class RegistrationPresenter {
     public static final int REGULAR_USER = 3;
+    public static final int EXPIRED_TIME = 30 * 24 * 60 * 60; // 1 month
     private final RegistrationView view;
     private final RegistrationService userService;
     private final MyCookie cookie;
@@ -59,10 +60,8 @@ public class RegistrationPresenter {
                     final int result = registrationResult.resultCode;
                     if (result == 0) {
                         session.set("UserID", registrationResult.userId);
-                       /* Cookie userIdCookie = new Cookie("UserID", String.valueOf(newUser.getId()));
-                        userIdCookie.setMaxAge(30 * 24 * 60 * 60); // 1 month in seconds
-                        response.addCookie(userIdCookie);
-                        response.sendRedirect(request.getContextPath() + "/register?action=successfull");*/
+                        cookie.add("UserID",registrationResult.userId, clock.now().plusMonths(1));
+                       view.redirectToSuccessfulPage();
                         return;
                     } else if (result == 9) {
                         view.showError("خطا در ثبت داده");
@@ -103,6 +102,6 @@ public class RegistrationPresenter {
                     break;
             }
         }
-        view.redirectToSuccessfulView("/WEB-INF/templates/register.jsp");
+        view.redirectToSuccessfulPage();
     }
 }

@@ -23,6 +23,7 @@ public class StubRegistrationView implements RegistrationView {
     private String email = Mehdi.EMAIL;
     private String website = Mehdi.WEBSITE;
     private boolean isPmActivate = Mehdi.IS_PM_ACTIVE;
+    private int redirectionCalls;
 
     public StubRegistrationView withUsername(String username) {
         this.username = username;
@@ -100,8 +101,8 @@ public class StubRegistrationView implements RegistrationView {
     }
 
     @Override
-    public void redirectToSuccessfulView(String to) {
-
+    public void redirectToSuccessfulPage() {
+        redirectionCalls++;
     }
 
     @Override
@@ -123,21 +124,16 @@ public class StubRegistrationView implements RegistrationView {
     }
 
     @Override
-    public HttpServletRequest getHttpRequest() {
-        return null;
-    }
-
-    @Override
-    public HttpServletResponse getHttpResponse() {
-        return null;
-    }
-
-    @Override
     public void setMessage(String message) {
 
     }
 
     public List<String> getDisplayErrors() {
         return errors;
+    }
+
+
+    public int getRedirectionCalls() {
+        return redirectionCalls;
     }
 }

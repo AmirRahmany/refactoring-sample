@@ -15,19 +15,21 @@ import static org.mockito.ArgumentMatchers.any;
 
 public class RegistrationSteps extends Stage<RegistrationSteps> {
 
+    public static final int ONE_MONTH = 30 * 24 * 60 * 60;
     private final SpyRegistrationService userService;
     private final StubRegistrationView view;
     private final RegistrationPresenter presenter;
     private final StubClock clock;
     private final FakeSession session;
+    private final FakeCookie cookie;
 
     public RegistrationSteps() {
         view = new StubRegistrationView();
         userService = new SpyRegistrationService();
         session = new FakeSession();
-        var fakeCookie = new FakeCookie();
+        cookie = new FakeCookie();
         clock = new StubClock();
-        presenter = new RegistrationPresenter(view, userService, fakeCookie, session, clock);
+        presenter = new RegistrationPresenter(view, userService, cookie, session, clock);
     }
 
     public void validationsFailsWithErrorCode(int errorCode) {
@@ -76,7 +78,7 @@ public class RegistrationSteps extends Stage<RegistrationSteps> {
         assertThat(actualDto.permission).isEqualTo(Permissions.NORMAL_USER);
     }
 
-    public void currentRegistrationDateIs(String dateTime) {
+    public void currentTimeIs(String dateTime) {
         final DateTimeFormatter formatter = getDateTimeFormatter();
         final LocalDateTime localDateTime = LocalDateTime.parse(dateTime, formatter);
         clock.timeTravelTo(localDateTime);
@@ -89,16 +91,42 @@ public class RegistrationSteps extends Stage<RegistrationSteps> {
         assertThat(actualDate).isEqualTo(expectedTime);
     }
 
-    private static DateTimeFormatter getDateTimeFormatter() {
-        return DateTimeFormatter.ofPattern("yyyy-MM-dd' 'H:mm:ss");
-    }
-
     public void registrationProcessIsFailing() {
         userService.setRegistrationResult(9);
     }
 
     public void sessionFilledWithUserId() {
         final int expectedUserId = userService.getUserId();
-        assertThat(expectedUserId).isEqualTo(session.get("UserID"));
+        assertThat(session.get("UserID")).isEqualTo(expectedUserId);
+    }
+
+    public RegistrationSteps cookieSetWithUserId() {
+        final int expectedUserId = userService.getUserId();
+        final int actualUserId = Integer.parseInt(cookie.get("UserID").toString());
+        assertThat(actualUserId).isEqualTo(expectedUserId);
+
+        return self();
+    }
+
+    public void userIdCookieExpiredAfterOneMonth() {
+        final int actualExpireDate = cookie.getExpireDateOf("UserID");
+        assertThat(actualExpireDate).isEqualTo(ONE_MONTH);
+    }
+
+    public void cookieFilledWithExpireDateOf(String dateTime) {
+        final LocalDateTime expiredDateTime = LocalDateTime.parse(dateTime, getDateTimeFormatter());
+
+
+        assertThat(expiredDateTime.getSecond()).isEqualTo(cookie.getExpireDateOf("UserID"));
+
+    }
+
+    private static DateTimeFormatter getDateTimeFormatter() {
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd' 'HH:mm:ss");
+    }
+
+    public void userRedirectToSuccessfulPage() {
+
+        assertThat(view.getRedirectionCalls()).isEqualTo(1);
     }
 }

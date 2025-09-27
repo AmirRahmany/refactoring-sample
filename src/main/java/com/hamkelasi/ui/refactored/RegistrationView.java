@@ -13,14 +13,9 @@ public interface RegistrationView {
     String website();
     boolean isPmActivate();
     void showError(String errorText);
-    void redirectToSuccessfulView(String to);
+    void redirectToSuccessfulPage();
     boolean isPageValid();
     Uploader profileImage();
     void setProfileImage(Uploader uploader);
-
-    HttpServletRequest getHttpRequest();
-
-    HttpServletResponse getHttpResponse();
-
     void setMessage(String message);
 }

@@ -199,9 +199,9 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
     }
 
     @Override
-    public void redirectToSuccessfulView(String to) {
+    public void redirectToSuccessfulPage() {
         try {
-            request.getRequestDispatcher(request.getContextPath() + to).forward(request, response);
+            request.getRequestDispatcher(request.getContextPath() + "/register").forward(request, response);
         } catch (ServletException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -221,16 +221,6 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
 
     public void setProfileImage(Uploader uploader) {
         profileImage = uploader;
-    }
-
-    @Override
-    public HttpServletRequest getHttpRequest() {
-        return request;
-    }
-
-    @Override
-    public HttpServletResponse getHttpResponse() {
-        return response;
     }
 
     @Override

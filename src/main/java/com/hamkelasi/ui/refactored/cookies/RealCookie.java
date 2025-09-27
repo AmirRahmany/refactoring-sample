@@ -5,6 +5,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 
 public class RealCookie implements MyCookie {
@@ -23,9 +25,9 @@ public class RealCookie implements MyCookie {
     }
 
     @Override
-    public void add(String key, Object value, int expiredTime) {
+    public void add(String key, Object value, LocalDateTime expiredTime) {
         final var cookie = new Cookie(key, value.toString());
-        cookie.setMaxAge(expiredTime);
+        cookie.setMaxAge(expiredTime.getSecond());
         response.addCookie(cookie);
     }
 }

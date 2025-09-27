@@ -59,9 +59,9 @@ class RegistrationPresenterTests extends ScenarioTest<RegistrationSteps, Registr
     void sets_now_as_a_register_date_of_user() {
         given().validation_is_successful()
                 .and().user_does_not_provide_any_profile_picture()
-                .and().currentRegistrationDateIs("2025-08-27 3:41:00");
+                .and().currentTimeIs("2025-08-27 03:41:00");
         when().userTriesToRegister();
-        then().registerDateOfUserSetTo("2025-08-27 3:41:00");
+        then().registerDateOfUserSetTo("2025-08-27 03:41:00");
     }
 
     @Test
@@ -75,11 +75,36 @@ class RegistrationPresenterTests extends ScenarioTest<RegistrationSteps, Registr
     }
 
     @Test
-    void user_id_added_to_session_after_registration() {
+    void user_id_added_to_session_after_successful_registration() {
         given().validation_is_successful()
                 .and().user_does_not_provide_any_profile_picture();
         when().userTriesToRegister();
         then().sessionFilledWithUserId();
+    }
+
+    @Test
+    void user_id_added_to_cookie_after__successful_registration() {
+        given().validation_is_successful()
+                .and().user_does_not_provide_any_profile_picture();
+        when().userTriesToRegister();
+        then().cookieSetWithUserId();
+    }
+
+    @Test
+    void expire_date_for_cookie_is_set_to_one_month() {
+        given().validation_is_successful()
+                .and().user_does_not_provide_any_profile_picture()
+                .and().currentTimeIs("2025-08-27 18:32:00");
+        when().userTriesToRegister();
+        then().cookieFilledWithExpireDateOf("2025-09-27 18:32:00");
+    }
+
+    @Test
+    void redirect_to_successful_page_after_successful_registration_() {
+        given().validation_is_successful()
+                .and().user_does_not_provide_any_profile_picture();
+        when().userTriesToRegister();
+        then().userRedirectToSuccessfulPage();
     }
 }
 
