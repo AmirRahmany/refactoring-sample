@@ -4,7 +4,12 @@ import com.hamkelasi.bll.refactored.permissions.Permissions;
 import com.hamkelasi.bll.refactored.registration.RealUserService;
 import com.hamkelasi.bll.refactored.registration.RegisterUserDTO;
 import com.hamkelasi.bll.refactored.registration.UserService;
+import com.hamkelasi.bll.refactored.shared.Clock;
+import com.hamkelasi.bll.refactored.shared.SystemClock;
+import com.hamkelasi.ui.RegisterServlet;
 import com.hamkelasi.ui.refactored.cookies.MyCookie;
+import com.hamkelasi.ui.refactored.cookies.RealCookie;
+import com.hamkelasi.ui.refactored.session_management.RealSession;
 import com.hamkelasi.ui.refactored.session_management.Session;
 
 public class RegistrationPresenter {
@@ -13,18 +18,21 @@ public class RegistrationPresenter {
     private final UserService userService;
     private final MyCookie cookie;
     private final Session session;
+    private final Clock clock;
 
-    public RegistrationPresenter(RegistrationView view, UserService userService, MyCookie cookie, Session session) {
+    public RegistrationPresenter(RegistrationView view, UserService userService, MyCookie cookie, Session session, Clock clock) {
         this.view = view;
         this.userService = userService;
         this.cookie = cookie;
         this.session = session;
+        this.clock = clock;
     }
 
-    public RegistrationPresenter(RegistrationView view, MyCookie cookie, Session session) {
+    public RegistrationPresenter(RegistrationView view,MyCookie cookie,Session session) {
         this.view = view;
         this.cookie = cookie;
         this.session = session;
+        this.clock = new SystemClock();
         this.userService = new RealUserService();
     }
 
@@ -47,6 +55,7 @@ public class RegistrationPresenter {
                     dto.website = view.website();
                     dto.isPmActive = view.isPmActivate();
                     dto.permission = Permissions.NORMAL_USER;
+                    dto.registerDate = clock.now();
 
                     userService.register(dto);
                     // dto.registerDate = LocalDateTime.now();

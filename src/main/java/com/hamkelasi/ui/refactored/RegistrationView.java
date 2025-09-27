@@ -1,6 +1,8 @@
 package com.hamkelasi.ui.refactored;
 
 import com.hamkelasi.ui.refactored.file_upload.Uploader;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public interface RegistrationView {
     String username();
@@ -15,4 +17,8 @@ public interface RegistrationView {
     boolean isPageValid();
     Uploader profileImage();
     void setProfileImage(Uploader uploader);
+
+    HttpServletRequest getHttpRequest();
+
+    HttpServletResponse getHttpResponse();
 }

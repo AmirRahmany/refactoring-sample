@@ -4,123 +4,8 @@
   "scenarios": [
     {
       "className": "com.hamkelasi.ui.unit.RegistrationPresenterTests",
-      "testMethodName": "registration_successful_when_user_entered_valid_data",
-      "description": "registration successful when user entered valid data",
-      "tagIds": [],
-      "explicitParameters": [],
-      "derivedParameters": [],
-      "scenarioCases": [
-        {
-          "caseNr": 1,
-          "steps": [
-            {
-              "name": "user entered following information",
-              "words": [
-                {
-                  "value": "Given",
-                  "isIntroWord": true
-                },
-                {
-                  "value": "user entered following information"
-                },
-                {
-                  "value": "com.hamkelasi.ui.unit.RegistrationPresenterTests$$Lambda/0x000001eb012188f8@51abf713",
-                  "argumentInfo": {
-                    "argumentName": "configurator",
-                    "formattedValue": "com.hamkelasi.ui.unit.RegistrationPresenterTests$$Lambda/0x000001eb012188f8@51abf713"
-                  }
-                }
-              ],
-              "status": "PASSED",
-              "durationInNanos": 32994600,
-              "depth": 0,
-              "parentFailed": false
-            },
-            {
-              "name": "validation is successful",
-              "words": [
-                {
-                  "value": "and",
-                  "isIntroWord": true
-                },
-                {
-                  "value": "validation is successful"
-                }
-              ],
-              "status": "PASSED",
-              "durationInNanos": 711900,
-              "depth": 0,
-              "parentFailed": false
-            },
-            {
-              "name": "user does not provide any profile picture",
-              "words": [
-                {
-                  "value": "and",
-                  "isIntroWord": true
-                },
-                {
-                  "value": "user does not provide any profile picture"
-                }
-              ],
-              "status": "PASSED",
-              "durationInNanos": 2607700,
-              "depth": 0,
-              "parentFailed": false
-            },
-            {
-              "name": "user tries to register",
-              "words": [
-                {
-                  "value": "When",
-                  "isIntroWord": true
-                },
-                {
-                  "value": "user tries to register"
-                }
-              ],
-              "status": "PASSED",
-              "durationInNanos": 2214401,
-              "depth": 0,
-              "parentFailed": false
-            },
-            {
-              "name": "user registered successfully",
-              "words": [
-                {
-                  "value": "Then",
-                  "isIntroWord": true
-                },
-                {
-                  "value": "user registered successfully"
-                },
-                {
-                  "value": "com.hamkelasi.ui.unit.RegistrationPresenterTests$$Lambda/0x000001eb01224e98@6979efad",
-                  "argumentInfo": {
-                    "argumentName": "configurator",
-                    "formattedValue": "com.hamkelasi.ui.unit.RegistrationPresenterTests$$Lambda/0x000001eb01224e98@6979efad"
-                  }
-                }
-              ],
-              "status": "PASSED",
-              "durationInNanos": 1474477500,
-              "depth": 0,
-              "parentFailed": false
-            }
-          ],
-          "explicitArguments": [],
-          "derivedArguments": [],
-          "status": "SUCCESS",
-          "durationInNanos": 1589471601
-        }
-      ],
-      "casesAsTable": false,
-      "durationInNanos": 1589471601
-    },
-    {
-      "className": "com.hamkelasi.ui.unit.RegistrationPresenterTests",
-      "testMethodName": "registers_user_with_user_normal_permission",
-      "description": "registers user with user normal permission",
+      "testMethodName": "sets_now_as_a_register_date_of_user",
+      "description": "sets now as a register date of user",
       "tagIds": [],
       "explicitParameters": [],
       "derivedParameters": [],
@@ -140,7 +25,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 961400,
+              "durationInNanos": 19025700,
               "depth": 0,
               "parentFailed": false
             },
@@ -156,7 +41,30 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 2041900,
+              "durationInNanos": 5138100,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "current registration date is",
+              "words": [
+                {
+                  "value": "and",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "current registration date is"
+                },
+                {
+                  "value": "2025-08-27 3:41:00",
+                  "argumentInfo": {
+                    "argumentName": "dateTime",
+                    "formattedValue": "2025-08-27 3:41:00"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 26419400,
               "depth": 0,
               "parentFailed": false
             },
@@ -172,23 +80,30 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 1195600,
+              "durationInNanos": 1467900,
               "depth": 0,
               "parentFailed": false
             },
             {
-              "name": "user registered with normal permission",
+              "name": "register date of user set to",
               "words": [
                 {
                   "value": "Then",
                   "isIntroWord": true
                 },
                 {
-                  "value": "user registered with normal permission"
+                  "value": "register date of user set to"
+                },
+                {
+                  "value": "2025-08-27 3:41:00",
+                  "argumentInfo": {
+                    "argumentName": "expectedDateTime",
+                    "formattedValue": "2025-08-27 3:41:00"
+                  }
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 2427000,
+              "durationInNanos": 189296000,
               "depth": 0,
               "parentFailed": false
             }
@@ -196,330 +111,11 @@
           "explicitArguments": [],
           "derivedArguments": [],
           "status": "SUCCESS",
-          "durationInNanos": 8360601
+          "durationInNanos": 346743200
         }
       ],
       "casesAsTable": false,
-      "durationInNanos": 8360601
-    },
-    {
-      "className": "com.hamkelasi.ui.unit.RegistrationPresenterTests",
-      "testMethodName": "show_corresponding_error_on_failed_registration",
-      "description": "show corresponding error on failed registration",
-      "tagIds": [],
-      "explicitParameters": [],
-      "derivedParameters": [
-        "errorCode",
-        "error"
-      ],
-      "scenarioCases": [
-        {
-          "caseNr": 1,
-          "steps": [
-            {
-              "name": "validations fails with error code",
-              "words": [
-                {
-                  "value": "Given",
-                  "isIntroWord": true
-                },
-                {
-                  "value": "validations fails with error code"
-                },
-                {
-                  "value": "1",
-                  "argumentInfo": {
-                    "parameterName": "errorCode",
-                    "argumentName": "errorCode",
-                    "formattedValue": "1"
-                  }
-                }
-              ],
-              "status": "PASSED",
-              "durationInNanos": 2813500,
-              "depth": 0,
-              "parentFailed": false
-            },
-            {
-              "name": "user tries to register",
-              "words": [
-                {
-                  "value": "When",
-                  "isIntroWord": true
-                },
-                {
-                  "value": "user tries to register"
-                }
-              ],
-              "status": "PASSED",
-              "durationInNanos": 387801,
-              "depth": 0,
-              "parentFailed": false
-            },
-            {
-              "name": "error display on screen",
-              "words": [
-                {
-                  "value": "Then",
-                  "isIntroWord": true
-                },
-                {
-                  "value": "error display on screen"
-                },
-                {
-                  "value": "ایمیل وارد شده تکراری می باشد",
-                  "argumentInfo": {
-                    "parameterName": "error",
-                    "argumentName": "error",
-                    "formattedValue": "ایمیل وارد شده تکراری می باشد"
-                  }
-                }
-              ],
-              "status": "PASSED",
-              "durationInNanos": 29888600,
-              "depth": 0,
-              "parentFailed": false
-            }
-          ],
-          "explicitArguments": [],
-          "derivedArguments": [
-            "1",
-            "ایمیل وارد شده تکراری می باشد"
-          ],
-          "status": "SUCCESS",
-          "durationInNanos": 104638101
-        },
-        {
-          "caseNr": 2,
-          "steps": [
-            {
-              "name": "validations fails with error code",
-              "words": [
-                {
-                  "value": "Given",
-                  "isIntroWord": true
-                },
-                {
-                  "value": "validations fails with error code"
-                },
-                {
-                  "value": "2",
-                  "argumentInfo": {
-                    "parameterName": "errorCode",
-                    "argumentName": "errorCode",
-                    "formattedValue": "2"
-                  }
-                }
-              ],
-              "status": "PASSED",
-              "durationInNanos": 4551000,
-              "depth": 0,
-              "parentFailed": false
-            },
-            {
-              "name": "user tries to register",
-              "words": [
-                {
-                  "value": "When",
-                  "isIntroWord": true
-                },
-                {
-                  "value": "user tries to register"
-                }
-              ],
-              "status": "PASSED",
-              "durationInNanos": 952500,
-              "depth": 0,
-              "parentFailed": false
-            },
-            {
-              "name": "error display on screen",
-              "words": [
-                {
-                  "value": "Then",
-                  "isIntroWord": true
-                },
-                {
-                  "value": "error display on screen"
-                },
-                {
-                  "value": "نام کاربری وارد شده تکراری می باشد",
-                  "argumentInfo": {
-                    "parameterName": "error",
-                    "argumentName": "error",
-                    "formattedValue": "نام کاربری وارد شده تکراری می باشد"
-                  }
-                }
-              ],
-              "status": "PASSED",
-              "durationInNanos": 4837700,
-              "depth": 0,
-              "parentFailed": false
-            }
-          ],
-          "explicitArguments": [],
-          "derivedArguments": [
-            "2",
-            "نام کاربری وارد شده تکراری می باشد"
-          ],
-          "status": "SUCCESS",
-          "durationInNanos": 13194699
-        },
-        {
-          "caseNr": 3,
-          "steps": [
-            {
-              "name": "validations fails with error code",
-              "words": [
-                {
-                  "value": "Given",
-                  "isIntroWord": true
-                },
-                {
-                  "value": "validations fails with error code"
-                },
-                {
-                  "value": "3",
-                  "argumentInfo": {
-                    "parameterName": "errorCode",
-                    "argumentName": "errorCode",
-                    "formattedValue": "3"
-                  }
-                }
-              ],
-              "status": "PASSED",
-              "durationInNanos": 5173400,
-              "depth": 0,
-              "parentFailed": false
-            },
-            {
-              "name": "user tries to register",
-              "words": [
-                {
-                  "value": "When",
-                  "isIntroWord": true
-                },
-                {
-                  "value": "user tries to register"
-                }
-              ],
-              "status": "PASSED",
-              "durationInNanos": 502100,
-              "depth": 0,
-              "parentFailed": false
-            },
-            {
-              "name": "error display on screen",
-              "words": [
-                {
-                  "value": "Then",
-                  "isIntroWord": true
-                },
-                {
-                  "value": "error display on screen"
-                },
-                {
-                  "value": "فرمت ایمیل وارد شده نادرست می باشد",
-                  "argumentInfo": {
-                    "parameterName": "error",
-                    "argumentName": "error",
-                    "formattedValue": "فرمت ایمیل وارد شده نادرست می باشد"
-                  }
-                }
-              ],
-              "status": "PASSED",
-              "durationInNanos": 2353399,
-              "depth": 0,
-              "parentFailed": false
-            }
-          ],
-          "explicitArguments": [],
-          "derivedArguments": [
-            "3",
-            "فرمت ایمیل وارد شده نادرست می باشد"
-          ],
-          "status": "SUCCESS",
-          "durationInNanos": 10509200
-        },
-        {
-          "caseNr": 4,
-          "steps": [
-            {
-              "name": "validations fails with error code",
-              "words": [
-                {
-                  "value": "Given",
-                  "isIntroWord": true
-                },
-                {
-                  "value": "validations fails with error code"
-                },
-                {
-                  "value": "4",
-                  "argumentInfo": {
-                    "parameterName": "errorCode",
-                    "argumentName": "errorCode",
-                    "formattedValue": "4"
-                  }
-                }
-              ],
-              "status": "PASSED",
-              "durationInNanos": 4393800,
-              "depth": 0,
-              "parentFailed": false
-            },
-            {
-              "name": "user tries to register",
-              "words": [
-                {
-                  "value": "When",
-                  "isIntroWord": true
-                },
-                {
-                  "value": "user tries to register"
-                }
-              ],
-              "status": "PASSED",
-              "durationInNanos": 587100,
-              "depth": 0,
-              "parentFailed": false
-            },
-            {
-              "name": "error display on screen",
-              "words": [
-                {
-                  "value": "Then",
-                  "isIntroWord": true
-                },
-                {
-                  "value": "error display on screen"
-                },
-                {
-                  "value": "فرمت وب سایت وارد شده نادرست می باشد",
-                  "argumentInfo": {
-                    "parameterName": "error",
-                    "argumentName": "error",
-                    "formattedValue": "فرمت وب سایت وارد شده نادرست می باشد"
-                  }
-                }
-              ],
-              "status": "PASSED",
-              "durationInNanos": 3749901,
-              "depth": 0,
-              "parentFailed": false
-            }
-          ],
-          "explicitArguments": [],
-          "derivedArguments": [
-            "4",
-            "فرمت وب سایت وارد شده نادرست می باشد"
-          ],
-          "status": "SUCCESS",
-          "durationInNanos": 10863399
-        }
-      ],
-      "casesAsTable": true,
-      "durationInNanos": 139205399
+      "durationInNanos": 346743200
     }
   ],
   "tagMap": {}

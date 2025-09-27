@@ -22,7 +22,7 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
 
     private String labelError = "";
     private HttpServletRequest request;
-    private ServletResponse response;
+    private HttpServletResponse response;
     private Part uploadPicture;
     private RegistrationPresenter presenter;
     private Uploader profileImage;
@@ -33,6 +33,8 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        this.request=request;
+        this.response = response;
         HttpSession session = request.getSession();
 
         // Check for UserID cookie
@@ -63,6 +65,8 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        this.request=request;
+        this.response = response;
         HttpSession session = request.getSession();
 
         // Mimic Page.IsValid (basic check for required fields)
@@ -209,5 +213,15 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
 
     public void setProfileImage(Uploader uploader){
         profileImage = uploader;
+    }
+
+    @Override
+    public HttpServletRequest getHttpRequest() {
+        return request;
+    }
+
+    @Override
+    public HttpServletResponse getHttpResponse() {
+        return response;
     }
 }

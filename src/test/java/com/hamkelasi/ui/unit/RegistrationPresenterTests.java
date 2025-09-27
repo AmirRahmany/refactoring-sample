@@ -54,5 +54,14 @@ public class RegistrationPresenterTests extends ScenarioTest<RegistrationSteps, 
         when().userTriesToRegister();
         then().user_registered_with_normal_permission();
     }
+
+    @Test
+    void sets_now_as_a_register_date_of_user() {
+        given().validation_is_successful()
+                .and().user_does_not_provide_any_profile_picture()
+                .and().currentRegistrationDateIs("2025-08-27 3:41:00");
+        when().userTriesToRegister();
+        then().registerDateOfUserSetTo("2025-08-27 3:41:00");
+    }
 }
 

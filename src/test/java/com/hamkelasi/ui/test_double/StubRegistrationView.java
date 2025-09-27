@@ -2,6 +2,10 @@ package com.hamkelasi.ui.test_double;
 
 import com.hamkelasi.ui.refactored.RegistrationView;
 import com.hamkelasi.ui.refactored.file_upload.Uploader;
+import com.hamkelasi.ui.test_utils.RegistrationTestInfo;
+import com.hamkelasi.ui.test_utils.RegistrationTestInfo.Mehdi;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,20 +16,20 @@ import static org.mockito.Mockito.when;
 
 public class StubRegistrationView implements RegistrationView {
     private final List<String> errors = new ArrayList<>();
-    private String username;
-    private String password;
-    private String firstname;
-    private String lastname;
-    private String email;
-    private String website;
-    private boolean isPmActivate;
+    private String username = Mehdi.USERNAME;
+    private String password = Mehdi.PASSWORD;
+    private String firstname = Mehdi.FIRST_NAME;
+    private String lastname = Mehdi.LAST_NAME;
+    private String email = Mehdi.EMAIL;
+    private String website = Mehdi.WEBSITE;
+    private boolean isPmActivate = Mehdi.IS_PM_ACTIVE;
 
     public StubRegistrationView withUsername(String username) {
         this.username = username;
         return this;
     }
 
-    public StubRegistrationView withPassword(String password){
+    public StubRegistrationView withPassword(String password) {
         this.password = password;
         return this;
     }
@@ -116,6 +120,16 @@ public class StubRegistrationView implements RegistrationView {
     @Override
     public void setProfileImage(Uploader uploader) {
 
+    }
+
+    @Override
+    public HttpServletRequest getHttpRequest() {
+        return null;
+    }
+
+    @Override
+    public HttpServletResponse getHttpResponse() {
+        return null;
     }
 
     public List<String> getDisplayErrors() {
