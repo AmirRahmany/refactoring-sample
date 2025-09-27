@@ -2,7 +2,7 @@ package com.hamkelasi.bll.refactored.registration;
 
 import com.hamkelasi.bll.User;
 
-public class RealUserService implements UserService {
+public class RealUserService implements RegistrationService {
     private final User user;
     private RegisterUserDTO registerUserDTO;
 

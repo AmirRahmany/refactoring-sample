@@ -3,24 +3,21 @@ package com.hamkelasi.ui.refactored;
 import com.hamkelasi.bll.refactored.permissions.Permissions;
 import com.hamkelasi.bll.refactored.registration.RealUserService;
 import com.hamkelasi.bll.refactored.registration.RegisterUserDTO;
-import com.hamkelasi.bll.refactored.registration.UserService;
+import com.hamkelasi.bll.refactored.registration.RegistrationService;
 import com.hamkelasi.bll.refactored.shared.Clock;
 import com.hamkelasi.bll.refactored.shared.SystemClock;
-import com.hamkelasi.ui.RegisterServlet;
 import com.hamkelasi.ui.refactored.cookies.MyCookie;
-import com.hamkelasi.ui.refactored.cookies.RealCookie;
-import com.hamkelasi.ui.refactored.session_management.RealSession;
 import com.hamkelasi.ui.refactored.session_management.Session;
 
 public class RegistrationPresenter {
     public static final int REGULAR_USER = 3;
     private final RegistrationView view;
-    private final UserService userService;
+    private final RegistrationService userService;
     private final MyCookie cookie;
     private final Session session;
     private final Clock clock;
 
-    public RegistrationPresenter(RegistrationView view, UserService userService, MyCookie cookie, Session session, Clock clock) {
+    public RegistrationPresenter(RegistrationView view, RegistrationService userService, MyCookie cookie, Session session, Clock clock) {
         this.view = view;
         this.userService = userService;
         this.cookie = cookie;

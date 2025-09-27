@@ -1,9 +1,9 @@
 package com.hamkelasi.ui.test_double;
 
 import com.hamkelasi.bll.refactored.registration.RegisterUserDTO;
-import com.hamkelasi.bll.refactored.registration.UserService;
+import com.hamkelasi.bll.refactored.registration.RegistrationService;
 
-public class SpyUserService implements UserService {
+public class SpyUserService implements RegistrationService {
     private int validationResult;
     private RegisterUserDTO registerDTO;
     private int registrationCalled;
