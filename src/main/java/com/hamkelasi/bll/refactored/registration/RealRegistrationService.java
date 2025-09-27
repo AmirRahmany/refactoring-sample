@@ -1,8 +1,11 @@
 package com.hamkelasi.bll.refactored.registration;
 
 import com.hamkelasi.bll.User;
+import com.hamkelasi.bll.Validation;
 import com.hamkelasi.dal.refactored.AdoUserRepository;
 import com.hamkelasi.dal.refactored.UserRepository;
+
+import static com.hamkelasi.bll.refactored.registration.UserValidationResults.*;
 
 public class RealRegistrationService implements RegistrationService {
     private RegisterUserDTO registerUserDTO;
@@ -15,11 +18,6 @@ public class RealRegistrationService implements RegistrationService {
 
     public RealRegistrationService() {
         this.repository = new AdoUserRepository();
-    }
-
-    @Override
-    public int isValid(String username, String email, String website) {
-        return new User().isValid(username, email, website);
     }
 
     @Override
@@ -48,5 +46,17 @@ public class RealRegistrationService implements RegistrationService {
         }
 
         return result;
+    }
+
+    @Override
+    public int isValid(String username, String email, String website) {
+        Validation validator = new Validation();
+
+        if (repository.getUserCountByEmail(email) != 0) return EMAIL_IS_DUPLICATED;
+        if (repository.getUserCountByUsername(username) != 0) return USERNAME_IS_DUPLICATED;
+        if (validator.isEmailInvalid(email)) return INVALID_EMAIL_FORMAT;
+        if (website != null && !website.isEmpty() && validator.isUrlInvalid(website)) return INVALID_WEBSITE_FORMAT;
+
+        return SUCCESSFUL;
     }
 }

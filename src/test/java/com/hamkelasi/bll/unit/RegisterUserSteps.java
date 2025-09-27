@@ -1,6 +1,6 @@
 package com.hamkelasi.bll.unit;
 
-import com.hamkelasi.bll.User;
+import com.hamkelasi.bll.refactored.registration.RealRegistrationService;
 import com.hamkelasi.bll.refactored.registration.UserValidationResults;
 import com.hamkelasi.dal.refactored.UserRepository;
 
@@ -10,7 +10,7 @@ import static org.mockito.Mockito.when;
 
 public class RegisterUserSteps {
 
-    private final User user;
+    private final RealRegistrationService registrationService;
 
     private final UserRepository userRepository;
 
@@ -18,7 +18,7 @@ public class RegisterUserSteps {
 
     public RegisterUserSteps() {
         userRepository = mock(UserRepository.class);
-        this.user = new User(userRepository);
+        this.registrationService = new RealRegistrationService(userRepository);
     }
 
     public void thereIsAUserWithEmail(String email) {
@@ -34,7 +34,7 @@ public class RegisterUserSteps {
     }
 
     public void someoneValidatesTheRegistration(String username, String email, String website) {
-        result = user.isValid(username,email,website);
+        result = registrationService.isValid(username,email,website);
     }
 
     public void heShouldBeGetDuplicateUsernameError() {

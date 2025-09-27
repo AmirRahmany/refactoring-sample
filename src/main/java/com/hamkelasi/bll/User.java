@@ -260,99 +260,88 @@ public class User {
     }
 
 
-    public int isValid(String username, String email, String website) {
+    public int isUpdateValid(String oldUsername, String newUsername, String oldEmail, String newEmail, String website) {
         Validation validator = new Validation();
+        final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
+        int retValue = 0;
 
-        if (userRepository.getUserCountByEmail(email) != 0) return EMAIL_IS_DUPLICATED;
-        if (userRepository.getUserCountByUsername(username) != 0) return USERNAME_IS_DUPLICATED;
-        if (validator.isEmailInvalid(email)) return INVALID_EMAIL_FORMAT;
-        if (website != null && !website.isEmpty() && validator.isUrlInvalid(website)) return INVALID_WEBSITE_FORMAT;
-
-        return SUCCESSFUL;
-}
-
-public int isUpdateValid(String oldUsername, String newUsername, String oldEmail, String newEmail, String website) {
-    Validation validator = new Validation();
-    final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
-    int retValue = 0;
-
-    if (!oldEmail.equals(newEmail)) {
-        if (user.getUserCountByEmail(newEmail) != 0) {
-            retValue = 1; //ایمیل تکراری است
-        }
-    }
-
-    if (!oldUsername.equals(newUsername)) {
-        if (retValue == 0 && user.getUserCountByUsername(newUsername) != 0) {
-            retValue = 2; //نام کاربری تکراری است
-        }
-    }
-
-    if (retValue == 0 && validator.isEmailValid(newEmail) == false) {
-        retValue = 3; //فرمت ایمیل اشتباه است
-    }
-
-    if (retValue == 0) {
-        if (!website.equals("")) {
-            if (validator.isUrlValid(website) == false) {
-                retValue = 4; //فرمت وب سایت اشتباه است
+        if (!oldEmail.equals(newEmail)) {
+            if (user.getUserCountByEmail(newEmail) != 0) {
+                retValue = 1; //ایمیل تکراری است
             }
         }
+
+        if (!oldUsername.equals(newUsername)) {
+            if (retValue == 0 && user.getUserCountByUsername(newUsername) != 0) {
+                retValue = 2; //نام کاربری تکراری است
+            }
+        }
+
+        if (retValue == 0 && validator.isEmailValid(newEmail) == false) {
+            retValue = 3; //فرمت ایمیل اشتباه است
+        }
+
+        if (retValue == 0) {
+            if (!website.equals("")) {
+                if (validator.isUrlValid(website) == false) {
+                    retValue = 4; //فرمت وب سایت اشتباه است
+                }
+            }
+        }
+
+        return retValue;
     }
 
-    return retValue;
-}
+    public List<User> getOrderedList() {
+        List<User> userList = new ArrayList<User>();
 
-public List<User> getOrderedList() {
-    List<User> userList = new ArrayList<User>();
+        final List<Base.Row> dt = new com.hamkelasi.dal.User().getOrderedListID();// Assuming returns List<Integer>
 
-    final List<Base.Row> dt = new com.hamkelasi.dal.User().getOrderedListID();// Assuming returns List<Integer>
+        for (int i = 0; i < dt.size(); i++) {
+            int id = Integer.parseInt(dt.get(i).get("id").toString());
+            User tempUser = new User(id);
+            userList.add(tempUser);
+        }
 
-    for (int i = 0; i < dt.size(); i++) {
-        int id = Integer.parseInt(dt.get(i).get("id").toString());
-        User tempUser = new User(id);
-        userList.add(tempUser);
+        return userList;
     }
 
-    return userList;
-}
-
-public List<User> getListByType(int typeId) {
-    final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
-    // Assuming returns List<User> directly
-    final List<Base.Row> dt = user.getListByType(typeId);
-    List<User> userlist = new ArrayList<>();
-    for (int i = 0; i < dt.size(); i++) {
-        int tempid = Integer.parseInt(dt.get(i).get("id").toString());
-        User temp = new User(tempid);
-        userlist.add(temp);
+    public List<User> getListByType(int typeId) {
+        final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
+        // Assuming returns List<User> directly
+        final List<Base.Row> dt = user.getListByType(typeId);
+        List<User> userlist = new ArrayList<>();
+        for (int i = 0; i < dt.size(); i++) {
+            int tempid = Integer.parseInt(dt.get(i).get("id").toString());
+            User temp = new User(tempid);
+            userlist.add(temp);
+        }
+        return userlist;
     }
-    return userlist;
-}
 
-public int getPostCount(int userID) {
-    final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
-    int count = user.getTextPostCount(userID);
-    return count;
-}
-
-public int getPostCount(int userID, Date start, Date end) {
-    final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
-    int count = user.getTextPostCount(userID, start, end);
-    return count;
-}
-
-public List<User> getRegisteredList(Date startDate, Date endDate) {
-    final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
-    // Assuming returns List<Integer> IDs
-    final List<Base.Row> dt = user.getRegisteredList(startDate, endDate);
-    List<User> userList = new ArrayList<>();
-
-    for (int i = 0; i < dt.size(); i++) {
-        int userId = Integer.parseInt(dt.get(i).get("id").toString());
-        User tempUser = new User(userId);
-        userList.add(tempUser);
+    public int getPostCount(int userID) {
+        final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
+        int count = user.getTextPostCount(userID);
+        return count;
     }
-    return userList;
-}
+
+    public int getPostCount(int userID, Date start, Date end) {
+        final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
+        int count = user.getTextPostCount(userID, start, end);
+        return count;
+    }
+
+    public List<User> getRegisteredList(Date startDate, Date endDate) {
+        final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
+        // Assuming returns List<Integer> IDs
+        final List<Base.Row> dt = user.getRegisteredList(startDate, endDate);
+        List<User> userList = new ArrayList<>();
+
+        for (int i = 0; i < dt.size(); i++) {
+            int userId = Integer.parseInt(dt.get(i).get("id").toString());
+            User tempUser = new User(userId);
+            userList.add(tempUser);
+        }
+        return userList;
+    }
 }

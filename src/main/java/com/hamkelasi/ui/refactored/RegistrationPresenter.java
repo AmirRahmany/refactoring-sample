@@ -83,7 +83,7 @@ public class RegistrationPresenter {
 //                        uploadPicture.write(savePath);
 //                        newUser.setProfilePicture("/UserImages/" + filename);
 //                    } else {
-//                        newUser.setProfilePicture("");
+//                        newUser.setProfilePicture("/UserImages/default.png");
 //                    }
 
                     view.setMessage("ثبت نام شما با موفقیت انجام شد");
