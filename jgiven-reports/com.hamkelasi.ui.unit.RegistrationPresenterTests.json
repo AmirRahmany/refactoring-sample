@@ -4,6 +4,525 @@
   "scenarios": [
     {
       "className": "com.hamkelasi.ui.unit.RegistrationPresenterTests",
+      "testMethodName": "registration_successful_when_user_entered_valid_data",
+      "description": "registration successful when user entered valid data",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [],
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "user entered following information",
+              "words": [
+                {
+                  "value": "Given",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "user entered following information"
+                },
+                {
+                  "value": "com.hamkelasi.ui.unit.RegistrationPresenterTests$$Lambda/0x000002aedc8c76d0@28796d0e",
+                  "argumentInfo": {
+                    "argumentName": "configurator",
+                    "formattedValue": "com.hamkelasi.ui.unit.RegistrationPresenterTests$$Lambda/0x000002aedc8c76d0@28796d0e"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 3659600,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "validation is successful",
+              "words": [
+                {
+                  "value": "and",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "validation is successful"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 466800,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "user does not provide any profile picture",
+              "words": [
+                {
+                  "value": "and",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "user does not provide any profile picture"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 635100,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "user tries to register",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "user tries to register"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 1360300,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "user registered successfully",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "user registered successfully"
+                },
+                {
+                  "value": "com.hamkelasi.ui.unit.RegistrationPresenterTests$$Lambda/0x000002aedc8c78f8@542aec6",
+                  "argumentInfo": {
+                    "argumentName": "configurator",
+                    "formattedValue": "com.hamkelasi.ui.unit.RegistrationPresenterTests$$Lambda/0x000002aedc8c78f8@542aec6"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 134152000,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [],
+          "status": "SUCCESS",
+          "durationInNanos": 143928500
+        }
+      ],
+      "casesAsTable": false,
+      "durationInNanos": 143928500
+    },
+    {
+      "className": "com.hamkelasi.ui.unit.RegistrationPresenterTests",
+      "testMethodName": "registers_user_with_user_normal_permission",
+      "description": "registers user with user normal permission",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [],
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "validation is successful",
+              "words": [
+                {
+                  "value": "Given",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "validation is successful"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 375400,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "user does not provide any profile picture",
+              "words": [
+                {
+                  "value": "and",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "user does not provide any profile picture"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 523700,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "user tries to register",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "user tries to register"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 276800,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "user registered with normal permission",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "user registered with normal permission"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 408600,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [],
+          "status": "SUCCESS",
+          "durationInNanos": 2990300
+        }
+      ],
+      "casesAsTable": false,
+      "durationInNanos": 2990300
+    },
+    {
+      "className": "com.hamkelasi.ui.unit.RegistrationPresenterTests",
+      "testMethodName": "show_corresponding_error_on_failed_registration",
+      "description": "show corresponding error on failed registration",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [
+        "errorCode",
+        "error"
+      ],
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "validations fails with error code",
+              "words": [
+                {
+                  "value": "Given",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "validations fails with error code"
+                },
+                {
+                  "value": "1",
+                  "argumentInfo": {
+                    "parameterName": "errorCode",
+                    "argumentName": "errorCode",
+                    "formattedValue": "1"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 2870500,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "user tries to register",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "user tries to register"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 466800,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "error display on screen",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "error display on screen"
+                },
+                {
+                  "value": "ایمیل وارد شده تکراری می باشد",
+                  "argumentInfo": {
+                    "parameterName": "error",
+                    "argumentName": "error",
+                    "formattedValue": "ایمیل وارد شده تکراری می باشد"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 35295800,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [
+            "1",
+            "ایمیل وارد شده تکراری می باشد"
+          ],
+          "status": "SUCCESS",
+          "durationInNanos": 90454700
+        },
+        {
+          "caseNr": 2,
+          "steps": [
+            {
+              "name": "validations fails with error code",
+              "words": [
+                {
+                  "value": "Given",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "validations fails with error code"
+                },
+                {
+                  "value": "2",
+                  "argumentInfo": {
+                    "parameterName": "errorCode",
+                    "argumentName": "errorCode",
+                    "formattedValue": "2"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 2316500,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "user tries to register",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "user tries to register"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 1521200,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "error display on screen",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "error display on screen"
+                },
+                {
+                  "value": "نام کاربری وارد شده تکراری می باشد",
+                  "argumentInfo": {
+                    "parameterName": "error",
+                    "argumentName": "error",
+                    "formattedValue": "نام کاربری وارد شده تکراری می باشد"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 2141800,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [
+            "2",
+            "نام کاربری وارد شده تکراری می باشد"
+          ],
+          "status": "SUCCESS",
+          "durationInNanos": 7214500
+        },
+        {
+          "caseNr": 3,
+          "steps": [
+            {
+              "name": "validations fails with error code",
+              "words": [
+                {
+                  "value": "Given",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "validations fails with error code"
+                },
+                {
+                  "value": "3",
+                  "argumentInfo": {
+                    "parameterName": "errorCode",
+                    "argumentName": "errorCode",
+                    "formattedValue": "3"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 2703500,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "user tries to register",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "user tries to register"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 265000,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "error display on screen",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "error display on screen"
+                },
+                {
+                  "value": "فرمت ایمیل وارد شده نادرست می باشد",
+                  "argumentInfo": {
+                    "parameterName": "error",
+                    "argumentName": "error",
+                    "formattedValue": "فرمت ایمیل وارد شده نادرست می باشد"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 1868400,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [
+            "3",
+            "فرمت ایمیل وارد شده نادرست می باشد"
+          ],
+          "status": "SUCCESS",
+          "durationInNanos": 6208000
+        },
+        {
+          "caseNr": 4,
+          "steps": [
+            {
+              "name": "validations fails with error code",
+              "words": [
+                {
+                  "value": "Given",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "validations fails with error code"
+                },
+                {
+                  "value": "4",
+                  "argumentInfo": {
+                    "parameterName": "errorCode",
+                    "argumentName": "errorCode",
+                    "formattedValue": "4"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 2250600,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "user tries to register",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "user tries to register"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 366500,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "error display on screen",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "error display on screen"
+                },
+                {
+                  "value": "فرمت وب سایت وارد شده نادرست می باشد",
+                  "argumentInfo": {
+                    "parameterName": "error",
+                    "argumentName": "error",
+                    "formattedValue": "فرمت وب سایت وارد شده نادرست می باشد"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 1825500,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [
+            "4",
+            "فرمت وب سایت وارد شده نادرست می باشد"
+          ],
+          "status": "SUCCESS",
+          "durationInNanos": 5706300
+        }
+      ],
+      "casesAsTable": true,
+      "durationInNanos": 109583500
+    },
+    {
+      "className": "com.hamkelasi.ui.unit.RegistrationPresenterTests",
       "testMethodName": "sets_now_as_a_register_date_of_user",
       "description": "sets now as a register date of user",
       "tagIds": [],
@@ -25,7 +544,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 19025700,
+              "durationInNanos": 312500,
               "depth": 0,
               "parentFailed": false
             },
@@ -41,7 +560,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 5138100,
+              "durationInNanos": 527800,
               "depth": 0,
               "parentFailed": false
             },
@@ -64,7 +583,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 26419400,
+              "durationInNanos": 6195300,
               "depth": 0,
               "parentFailed": false
             },
@@ -80,7 +599,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 1467900,
+              "durationInNanos": 482600,
               "depth": 0,
               "parentFailed": false
             },
@@ -103,7 +622,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 189296000,
+              "durationInNanos": 8678700,
               "depth": 0,
               "parentFailed": false
             }
@@ -111,11 +630,11 @@
           "explicitArguments": [],
           "derivedArguments": [],
           "status": "SUCCESS",
-          "durationInNanos": 346743200
+          "durationInNanos": 17877100
         }
       ],
       "casesAsTable": false,
-      "durationInNanos": 346743200
+      "durationInNanos": 17877100
     }
   ],
   "tagMap": {}

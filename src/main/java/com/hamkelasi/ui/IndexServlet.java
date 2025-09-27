@@ -1,5 +1,9 @@
 package com.hamkelasi.ui;
 
+import com.hamkelasi.bll.City;
+import com.hamkelasi.bll.Province;
+import com.hamkelasi.bll.School;
+import com.hamkelasi.bll.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -15,6 +19,14 @@ public class IndexServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("IndexServlet doGet() called");
+
+        //info
+        //Statics Part
+        request.setAttribute("memberCount",User.getCount());
+        request.setAttribute("provinceCount",Province.getCount());
+        request.setAttribute("cityCount", City.getCount());
+        request.setAttribute("schoolCount", School.getCount());
+
 
         HttpSession session = request.getSession();
         logger.info("Session ID: " + session.getId());
