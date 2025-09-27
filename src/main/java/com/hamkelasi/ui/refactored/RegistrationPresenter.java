@@ -8,6 +8,7 @@ import com.hamkelasi.bll.refactored.shared.Clock;
 import com.hamkelasi.bll.refactored.shared.SystemClock;
 import com.hamkelasi.ui.refactored.cookies.MyCookie;
 import com.hamkelasi.ui.refactored.session_management.Session;
+import jakarta.servlet.http.Cookie;
 
 public class RegistrationPresenter {
     public static final int REGULAR_USER = 3;
@@ -54,7 +55,9 @@ public class RegistrationPresenter {
                     dto.permission = Permissions.NORMAL_USER;
                     dto.registerDate = clock.now();
 
-                    userService.register(dto);
+                    final int result = userService.register(dto);
+                    if (result == 9)
+                        view.showError("خطا در ثبت داده");
                     // dto.registerDate = LocalDateTime.now();
                     //dto.permission = REGULAR_USER;
 //
@@ -72,6 +75,15 @@ public class RegistrationPresenter {
 //                    } else {
 //                        newUser.setProfilePicture("");
 //                    }
+
+                  /*  if (valInsert == 0) {
+                        session.setAttribute("UserID", newUser.getId());
+                        Cookie userIdCookie = new Cookie("UserID", String.valueOf(newUser.getId()));
+                        userIdCookie.setMaxAge(30 * 24 * 60 * 60); // 1 month in seconds
+                        response.addCookie(userIdCookie);
+                        response.sendRedirect(request.getContextPath() + "/register?action=successfull");
+                        return;
+                    }*/
                     break;
                 case 1:
                     view.showError("ایمیل وارد شده تکراری می باشد");

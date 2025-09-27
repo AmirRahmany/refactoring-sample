@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-public class RegistrationPresenterTests extends ScenarioTest<RegistrationSteps, RegistrationSteps, RegistrationSteps> {
+class RegistrationPresenterTests extends ScenarioTest<RegistrationSteps, RegistrationSteps, RegistrationSteps> {
 
     @ParameterizedTest
     @CsvSource({
@@ -62,6 +62,16 @@ public class RegistrationPresenterTests extends ScenarioTest<RegistrationSteps, 
                 .and().currentRegistrationDateIs("2025-08-27 3:41:00");
         when().userTriesToRegister();
         then().registerDateOfUserSetTo("2025-08-27 3:41:00");
+    }
+
+    @Test
+    void shown_an_error_when_registration_fails() {
+        var error = "خطا در ثبت داده";
+        given().validation_is_successful()
+                .and().user_does_not_provide_any_profile_picture()
+                .and().registrationProcessIsFailing();
+        when().userTriesToRegister();
+        then().errorDisplayOnScreen(error);
     }
 }
 

@@ -2,12 +2,10 @@ package com.hamkelasi.ui.unit;
 
 import com.hamkelasi.bll.refactored.permissions.Permissions;
 import com.hamkelasi.bll.refactored.registration.RegisterUserDTO;
-import com.hamkelasi.bll.refactored.shared.Clock;
 import com.hamkelasi.ui.refactored.RegistrationPresenter;
 import com.hamkelasi.ui.test_double.*;
 import com.tngtech.jgiven.Stage;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Consumer;
@@ -17,14 +15,14 @@ import static org.mockito.ArgumentMatchers.any;
 
 public class RegistrationSteps extends Stage<RegistrationSteps> {
 
-    private final SpyUserService userService;
+    private final SpyRegistrationService userService;
     private final StubRegistrationView view;
     private final RegistrationPresenter presenter;
     private final StubClock clock;
 
     public RegistrationSteps() {
         view = new StubRegistrationView();
-        userService = new SpyUserService();
+        userService = new SpyRegistrationService();
         var fakeSession = new FakeSession();
         var fakeCookie = new FakeCookie();
         clock = new StubClock();
@@ -93,4 +91,9 @@ public class RegistrationSteps extends Stage<RegistrationSteps> {
     private static DateTimeFormatter getDateTimeFormatter() {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd' 'H:mm:ss");
     }
+
+    public void registrationProcessIsFailing() {
+        userService.setRegistrationResult(9);
+    }
+
 }
