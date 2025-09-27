@@ -19,4 +19,9 @@ public class AdoUserRepository implements UserRepository {
     public boolean add(String username, String password, String firstname, String lastname, String profilePicture, String email, String website, int permission, LocalDateTime registerDate, boolean isPMActive) {
         return new User().add(username,password,firstname,lastname,profilePicture,email,website,permission,registerDate,isPMActive);
     }
+
+    @Override
+    public int getId(String username) {
+        return new User().getID(username);
+    }
 }

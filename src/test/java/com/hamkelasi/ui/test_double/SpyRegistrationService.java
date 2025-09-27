@@ -1,24 +1,33 @@
 package com.hamkelasi.ui.test_double;
 
 import com.hamkelasi.bll.refactored.registration.RegisterUserDTO;
+import com.hamkelasi.bll.refactored.registration.RegistrationResult;
 import com.hamkelasi.bll.refactored.registration.RegistrationService;
 
 public class SpyRegistrationService implements RegistrationService {
-    private int validationResult;
     private RegisterUserDTO registerDTO;
     private int registrationCalled;
-    private int registrationResult;
+    private RegistrationResult registrationResult;
+    private int validationResult;
 
-    public void setRegistrationResult(int resultCode){
-        registrationResult = resultCode;
+    public SpyRegistrationService() {
+        registrationResult = new RegistrationResult();
+    }
+
+    public void setRegistrationResult(int resultCode) {
+        registrationResult.resultCode = resultCode;
     }
 
     public void setValidationResult(int result) {
         this.validationResult = result;
     }
 
+    public void setUserId(int userId){
+        this.registrationResult.userId = userId;
+    }
+
     @Override
-    public int register(RegisterUserDTO registerUserDto) {
+    public RegistrationResult register(RegisterUserDTO registerUserDto) {
         this.registerDTO = registerUserDto;
         registrationCalled++;
         return registrationResult;
@@ -29,10 +38,6 @@ public class SpyRegistrationService implements RegistrationService {
         return validationResult;
     }
 
-    @Override
-    public int getId() {
-        return 0;
-    }
 
     @Override
     public RegisterUserDTO getRegisteredDto() {
@@ -44,6 +49,10 @@ public class SpyRegistrationService implements RegistrationService {
     }
 
     public int getRegistrationResultCode() {
-        return registrationResult;
+        return registrationResult.resultCode;
+    }
+
+    public int getUserId() {
+        return registrationResult.userId;
     }
 }

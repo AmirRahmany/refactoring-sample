@@ -1,14 +1,14 @@
 package com.hamkelasi.ui.refactored;
 
 import com.hamkelasi.bll.refactored.permissions.Permissions;
-import com.hamkelasi.bll.refactored.registration.RealUserService;
+import com.hamkelasi.bll.refactored.registration.RealRegistrationService;
 import com.hamkelasi.bll.refactored.registration.RegisterUserDTO;
+import com.hamkelasi.bll.refactored.registration.RegistrationResult;
 import com.hamkelasi.bll.refactored.registration.RegistrationService;
 import com.hamkelasi.bll.refactored.shared.Clock;
 import com.hamkelasi.bll.refactored.shared.SystemClock;
 import com.hamkelasi.ui.refactored.cookies.MyCookie;
 import com.hamkelasi.ui.refactored.session_management.Session;
-import jakarta.servlet.http.Cookie;
 
 public class RegistrationPresenter {
     public static final int REGULAR_USER = 3;
@@ -26,12 +26,12 @@ public class RegistrationPresenter {
         this.clock = clock;
     }
 
-    public RegistrationPresenter(RegistrationView view,MyCookie cookie,Session session) {
+    public RegistrationPresenter(RegistrationView view, MyCookie cookie, Session session) {
         this.view = view;
         this.cookie = cookie;
         this.session = session;
         this.clock = new SystemClock();
-        this.userService = new RealUserService();
+        this.userService = new RealRegistrationService();
     }
 
     public void register() {
@@ -55,9 +55,20 @@ public class RegistrationPresenter {
                     dto.permission = Permissions.NORMAL_USER;
                     dto.registerDate = clock.now();
 
-                    final int result = userService.register(dto);
-                    if (result == 9)
+                    final RegistrationResult registrationResult = userService.register(dto);
+                    final int result = registrationResult.resultCode;
+                    if (result == 0) {
+                        session.set("UserID", registrationResult.userId);
+                       /* Cookie userIdCookie = new Cookie("UserID", String.valueOf(newUser.getId()));
+                        userIdCookie.setMaxAge(30 * 24 * 60 * 60); // 1 month in seconds
+                        response.addCookie(userIdCookie);
+                        response.sendRedirect(request.getContextPath() + "/register?action=successfull");*/
+                        return;
+                    } else if (result == 9) {
                         view.showError("خطا در ثبت داده");
+                    }
+
+                    /***TODO: Up to students**/
                     // dto.registerDate = LocalDateTime.now();
                     //dto.permission = REGULAR_USER;
 //
@@ -76,14 +87,6 @@ public class RegistrationPresenter {
 //                        newUser.setProfilePicture("");
 //                    }
 
-                  /*  if (valInsert == 0) {
-                        session.setAttribute("UserID", newUser.getId());
-                        Cookie userIdCookie = new Cookie("UserID", String.valueOf(newUser.getId()));
-                        userIdCookie.setMaxAge(30 * 24 * 60 * 60); // 1 month in seconds
-                        response.addCookie(userIdCookie);
-                        response.sendRedirect(request.getContextPath() + "/register?action=successfull");
-                        return;
-                    }*/
                     view.setMessage("ثبت نام شما با موفقیت انجام شد");
                     break;
                 case 1:

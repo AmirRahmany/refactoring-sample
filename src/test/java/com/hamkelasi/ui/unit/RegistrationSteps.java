@@ -19,14 +19,15 @@ public class RegistrationSteps extends Stage<RegistrationSteps> {
     private final StubRegistrationView view;
     private final RegistrationPresenter presenter;
     private final StubClock clock;
+    private final FakeSession session;
 
     public RegistrationSteps() {
         view = new StubRegistrationView();
         userService = new SpyRegistrationService();
-        var fakeSession = new FakeSession();
+        session = new FakeSession();
         var fakeCookie = new FakeCookie();
         clock = new StubClock();
-        presenter = new RegistrationPresenter(view, userService, fakeCookie, fakeSession, clock);
+        presenter = new RegistrationPresenter(view, userService, fakeCookie, session, clock);
     }
 
     public void validationsFailsWithErrorCode(int errorCode) {
@@ -64,7 +65,7 @@ public class RegistrationSteps extends Stage<RegistrationSteps> {
         var actualDto = userService.getRegisteredDto();
 
         assertThat(userService.calledTimes()).isEqualTo(1);
-        assertThat(userService.register(any())).isZero();
+        assertThat(userService.register(any()).resultCode).isZero();
         assertThat(actualDto).usingRecursiveComparison()
                 .ignoringFields("permission", "registerDate", "profilePicture").isEqualTo(expectedDto);
     }
@@ -96,4 +97,8 @@ public class RegistrationSteps extends Stage<RegistrationSteps> {
         userService.setRegistrationResult(9);
     }
 
+    public void sessionFilledWithUserId() {
+        final int expectedUserId = userService.getUserId();
+        assertThat(expectedUserId).isEqualTo(session.get("UserID"));
+    }
 }

@@ -32,7 +32,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 142489400,
+              "durationInNanos": 90445700,
               "depth": 0,
               "parentFailed": false
             },
@@ -69,7 +69,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 12995000,
+              "durationInNanos": 9647400,
               "depth": 0,
               "parentFailed": false
             },
@@ -85,7 +85,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 112007800,
+              "durationInNanos": 75995800,
               "depth": 0,
               "parentFailed": false
             }
@@ -93,11 +93,11 @@
           "explicitArguments": [],
           "derivedArguments": [],
           "status": "SUCCESS",
-          "durationInNanos": 317095500
+          "durationInNanos": 218818800
         }
       ],
       "casesAsTable": false,
-      "durationInNanos": 317095500
+      "durationInNanos": 218818800
     },
     {
       "className": "com.hamkelasi.bll.unit.when_registering_user",
@@ -129,7 +129,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 2325800,
+              "durationInNanos": 1305300,
               "depth": 0,
               "parentFailed": false
             },
@@ -166,7 +166,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 2396500,
+              "durationInNanos": 1335400,
               "depth": 0,
               "parentFailed": false
             },
@@ -182,7 +182,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 1196300,
+              "durationInNanos": 527100,
               "depth": 0,
               "parentFailed": false
             }
@@ -190,11 +190,11 @@
           "explicitArguments": [],
           "derivedArguments": [],
           "status": "SUCCESS",
-          "durationInNanos": 7571300
+          "durationInNanos": 4449700
         }
       ],
       "casesAsTable": false,
-      "durationInNanos": 7571300
+      "durationInNanos": 4449700
     },
     {
       "className": "com.hamkelasi.bll.unit.when_registering_user",
@@ -243,7 +243,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 7454800,
+              "durationInNanos": 2884200,
               "depth": 0,
               "parentFailed": false
             },
@@ -259,7 +259,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 2713000,
+              "durationInNanos": 764000,
               "depth": 0,
               "parentFailed": false
             }
@@ -269,7 +269,7 @@
             "example"
           ],
           "status": "SUCCESS",
-          "durationInNanos": 38132300
+          "durationInNanos": 16246600
         },
         {
           "caseNr": 2,
@@ -308,7 +308,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 6125100,
+              "durationInNanos": 1496000,
               "depth": 0,
               "parentFailed": false
             },
@@ -324,7 +324,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 1422900,
+              "durationInNanos": 405700,
               "depth": 0,
               "parentFailed": false
             }
@@ -334,11 +334,11 @@
             "http://example.com"
           ],
           "status": "SUCCESS",
-          "durationInNanos": 9308200
+          "durationInNanos": 2413800
         }
       ],
       "casesAsTable": true,
-      "durationInNanos": 47440500
+      "durationInNanos": 18660400
     },
     {
       "className": "com.hamkelasi.bll.unit.when_registering_user",
@@ -384,7 +384,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 5621200,
+              "durationInNanos": 1758900,
               "depth": 0,
               "parentFailed": false
             },
@@ -400,7 +400,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 1144900,
+              "durationInNanos": 480700,
               "depth": 0,
               "parentFailed": false
             }
@@ -408,11 +408,11 @@
           "explicitArguments": [],
           "derivedArguments": [],
           "status": "SUCCESS",
-          "durationInNanos": 8039800
+          "durationInNanos": 3065500
         }
       ],
       "casesAsTable": false,
-      "durationInNanos": 8039800
+      "durationInNanos": 3065500
     },
     {
       "className": "com.hamkelasi.bll.unit.when_registering_user",
@@ -461,7 +461,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 4331400,
+              "durationInNanos": 1441800,
               "depth": 0,
               "parentFailed": false
             },
@@ -477,7 +477,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 980600,
+              "durationInNanos": 303300,
               "depth": 0,
               "parentFailed": false
             }
@@ -487,7 +487,7 @@
             "null"
           ],
           "status": "SUCCESS",
-          "durationInNanos": 6949900
+          "durationInNanos": 2313100
         },
         {
           "caseNr": 2,
@@ -526,7 +526,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 5108300,
+              "durationInNanos": 1376200,
               "depth": 0,
               "parentFailed": false
             },
@@ -542,7 +542,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 843800,
+              "durationInNanos": 249200,
               "depth": 0,
               "parentFailed": false
             }
@@ -552,11 +552,11 @@
             ""
           ],
           "status": "SUCCESS",
-          "durationInNanos": 8505000
+          "durationInNanos": 2211300
         }
       ],
       "casesAsTable": true,
-      "durationInNanos": 15454900
+      "durationInNanos": 4524400
     },
     {
       "className": "com.hamkelasi.bll.unit.when_registering_user",
@@ -602,7 +602,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 3666100,
+              "durationInNanos": 1518900,
               "depth": 0,
               "parentFailed": false
             },
@@ -618,7 +618,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 874000,
+              "durationInNanos": 325200,
               "depth": 0,
               "parentFailed": false
             }
@@ -626,11 +626,11 @@
           "explicitArguments": [],
           "derivedArguments": [],
           "status": "SUCCESS",
-          "durationInNanos": 5849100
+          "durationInNanos": 2402300
         }
       ],
       "casesAsTable": false,
-      "durationInNanos": 5849100
+      "durationInNanos": 2402300
     }
   ],
   "tagMap": {}

@@ -73,5 +73,13 @@ class RegistrationPresenterTests extends ScenarioTest<RegistrationSteps, Registr
         when().userTriesToRegister();
         then().errorDisplayOnScreen(error);
     }
+
+    @Test
+    void user_id_added_to_session_after_registration() {
+        given().validation_is_successful()
+                .and().user_does_not_provide_any_profile_picture();
+        when().userTriesToRegister();
+        then().sessionFilledWithUserId();
+    }
 }
 

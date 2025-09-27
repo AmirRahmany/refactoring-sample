@@ -165,10 +165,6 @@ public class User {
         return retValue;
     }
 
-    public int add() {
-        return add(this.username, this.password, this.firstname, this.lastname, this.profilePicture, this.email, this.website, this.permission, this.registerDate, this.isPmActivate);
-    }
-
     public int delete(int id) {
         final com.hamkelasi.dal.User user = new com.hamkelasi.dal.User();
         boolean isDeleted = user.delete(id);

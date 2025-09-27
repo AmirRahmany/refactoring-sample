@@ -1,7 +1,7 @@
 package com.hamkelasi.ui;
 
 
-import com.hamkelasi.bll.refactored.registration.RealUserService;
+import com.hamkelasi.bll.refactored.registration.RealRegistrationService;
 import com.hamkelasi.bll.refactored.shared.SystemClock;
 import com.hamkelasi.ui.refactored.RegistrationPresenter;
 import com.hamkelasi.ui.refactored.RegistrationView;
@@ -146,7 +146,7 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
     private void initPresenter(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
-        this.presenter = new RegistrationPresenter(this, new RealUserService(), new RealCookie(this.request, this.response), new RealSession(this.request), new SystemClock());
+        this.presenter = new RegistrationPresenter(this, new RealRegistrationService(), new RealCookie(this.request, this.response), new RealSession(this.request), new SystemClock());
     }
 
     private boolean isValidForm(HttpServletRequest request) {

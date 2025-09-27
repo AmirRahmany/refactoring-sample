@@ -7,4 +7,6 @@ public interface UserRepository {
     int getUserCountByEmail(String email);
     boolean add(String username, String password, String firstname, String lastname, String profilePicture,
         String email, String website, int permission, LocalDateTime registerDate, boolean isPMActive);
+
+    int getId(String username);
 }
