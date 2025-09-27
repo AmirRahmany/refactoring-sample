@@ -21,4 +21,6 @@ public interface RegistrationView {
     HttpServletRequest getHttpRequest();
 
     HttpServletResponse getHttpResponse();
+
+    void setMessage(String message);
 }

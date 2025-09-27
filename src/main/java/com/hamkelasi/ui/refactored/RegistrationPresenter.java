@@ -84,6 +84,7 @@ public class RegistrationPresenter {
                         response.sendRedirect(request.getContextPath() + "/register?action=successfull");
                         return;
                     }*/
+                    view.setMessage("ثبت نام شما با موفقیت انجام شد");
                     break;
                 case 1:
                     view.showError("ایمیل وارد شده تکراری می باشد");
@@ -99,5 +100,6 @@ public class RegistrationPresenter {
                     break;
             }
         }
+        view.redirectToSuccessfulView("/WEB-INF/templates/register.jsp");
     }
 }

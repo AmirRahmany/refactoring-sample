@@ -132,6 +132,11 @@ public class StubRegistrationView implements RegistrationView {
         return null;
     }
 
+    @Override
+    public void setMessage(String message) {
+
+    }
+
     public List<String> getDisplayErrors() {
         return errors;
     }

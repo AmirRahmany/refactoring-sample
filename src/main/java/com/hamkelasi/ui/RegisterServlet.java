@@ -1,20 +1,20 @@
 package com.hamkelasi.ui;
 
 
-import com.hamkelasi.bll.User;
+import com.hamkelasi.bll.refactored.registration.RealUserService;
+import com.hamkelasi.bll.refactored.shared.SystemClock;
 import com.hamkelasi.ui.refactored.RegistrationPresenter;
 import com.hamkelasi.ui.refactored.RegistrationView;
+import com.hamkelasi.ui.refactored.cookies.RealCookie;
 import com.hamkelasi.ui.refactored.file_upload.RealProfileUploader;
 import com.hamkelasi.ui.refactored.file_upload.Uploader;
+import com.hamkelasi.ui.refactored.session_management.RealSession;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 @WebServlet("/register")
 @MultipartConfig
@@ -33,7 +33,7 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        this.request=request;
+        this.request = request;
         this.response = response;
         HttpSession session = request.getSession();
 
@@ -65,7 +65,9 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        this.request=request;
+        initPresenter(request, response);
+        presenter.register();
+/*        this.request=request;
         this.response = response;
         HttpSession session = request.getSession();
 
@@ -135,10 +137,16 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
                     request.setAttribute("labelError", labelError);
                     break;
             }
-        }
+        }*/
 
-        request.setAttribute("panelRegisterVisible", true);
-        request.getRequestDispatcher("/WEB-INF/templates/register.jsp").forward(request, response);
+        //request.setAttribute("panelRegisterVisible", true);
+        //request.getRequestDispatcher("/WEB-INF/templates/register.jsp").forward(request, response);
+    }
+
+    private void initPresenter(HttpServletRequest request, HttpServletResponse response) {
+        this.request = request;
+        this.response = response;
+        this.presenter = new RegistrationPresenter(this, new RealUserService(), new RealCookie(this.request, this.response), new RealSession(this.request), new SystemClock());
     }
 
     private boolean isValidForm(HttpServletRequest request) {
@@ -187,7 +195,7 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
 
     @Override
     public void showError(String errorText) {
-        request.setAttribute("labelError", labelError);
+        request.setAttribute("labelError", errorText);
     }
 
     @Override
@@ -208,10 +216,10 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
 
     @Override
     public Uploader profileImage() {
-        return new RealProfileUploader(uploadPicture,this);
+        return new RealProfileUploader(uploadPicture, this);
     }
 
-    public void setProfileImage(Uploader uploader){
+    public void setProfileImage(Uploader uploader) {
         profileImage = uploader;
     }
 
@@ -223,5 +231,10 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
     @Override
     public HttpServletResponse getHttpResponse() {
         return response;
+    }
+
+    @Override
+    public void setMessage(String message) {
+        request.setAttribute("message",message);
     }
 }

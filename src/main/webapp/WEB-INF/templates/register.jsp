@@ -114,8 +114,8 @@
 
                 <div class="entry">
                     <!-- Success message -->
-                    <c:if test="${param.action == 'successfull'}">
-                        <div class="alert alert-success">${successMessage}</div>
+                    <c:if test="${not empty message}">
+                        <div class="alert alert-success">${message}</div>
                     </c:if>
 
                     <!-- Error message -->
@@ -173,7 +173,7 @@
                             <tr>
                                 <td class="register-label">وب سایت :</td>
                                 <td>
-                                    <input type="url" name="textWebsite" class="form-control english-input" maxlength="50" value="${form.textWebsite}"/>
+                                    <input type="txt" name="textWebsite" class="form-control english-input" maxlength="50" value="${form.textWebsite}"/>
                                     <c:if test="${not empty errors.website}">
                                         <span class="error-small">${errors.website}</span>
                                     </c:if>
