@@ -1,5 +1,6 @@
 package com.hamkelasi.ui.refactored;
 
+import com.hamkelasi.ui.refactored.file_upload.MyFile;
 import com.hamkelasi.ui.refactored.file_upload.Uploader;
 
 public interface RegistrationView {
@@ -16,4 +17,7 @@ public interface RegistrationView {
     Uploader profileImage();
     void setProfileImage(Uploader uploader);
     void setMessage(String message);
+
+    MyFile getUploadDirectoryFile();
+    void setFileDirectoryMaker(MyFile file);
 }

@@ -5,12 +5,13 @@ import com.hamkelasi.ui.refactored.file_upload.Uploader;
 public class StubUploader implements Uploader {
     private boolean hasFile;
     private String fileName;
+    private int uploadCalls;
 
-    public void setFileName(String fileName) {
+    public void setFileName(String fileName){
         this.fileName = fileName;
     }
 
-    public void setHasFile(boolean hasFile) {
+    public void setHasFile(boolean hasFile){
         this.hasFile = hasFile;
     }
 
@@ -25,7 +26,11 @@ public class StubUploader implements Uploader {
     }
 
     @Override
-    public String write(String dir) {
-        return "";
+    public void upload(String savedPath) {
+        uploadCalls++;
+    }
+
+    public int getUploadCalls() {
+        return uploadCalls;
     }
 }

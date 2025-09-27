@@ -7,5 +7,5 @@ public interface Uploader {
 
     String getFileName();
 
-    String write(String dir);
+    void upload(String dir);
 }

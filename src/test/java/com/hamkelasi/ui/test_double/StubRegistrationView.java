@@ -1,11 +1,9 @@
 package com.hamkelasi.ui.test_double;
 
 import com.hamkelasi.ui.refactored.RegistrationView;
+import com.hamkelasi.ui.refactored.file_upload.MyFile;
 import com.hamkelasi.ui.refactored.file_upload.Uploader;
-import com.hamkelasi.ui.test_utils.RegistrationTestInfo;
 import com.hamkelasi.ui.test_utils.RegistrationTestInfo.Mehdi;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +22,8 @@ public class StubRegistrationView implements RegistrationView {
     private String website = Mehdi.WEBSITE;
     private boolean isPmActivate = Mehdi.IS_PM_ACTIVE;
     private int redirectionCalls;
+    private MyFile file;
+    private Uploader profileImage;
 
     public StubRegistrationView withUsername(String username) {
         this.username = username;
@@ -112,20 +112,27 @@ public class StubRegistrationView implements RegistrationView {
 
     @Override
     public Uploader profileImage() {
-        final Uploader uploader = mock(Uploader.class);
-        when(uploader.write(any())).thenReturn("");
-        when(uploader.getFileName()).thenReturn("");
-        return uploader;
+        return profileImage;
     }
 
     @Override
     public void setProfileImage(Uploader uploader) {
-
+        this.profileImage = uploader;
     }
 
     @Override
     public void setMessage(String message) {
 
+    }
+
+    @Override
+    public MyFile getUploadDirectoryFile() {
+        return file;
+    }
+
+    @Override
+    public void setFileDirectoryMaker(MyFile file) {
+        this.file = file;
     }
 
     public List<String> getDisplayErrors() {

@@ -28,20 +28,11 @@ public class RealProfileUploader implements Uploader {
     }
 
     @Override
-    public String write(String dir) {
-        if (!hasFile()) return "";
-        String savedPath = "";
-        final String realPath = httpServlet.getServletContext().getRealPath(dir);
-        File uploadDir = new File(realPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
-        }
+    public void upload(String savedPath) {
         try {
-            savedPath = realPath + File.separator + getFileName();
             filePart.write(savedPath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return savedPath;
     }
 }

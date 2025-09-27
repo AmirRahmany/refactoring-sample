@@ -6,6 +6,8 @@ import com.hamkelasi.bll.refactored.shared.SystemClock;
 import com.hamkelasi.ui.refactored.RegistrationPresenter;
 import com.hamkelasi.ui.refactored.RegistrationView;
 import com.hamkelasi.ui.refactored.cookies.RealCookie;
+import com.hamkelasi.ui.refactored.file_upload.MyFile;
+import com.hamkelasi.ui.refactored.file_upload.RealFile;
 import com.hamkelasi.ui.refactored.file_upload.RealProfileUploader;
 import com.hamkelasi.ui.refactored.file_upload.Uploader;
 import com.hamkelasi.ui.refactored.session_management.RealSession;
@@ -26,9 +28,12 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
     private Part uploadPicture;
     private RegistrationPresenter presenter;
     private Uploader profileImage;
+    private MyFile directoryFile;
 
     public RegisterServlet(HttpServletRequest request) {
         this.request = request;
+        profileImage = new RealProfileUploader(uploadPicture, this);
+        this.directoryFile = new RealFile(getServletContext().getRealPath("/UserImages"));
     }
 
     @Override
@@ -216,7 +221,7 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
 
     @Override
     public Uploader profileImage() {
-        return new RealProfileUploader(uploadPicture, this);
+        return profileImage;
     }
 
     public void setProfileImage(Uploader uploader) {
@@ -225,6 +230,16 @@ public class RegisterServlet extends HttpServlet implements RegistrationView {
 
     @Override
     public void setMessage(String message) {
-        request.setAttribute("message",message);
+        request.setAttribute("message", message);
+    }
+
+    @Override
+    public MyFile getUploadDirectoryFile() {
+        return directoryFile;
+    }
+
+    @Override
+    public void setFileDirectoryMaker(MyFile file) {
+        directoryFile = file;
     }
 }

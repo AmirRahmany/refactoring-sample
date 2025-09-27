@@ -8,6 +8,7 @@ import com.hamkelasi.bll.refactored.registration.RegistrationService;
 import com.hamkelasi.bll.refactored.shared.Clock;
 import com.hamkelasi.bll.refactored.shared.SystemClock;
 import com.hamkelasi.ui.refactored.cookies.MyCookie;
+import com.hamkelasi.ui.refactored.file_upload.MyFile;
 import com.hamkelasi.ui.refactored.session_management.Session;
 
 public class RegistrationPresenter {
@@ -56,35 +57,30 @@ public class RegistrationPresenter {
                     dto.permission = Permissions.NORMAL_USER;
                     dto.registerDate = clock.now();
 
+
+                    var profileImage = view.profileImage();
+                    if (profileImage.hasFile()) {
+                        String filename = profileImage.getFileName();
+                        final MyFile uploadDir = view.getUploadDirectoryFile();
+                        String savePath = uploadDir.getSavedPathOf(filename);
+                        if (!uploadDir.dirExists()) {
+                            uploadDir.makeDir();
+                        }
+                        profileImage.upload(savePath);
+                        dto.profilePicture = ("/UserImages/" + filename);
+                    } else {
+                        dto.profilePicture = ("/UserImages/default.png");
+                    }
                     final RegistrationResult registrationResult = userService.register(dto);
                     final int result = registrationResult.resultCode;
                     if (result == 0) {
                         session.set("UserID", registrationResult.userId);
-                        cookie.add("UserID",registrationResult.userId, clock.now().plusMonths(1));
-                       view.redirectToSuccessfulPage();
+                        cookie.add("UserID", registrationResult.userId, clock.now().plusMonths(1));
+                        view.redirectToSuccessfulPage();
                         return;
                     } else if (result == 9) {
                         view.showError("خطا در ثبت داده");
                     }
-
-                    /***TODO: Up to students**/
-                    // dto.registerDate = LocalDateTime.now();
-                    //dto.permission = REGULAR_USER;
-//
-//                    // Handle file upload
-//                    uploadPicture = request.getPart("uploadPicture");
-//                    if (uploadPicture != null && uploadPicture.getSize() > 0) {
-//                        String filename = uploadPicture.getSubmittedFileName();
-//                        String savePath = getServletContext().getRealPath("/UserImages/") + File.separator + filename;
-//                        File uploadDir = new File(getServletContext().getRealPath("/UserImages/"));
-//                        if (!uploadDir.exists()) {
-//                            uploadDir.mkdirs();
-//                        }
-//                        uploadPicture.write(savePath);
-//                        newUser.setProfilePicture("/UserImages/" + filename);
-//                    } else {
-//                        newUser.setProfilePicture("/UserImages/default.png");
-//                    }
 
                     view.setMessage("ثبت نام شما با موفقیت انجام شد");
                     break;

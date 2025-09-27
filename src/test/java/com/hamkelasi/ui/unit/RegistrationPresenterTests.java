@@ -106,5 +106,34 @@ class RegistrationPresenterTests extends ScenarioTest<RegistrationSteps, Registr
         when().userTriesToRegister();
         then().userRedirectToSuccessfulPage();
     }
+
+    @Test
+    void save_user_profile_image_when_image_dir_exists() {
+        given().validation_is_successful()
+                .and().user_provide_a_profile_picture("image.png")
+                .and().image_directory_exists_in("/UserImages/");
+        when().userTriesToRegister();
+        then().imageSavedPathSetAsUserProfileImage("/UserImages/image.png");
+    }
+
+    @Test
+    void save_user_profile_image_and_make_dir() {
+        given().validation_is_successful()
+                .and().user_provide_a_profile_picture("image.png")
+                .and().image_directory_does_not_exists_in("/UserImages/");
+        when().userTriesToRegister();
+        then().makeUserImageDirectory()
+                .and().imageSavedPathSetAsUserProfileImage("/UserImages/image.png");
+
+    }
+
+    @Test
+    void set_default_image_as_user_profile_image_when_user_does_not_provide_any_profile() {
+        given().validation_is_successful()
+                .and().user_does_not_provide_any_profile_picture()
+                .and().set_a_default_image_for_user_profile_image("default.png");
+        when().userTriesToRegister();
+        then().imageSavedPathSetAsUserProfileImage("/UserImages/default.png");
+    }
 }
 

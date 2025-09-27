@@ -22,6 +22,8 @@ public class RegistrationSteps extends Stage<RegistrationSteps> {
     private final StubClock clock;
     private final FakeSession session;
     private final FakeCookie cookie;
+    private final StubUploader fakeUploader;
+    private FakeFile fakeFile;
 
     public RegistrationSteps() {
         view = new StubRegistrationView();
@@ -29,6 +31,7 @@ public class RegistrationSteps extends Stage<RegistrationSteps> {
         session = new FakeSession();
         cookie = new FakeCookie();
         clock = new StubClock();
+        fakeUploader = new StubUploader();
         presenter = new RegistrationPresenter(view, userService, cookie, session, clock);
     }
 
@@ -128,5 +131,43 @@ public class RegistrationSteps extends Stage<RegistrationSteps> {
     public void userRedirectToSuccessfulPage() {
 
         assertThat(view.getRedirectionCalls()).isEqualTo(1);
+    }
+
+    public RegistrationSteps user_provide_a_profile_picture(String filename) {
+        fakeUploader.setHasFile(true);
+        fakeUploader.setFileName(filename);
+        view.setProfileImage(fakeUploader);
+        return self();
+    }
+
+    public void imageSavedPathSetAsUserProfileImage(String expectedSavedPath) {
+        assertThat(userService.getRegisteredDto().profilePicture).isEqualTo(expectedSavedPath);
+        assertThat(fakeUploader.getUploadCalls());
+    }
+
+    public void image_directory_exists_in(String dir) {
+        view.setProfileImage(fakeUploader);
+        fakeFile = new FakeFile();
+        fakeFile.setDirExists(true);
+        fakeFile.setDir(dir);
+        view.setFileDirectoryMaker(fakeFile);
+    }
+
+    public RegistrationSteps makeUserImageDirectory() {
+        assertThat(fakeFile.getMakeDirCalls()).isEqualTo(1);
+        return  self();
+    }
+
+    public void image_directory_does_not_exists_in(String dir) {
+        view.setProfileImage(fakeUploader);
+        fakeFile = new FakeFile();
+        fakeFile.setDirExists(false);
+        fakeFile.setDir(dir);
+        view.setFileDirectoryMaker(fakeFile);
+    }
+
+    public void set_a_default_image_for_user_profile_image(String defaultImage) {
+        fakeUploader.setFileName(defaultImage);
+        view.setProfileImage(fakeUploader);
     }
 }
