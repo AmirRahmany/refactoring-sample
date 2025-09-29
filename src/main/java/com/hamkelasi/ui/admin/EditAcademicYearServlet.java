@@ -35,7 +35,7 @@ public class EditAcademicYearServlet extends HttpServlet {
 
         boolean isAuthenticated = false;
         if (session.getAttribute("UserID") != null) {
-            int loggedId = Integer.parseInt((String) session.getAttribute("UserID"));
+            int loggedId = Integer.parseInt(session.getAttribute("UserID").toString());
             User loggedUser = new User(loggedId);
             if (loggedUser.getPermission() == 1) {
                 isAuthenticated = true;
@@ -69,7 +69,7 @@ public class EditAcademicYearServlet extends HttpServlet {
                 request.setAttribute("showTable", false);
                 session.setAttribute("oldYearName", year.getAcademicYear());
             }
-            request.getRequestDispatcher("/admin/EditAcademicYear.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/templates/admin/edit-academic-year.jsp").forward(request, response);
         } else {
             request.setAttribute("errorMessage", "شما مجوز دسترسی به این صفحه را ندارید");
             request.setAttribute("showTable", false);
@@ -80,7 +80,7 @@ public class EditAcademicYearServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String oldYearName = (String) session.getAttribute("oldYearName");
+        String oldYearName = session.getAttribute("oldYearName").toString();
         String yearName = request.getParameter("yearName");
         String yearId = request.getParameter("yearId");
 

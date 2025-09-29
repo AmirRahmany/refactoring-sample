@@ -35,7 +35,7 @@ public class EditProvincesServlet extends HttpServlet {
 
         boolean isAuthenticated = false;
         if (session.getAttribute("UserID") != null) {
-            int loggedId = Integer.parseInt((String) session.getAttribute("UserID"));
+            int loggedId = Integer.parseInt(session.getAttribute("UserID").toString());
             User loggedUser = new User(loggedId);
             if (loggedUser.getPermission() == 1) {
                 isAuthenticated = true;
@@ -69,7 +69,7 @@ public class EditProvincesServlet extends HttpServlet {
                 request.setAttribute("showTable", false);
                 session.setAttribute("oldProvinceName", province.getName());
             }
-            request.getRequestDispatcher("/admin/edit-provinces.html").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/templates/admin/edit-provinces.jsp").forward(request, response);
         } else {
             request.setAttribute("errorMessage", "شما مجوز دسترسی به این صفحه را ندارید");
             request.setAttribute("showTable", false);
@@ -80,7 +80,7 @@ public class EditProvincesServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String oldProvinceName = (String) session.getAttribute("oldProvinceName");
+        String oldProvinceName = session.getAttribute("oldProvinceName").toString();
         String provinceName = request.getParameter("provinceName");
         String provinceId = request.getParameter("provinceId");
 

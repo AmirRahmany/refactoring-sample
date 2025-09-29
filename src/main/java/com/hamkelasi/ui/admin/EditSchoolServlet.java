@@ -232,7 +232,7 @@ public class EditSchoolServlet extends HttpServlet {
         request.setAttribute("provinces", provinceList);
         List<SchoolType> schoolTypes = List.of(SchoolType.getList());
         request.setAttribute("schoolTypes", schoolTypes);
-
+        request.setAttribute("panelChooseProvinceVisible",true);
         request.getRequestDispatcher("/WEB-INF/templates/admin/edit-schools.jsp").forward(request, response);
     }
 

@@ -139,7 +139,7 @@
                                     <td>${year.id}</td>
                                     <td>${year.academicYear}</td>
                                     <td>
-                                        <a href="${pageContext.request.contextPath}/admin/EditAcademicYear?ID=${year.id}" class="green-button">ویرایش</a>
+                                        <a href="${pageContext.request.contextPath}/admin/edit-academic-years?ID=${year.id}" class="green-button">ویرایش</a>
                                     </td>
                                     <td>
                                         <form action="${pageContext.request.contextPath}/admin/DeleteAcademicYear" method="post" style="display: inline;">
@@ -156,7 +156,7 @@
 
                     <c:if test="${showEditPanel != false}">
                         <h4>ویرایش سال تحصیلی</h4>
-                        <form action="${pageContext.request.contextPath}/admin/EditAcademicYear" method="post" id="editForm">
+                        <form action="${pageContext.request.contextPath}/admin/edit-academic-years" method="post" id="editForm">
                             <input type="hidden" name="yearId" value="${yearId}" />
                             <table class="form-table">
                                 <tr>

@@ -6,11 +6,11 @@ import java.util.List;
 public class SchoolType extends Base {
 
     public List<Row> getList() {
-        return executeSelect(Types.NULL, "SELECT * FROM SchoolType");
+        return executeQuery("SELECT * FROM SchoolType");
     }
 
     public List<Row> getSchoolType(int id) {
-        return executeSelect(Types.NULL, "SELECT * FROM SchoolType WHERE ID = ?",
+        return executeQuery("SELECT * FROM SchoolType WHERE ID = ?",
                 SqlParameter.in(1, Types.INTEGER, id));
     }
 }

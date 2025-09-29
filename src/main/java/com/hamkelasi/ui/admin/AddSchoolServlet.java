@@ -89,12 +89,13 @@ public class AddSchoolServlet extends HttpServlet {
                             int provinceId = Integer.parseInt(provinceIdStr);
                             List<City> cities = List.of(City.getList(provinceId));
                             request.setAttribute("cities", cities);
+                            request.setAttribute("selectedProvinceId", provinceId);
                         }
                     } else {
                         // Handle form submission
                         String schoolName = request.getParameter("textSchoolName");
-                        String cityIdStr = request.getParameter("listCity");
-                        String schoolTypeStr = request.getParameter("listSchoolType");
+                        String cityIdStr = request.getParameter("cityId");
+                        String schoolTypeStr = request.getParameter("schoolType");
 
                         if (schoolName != null && !schoolName.trim().isEmpty() &&
                                 cityIdStr != null && !cityIdStr.isEmpty() &&

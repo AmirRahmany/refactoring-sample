@@ -212,7 +212,7 @@
                                     </td>
                                     <td>
                                         <c:if test="${not empty userProfilePicture}">
-                                            <img src="${pageContext.request.contextPath}/user-images/${userProfilePicture}" width="50" height="50" alt="پروفایل" />
+                                            <img src="${pageContext.request.contextPath}${userProfilePicture}" width="50" height="50" alt="پروفایل" />
                                         </c:if>
                                     </td>
                                 </tr>

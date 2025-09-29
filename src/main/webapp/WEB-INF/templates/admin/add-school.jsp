@@ -107,7 +107,7 @@
 
                     <c:choose>
                         <c:when test="${panelVisible}">
-                            <form action="${pageContext.request.contextPath}/admin/AddSchool" method="post">
+                            <form action="${pageContext.request.contextPath}/admin/add-school" method="post">
                                 <table class="form-table">
                                     <tr>
                                         <td class="form-label">نام آموزشگاه :</td>
@@ -124,7 +124,7 @@
                                     <tr>
                                         <td class="form-label">نوع آموزشگاه :</td>
                                         <td>
-                                            <select name="listSchoolType" id="listSchoolType" class="form-control" required>
+                                            <select name="schoolType" id="listSchoolType" class="form-control" required>
                                                 <option value="">-- انتخاب نوع --</option>
                                                 <c:forEach var="type" items="${schoolTypes}">
                                                     <option value="${type.id}" ${type.id == formData.listSchoolType ? 'selected' : ''}>${type.typeName}</option>
@@ -139,11 +139,11 @@
                                     <tr>
                                         <td class="form-label">نام استان :</td>
                                         <td>
-                                            <select name="listProvince" id="listProvince" class="form-control" required
+                                            <select name="provinceId" id="listProvince" class="form-control" required
                                                     onchange="updateCities()">
                                                 <option value="">-- انتخاب استان --</option>
                                                 <c:forEach var="province" items="${provinces}">
-                                                    <option value="${province.id}" ${province.id == formData.listProvince ? 'selected' : ''}>${province.name}</option>
+                                                    <option value="${province.id}" ${province.id == selectedProvinceId ? 'selected' : ''}>${province.name}</option>
                                                 </c:forEach>
                                             </select>
                                             <c:if test="${not empty listProvinceError}">
@@ -160,10 +160,10 @@
                                     <tr>
                                         <td class="form-label">نام شهر :</td>
                                         <td>
-                                            <select name="listCity" id="listCity" class="form-control" required>
+                                            <select name="cityId" id="listCity" class="form-control" required>
                                                 <option value="">-- انتخاب شهر --</option>
                                                 <c:forEach var="city" items="${cities}">
-                                                    <option value="${city.id}" ${city.id == formData.listCity ? 'selected' : ''}>${city.name}</option>
+                                                    <option value="${city.id}" ${city.id == selectedCityId ? 'selected' : ''}>${city.name}</option>
                                                 </c:forEach>
                                             </select>
                                             <c:if test="${not empty listCityError}">
@@ -200,7 +200,7 @@
         if (provinceId) {
             var form = document.createElement('form');
             form.method = 'post';
-            form.action = '${pageContext.request.contextPath}/admin/AddSchool';
+            form.action = '${pageContext.request.contextPath}/admin/add-school';
 
             var input = document.createElement('input');
             input.type = 'hidden';

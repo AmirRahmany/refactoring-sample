@@ -32,7 +32,7 @@ public class UserPanelServlet extends HttpServlet {
             labelError = "شما مجوز دسترسی به این صفحه را ندارید";
         } else {
             try {
-                int userId = Integer.parseInt((String) session.getAttribute("UserID"));
+                int userId = Integer.parseInt(session.getAttribute("UserID").toString());
                 linkEditUserUrl = request.getContextPath() + "/admin/edit-users?ID=" + userId;
                 linkEditFriendsUrl = request.getContextPath() + "/edit-friends?ID=" + userId;
             } catch (NumberFormatException e) {

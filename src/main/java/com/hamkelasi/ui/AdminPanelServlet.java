@@ -26,7 +26,7 @@ public class AdminPanelServlet extends HttpServlet {
         // Check user authentication and permission
         boolean isAuthenticated = false;
         if (session.getAttribute("UserID") != null) {
-            int loggedID = Integer.parseInt((String) session.getAttribute("UserID"));
+            int loggedID = Integer.parseInt(session.getAttribute("UserID").toString());
             User loggedUser = new User(loggedID);
             if (loggedUser.getPermission() == 1) {
                 isAuthenticated = true;

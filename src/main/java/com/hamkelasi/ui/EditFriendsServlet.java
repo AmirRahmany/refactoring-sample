@@ -37,7 +37,7 @@ public class EditFriendsServlet extends HttpServlet {
         String labelError = null;
 
         if (session.getAttribute("UserID") != null) {
-            int userID = Integer.parseInt((String) session.getAttribute("UserID"));
+            int userID = Integer.parseInt(session.getAttribute("UserID").toString());
             String action = request.getParameter("action");
             String friendID = request.getParameter("friendID");
 

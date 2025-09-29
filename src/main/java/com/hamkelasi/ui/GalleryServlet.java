@@ -43,7 +43,7 @@ public class GalleryServlet extends HttpServlet {
         }
 
         try {
-            userID = Integer.parseInt((String) session.getAttribute("UserID"));
+            userID = Integer.parseInt(session.getAttribute("UserID").toString());
             schoolYearID = Integer.parseInt(request.getParameter("ID"));
             galleryType = MediaShare.Types.values()[Integer.parseInt(request.getParameter("Type"))];
         } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
@@ -137,7 +137,7 @@ public class GalleryServlet extends HttpServlet {
             return;
         }
 
-        int userID = Integer.parseInt((String) session.getAttribute("UserID"));
+        int userID = Integer.parseInt(session.getAttribute("UserID").toString());
         int schoolYearID = Integer.parseInt(request.getParameter("ID"));
         MediaShare.Types galleryType = MediaShare.Types.values()[Integer.parseInt(request.getParameter("Type"))];
 

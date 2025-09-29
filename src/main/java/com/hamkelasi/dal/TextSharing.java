@@ -24,7 +24,7 @@ public class TextSharing extends Base {
     }
 
     public List<Row> getList(int start, int finish, int schoolyearID) {
-        return executeSelect(Types.NULL,
+        return executeQuery(
                 "SELECT * FROM (" +
                         "  SELECT t.*, ROW_NUMBER() OVER (ORDER BY PostDate DESC) AS row_num" +
                         "  FROM TextShare t WHERE t.SchoolYearID = ?" +
@@ -35,6 +35,6 @@ public class TextSharing extends Base {
     }
 
     public List<Row> getPostedUsers() {
-        return executeSelect(Types.NULL, "SELECT DISTINCT UserID FROM TextShare");
+        return executeQuery("SELECT DISTINCT UserID FROM TextShare");
     }
 }

@@ -36,7 +36,7 @@ public class InboxServlet extends HttpServlet {
         String labelError = null;
 
         if (session.getAttribute("UserID") != null) {
-            int userID = Integer.parseInt((String) session.getAttribute("UserID"));
+            int userID = Integer.parseInt(session.getAttribute("UserID").toString());
             List<Message> inboxMessages = new Message().getInbox(userID);
 
             if (inboxMessages.size() > 0) {

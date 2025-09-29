@@ -26,7 +26,7 @@ public class OutboxServlet extends HttpServlet {
         String labelError = null;
 
         if (session.getAttribute("UserID") != null) {
-            int userID = Integer.parseInt((String) session.getAttribute("UserID"));
+            int userID = Integer.parseInt(session.getAttribute("UserID").toString());
             List<Message> outboxMessages = new Message().getOutbox(userID);
 
             if (outboxMessages.size() > 0) {

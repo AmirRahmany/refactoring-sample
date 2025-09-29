@@ -142,7 +142,7 @@
                     </c:if>
                     
                     <c:if test="${isAuthenticated}">
-                        <form action="${pageContext.request.contextPath}/reportUserType" method="post" id="reportForm">
+                        <form action="${pageContext.request.contextPath}/admin/reports/users/by-type" method="post" id="reportForm">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <table class="form-table">
                                 <tr>

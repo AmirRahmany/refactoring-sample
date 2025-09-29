@@ -135,7 +135,7 @@
                     <c:if test="${panelChooseProvinceVisible}">
                         <div class="dropdown-container">
                             <h4>انتخاب استان</h4>
-                            <form action="${pageContext.request.contextPath}/admin/edit-city" method="post">
+                            <form action="${pageContext.request.contextPath}/admin/edit-cities" method="post">
                                 <input type="hidden" name="action" value="showCities" />
                                 <div class="mb-3">
                                     <label class="form-label">انتخاب استان :</label>
@@ -164,7 +164,7 @@
                                     <td>${city.id}</td>
                                     <td>${city.name}</td>
                                     <td>
-                                        <a href="${pageContext.request.contextPath}/admin/edit-city?action=edit&id=${city.id}" class="green-button">ویرایش</a>
+                                        <a href="${pageContext.request.contextPath}/admin/edit-cities?action=edit&id=${city.id}" class="green-button">ویرایش</a>
                                     </td>
                                     <td>
                                         <form action="${pageContext.request.contextPath}/admin/edit-city" method="post" style="display: inline;">

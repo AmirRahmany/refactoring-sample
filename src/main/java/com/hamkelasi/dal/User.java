@@ -73,9 +73,9 @@ public class User extends Base{
     }
 
     public String getPassword(String username) {
-        return (String) executeScalar(Types.VARCHAR,
+        return  executeScalar(Types.VARCHAR,
                 "SELECT Password FROM Userlist WHERE Username = ?",
-                List.of(SqlParameter.in(1, Types.VARCHAR, username)));
+                List.of(SqlParameter.in(1, Types.VARCHAR, username))).toString();
     }
 
     public int getID(String username) {
@@ -108,7 +108,7 @@ public class User extends Base{
     }
 
     public List<Row> getListID() {
-        return executeSelect(Types.NULL, "SELECT ID FROM Userlist");
+        return executeQuery("SELECT ID FROM Userlist");
     }
 
     public List<Row> getOrderedListID() {

@@ -34,7 +34,7 @@ public  class SchoolType {
         List<Base.Row> dt = dalSchoolType.getSchoolType(id);
 
         this.id = id;
-        this.typeName = (String) dt.get(0).get("Type");
+        this.typeName = dt.get(0).get("Type").toString();
     }
 
     public static SchoolType[] getList() {
@@ -45,7 +45,7 @@ public  class SchoolType {
         for (int i = 0; i < types.length; i++) {
             types[i] = new SchoolType();
             types[i].id = (Integer) dt.get(i).get("id");
-            types[i].typeName = (String) dt.get(i).get("Type");
+            types[i].typeName = dt.get(i).get("Type").toString();
         }
 
         return types;

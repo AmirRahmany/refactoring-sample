@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-@WebServlet("/show-message")
+@WebServlet("/messages")
 public class ShowMessageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -42,7 +42,7 @@ public class ShowMessageServlet extends HttpServlet {
             if (messageIDStr != null && !messageIDStr.isEmpty()) {
                 try {
                     int messageID = Integer.parseInt(messageIDStr);
-                    int userID = Integer.parseInt((String) session.getAttribute("UserID"));
+                    int userID = Integer.parseInt(session.getAttribute("UserID").toString());
                     Message message = new Message(messageID);
                     boolean isAuthenticated = false;
 

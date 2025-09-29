@@ -14,7 +14,7 @@ public class School extends Base {
     }
 
     public List<Row> getSchool(int id) {
-        return executeSelect(Types.NULL, "SELECT * FROM School WHERE ID = ?",
+        return executeQuery("SELECT * FROM School WHERE ID = ?",
                 SqlParameter.in(1, Types.INTEGER, id));
     }
 
@@ -33,7 +33,7 @@ public class School extends Base {
     }
 
     public List<Row> getListByCity(int cityID) {
-        return executeSelect(Types.NULL, "SELECT * FROM School WHERE CityID = ?",
+        return executeQuery("SELECT * FROM School WHERE CityID = ?",
                 SqlParameter.in(1, Types.INTEGER, cityID));
     }
 

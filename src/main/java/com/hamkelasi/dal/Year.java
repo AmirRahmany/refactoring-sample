@@ -8,16 +8,16 @@ import java.util.List;
 public class Year extends Base {
 
     public List<Row> getList() {
-        return executeSelect(Types.NULL, "CALL year_GetList()", null);
+        return executeQuery( "select * from academicyear", null);
     }
 
     public List<Row> getYear(int id) {
-        return executeSelect(Types.NULL, "CALL year_GetYear(?)",
+        return executeQuery( "select * from academicyear where ID=?",
                 SqlParameter.in(1, Types.INTEGER, id));
     }
 
     public int getCount(String year) {
-        Object count = executeScalar(Types.INTEGER, "CALL year_GetCountByName(?)",
+        Object count = executeScalar(Types.INTEGER, "select count(*) from academicyear where ID=?",
                 List.of(SqlParameter.in(1, Types.VARCHAR, year)));
         return count == null ? 0 : ((Number) count).intValue();
     }

@@ -30,7 +30,7 @@ public class ComposeServlet extends HttpServlet {
         if (session.getAttribute("UserID") != null) {
             // Mimic !IsPostBack by checking if this is the initial GET request
             if (!"POST".equalsIgnoreCase(request.getMethod())) {
-                int loggedUserId = Integer.parseInt((String) session.getAttribute("UserID"));
+                int loggedUserId = Integer.parseInt( session.getAttribute("UserID").toString());
                 List<User> users = new User().getOrderedList();
                 List<UserItem> userItems = new ArrayList<>();
                 for (User user : users) {
@@ -62,7 +62,7 @@ public class ComposeServlet extends HttpServlet {
             Message message = new Message();
             message.setReceiverUser(Integer.parseInt(request.getParameter("listUsers")));
             message.setSubject(request.getParameter("textSubject"));
-            message.setSenderUser(Integer.parseInt((String) session.getAttribute("UserID")));
+            message.setSenderUser(Integer.parseInt(session.getAttribute("UserID").toString()));
             message.setDate(LocalDateTime.now());
             message.setText(request.getParameter("textPM"));
 
@@ -79,7 +79,7 @@ public class ComposeServlet extends HttpServlet {
 
         // Re-populate user list for JSP in case of error
         if (session.getAttribute("UserID") != null) {
-            int loggedUserId = Integer.parseInt((String) session.getAttribute("UserID"));
+            int loggedUserId = Integer.parseInt(session.getAttribute("UserID").toString());
             List<User> users = new User().getOrderedList();
             List<UserItem> userItems = new ArrayList<>();
             for (User user : users) {

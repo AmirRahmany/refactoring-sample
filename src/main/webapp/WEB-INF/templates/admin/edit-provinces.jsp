@@ -139,7 +139,7 @@
                                     <td>${province.id}</td>
                                     <td>${province.name}</td>
                                     <td>
-                                        <a href="${pageContext.request.contextPath}/admin/EditProvinces?ID=${province.id}" class="green-button">ویرایش</a>
+                                        <a href="${pageContext.request.contextPath}/admin/edit-provinces?ID=${province.id}" class="green-button">ویرایش</a>
                                     </td>
                                     <td>
                                         <form action="${pageContext.request.contextPath}/admin/DeleteProvinces" method="post" style="display: inline;">

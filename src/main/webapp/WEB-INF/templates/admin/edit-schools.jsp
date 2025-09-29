@@ -135,7 +135,7 @@
                     <c:if test="${panelChooseProvinceVisible}">
                         <div class="dropdown-container">
                             <h4>انتخاب استان و شهر</h4>
-                            <form action="${pageContext.request.contextPath}/admin/edit-school" method="post">
+                            <form action="${pageContext.request.contextPath}/admin/edit-schools" method="post">
                                 <input type="hidden" name="action" value="showCities" />
                                 <div class="mb-3">
                                     <label class="form-label">انتخاب استان :</label>
@@ -150,7 +150,7 @@
                             </form>
 
                             <c:if test="${cities != null}">
-                                <form action="${pageContext.request.contextPath}/admin/edit-school" method="post">
+                                <form action="${pageContext.request.contextPath}/admin/edit-schools" method="post">
                                     <input type="hidden" name="action" value="showSchools" />
                                     <input type="hidden" name="provinceId" value="${selectedProvinceId}" />
                                     <div class="mb-3">
@@ -161,6 +161,7 @@
                                                 <option value="${city.id}" ${selectedCityId == city.id ? 'selected' : ''}>${city.name}</option>
                                             </c:forEach>
                                         </select>
+                                        <input type="hidden" name="action" value="showSchools"/>
                                         <button type="submit" class="green-button">نمایش مدارس</button>
                                     </div>
                                 </form>
@@ -178,15 +179,16 @@
                             </tr>
                             <c:forEach var="school" items="${schools}" varStatus="status">
                                 <tr class="${status.count % 2 == 1 ? 'odd-row' : 'even-row'}">
-                                    <td>${school.typeName}</td>
+                                    <td>${school.type}</td>
                                     <td>${school.name}</td>
                                     <td>
-                                        <a href="${pageContext.request.contextPath}/admin/edit-school?action=edit&id=${school.id}" class="green-button">ویرایش</a>
+                                        <a href="${pageContext.request.contextPath}/admin/edit-schools?action=edit&id=${school.id}" class="green-button">ویرایش</a>
                                     </td>
                                     <td>
-                                        <form action="${pageContext.request.contextPath}/admin/edit-school" method="post" style="display: inline;">
+                                        <form action="${pageContext.request.contextPath}/admin/edit-schools" method="post" style="display: inline;">
                                             <input type="hidden" name="action" value="delete" />
                                             <input type="hidden" name="schoolId" value="${school.id}" />
+                                            <input type="hidden" name="action" value=""/>
                                             <button type="submit" class="green-button" style="background-color: #dc3545;" onclick="return confirmDelete()">
                                                 حذف
                                             </button>

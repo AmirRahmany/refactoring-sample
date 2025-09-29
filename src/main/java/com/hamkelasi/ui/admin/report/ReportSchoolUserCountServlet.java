@@ -1,145 +1,155 @@
 package com.hamkelasi.ui.admin.report;
 
-import com.hamkelasi.bll.City;
-import com.hamkelasi.bll.Province;
-import com.hamkelasi.bll.School;
-import com.hamkelasi.bll.SchoolType;
+import com.hamkelasi.bll.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
+
 
 @WebServlet("/admin/reports/schools/by-user-count")
 public class ReportSchoolUserCountServlet extends HttpServlet {
-    private static final String CSRF_TOKEN_PARAM = "_csrf";
+    private static final long serialVersionUID = 1L;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        boolean isAuthenticated = session.getAttribute("isAuthenticated") != null && (boolean) session.getAttribute("isAuthenticated");
-        boolean isAdmin = session.getAttribute("isAdmin") != null && (boolean) session.getAttribute("isAdmin");
 
-        if (!isAuthenticated || !isAdmin) {
-            request.setAttribute("labelError", "شما مجوز دسترسی به این صفحه را ندارید");
-            request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-user-count.jsp").forward(request, response);
-            return;
-        }
-
-        // Initialize provinces
-        List<Province> provinces = Arrays.asList(Province.getList());
-        request.setAttribute("provinces", provinces);
-
-        // Initialize cities for the first province
-        int provinceId = provinces.get(0).getId();
-        List<City> cities = List.of(City.getList(provinceId));
-        request.setAttribute("cities", cities);
-        request.setAttribute("selectedProvinceId", provinceId);
-
-        // Initialize schools for the first city
-        int cityId = cities.get(0).getId();
-        List<School> schools = School.getList(cityId);
-        request.setAttribute("schools", schools);
-        request.setAttribute("selectedCityId", cityId);
-        request.setAttribute("isAuthenticated", true);
-
-        request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-user-count.jsp").forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        boolean isAuthenticated = session.getAttribute("isAuthenticated") != null && (boolean) session.getAttribute("isAuthenticated");
-        boolean isAdmin = session.getAttribute("isAdmin") != null && (boolean) session.getAttribute("isAdmin");
-
-        if (!isAuthenticated || !isAdmin) {
-            request.setAttribute("labelError", "شما مجوز دسترسی به این صفحه را ندارید");
-            request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-user-count.jsp").forward(request, response);
-            return;
-        }
-
-        // Get request parameters
-        String provinceIdStr = request.getParameter("listProvinces");
-        String cityIdStr = request.getParameter("listCities");
-        String schoolIdStr = request.getParameter("listSchools");
-        String buttonFillCities = request.getParameter("buttonFillCities");
-        String buttonFillSchools = request.getParameter("buttonFillSchools");
-        String buttonShow = request.getParameter("buttonShow");
-        String csrfToken = request.getParameter(CSRF_TOKEN_PARAM);
-
-        // CSRF validation
-        String sessionCsrfToken = (String) session.getAttribute(CSRF_TOKEN_PARAM);
-        if (csrfToken == null || !csrfToken.equals(sessionCsrfToken)) {
-            request.setAttribute("labelError", "خطای امنیتی: توکن CSRF نامعتبر است");
-            request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-user-count.jsp").forward(request, response);
-            return;
-        }
-
-        // Initialize provinces
-        List<Province> provinces = Arrays.asList(Province.getList());
-        request.setAttribute("provinces", provinces);
-        int provinceId = provinceIdStr != null ? Integer.parseInt(provinceIdStr) : provinces.get(0).getId();
-        request.setAttribute("selectedProvinceId", provinceId);
-
-        // Initialize cities
-        List<City> cities = List.of(City.getList(provinceId));
-        request.setAttribute("cities", cities);
-        int cityId = cityIdStr != null ? Integer.parseInt(cityIdStr) : cities.get(0).getId();
-        request.setAttribute("selectedCityId", cityId);
-
-        // Initialize schools
-        List<School> schools = School.getList(cityId);
-        request.setAttribute("schools", schools);
-        request.setAttribute("isAuthenticated", true);
-
-        if (buttonFillCities != null) {
-            // Handle "نمایش شهرها" button
-            request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-user-count.jsp").forward(request, response);
-            return;
-        }
-
-        if (buttonFillSchools != null) {
-            // Handle "نمایش مدارس" button
-            request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-user-count.jsp").forward(request, response);
-            return;
-        }
-
-        if (buttonShow != null) {
-            // Handle "نمایش" button
-            if (schoolIdStr == null || schoolIdStr.trim().isEmpty()) {
-                request.setAttribute("labelError", "لطفاً یک آموزشگاه را انتخاب کنید");
-                request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-user-count.jsp").forward(request, response);
-                return;
-            }
-
-            int schoolId = Integer.parseInt(schoolIdStr);
-            request.setAttribute("selectedSchoolId", schoolId);
-
-            // Generate report
-            School school = new School(schoolId);
-            SchoolType schoolType = new SchoolType(school.getType());
-            int userCount = school.getUserCount();
-
-            City city = null;
-            for (City c : cities) {
-                if (c.getId() == cityId) {
-                    city = c;
+        // Handle cookies for user authentication
+        String userId = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("UserID".equals(cookie.getName())) {
+                    userId = cookie.getValue();
+                    if (session.getAttribute("UserID") == null) {
+                        session.setAttribute("UserID", userId);
+                    }
                     break;
                 }
             }
+        }
+
+        boolean isAuthenticated = false;
+        if (session.getAttribute("UserID") != null) {
+            int loggedId = Integer.parseInt( session.getAttribute("UserID").toString());
+            User loggedUser = new User(loggedId);
+            if (loggedUser.getPermission() == 1) {
+                isAuthenticated = true;
+            }
+        }
+
+        if (isAuthenticated) {
+            // Populate provinces on initial load
+            List<Province> provinces = List.of(Province.getList());
+            request.setAttribute("provinces", provinces);
+
+            // Populate cities for the first province (if any)
+            List<City> cities = new ArrayList<>();
+            if (!provinces.isEmpty()) {
+                int provinceId = provinces.get(0).getId();
+                cities = List.of(City.getList(provinceId));
+            }
+            request.setAttribute("cities", cities);
+
+            // Populate schools for the first city (if any)
+            List<School> schools = new ArrayList<>();
+            if (!cities.isEmpty()) {
+                int cityId = cities.get(0).getId();
+                schools = School.getList(cityId);
+            }
+            request.setAttribute("schools", schools);
 
             request.setAttribute("showResultTable", true);
-            request.setAttribute("cityName", city != null ? city.getName() : "");
-            request.setAttribute("schoolType", schoolType.getTypeName());
-            request.setAttribute("schoolName", school.getName());
-            request.setAttribute("userCount", userCount);
+            request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-user-count.jsp").forward(request, response);
+        } else {
+            request.setAttribute("labelError", "شما مجوز دسترسی به این صفحه را ندارید");
+            request.setAttribute("showReportPanel", false);
+            request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-user-count.jsp").forward(request, response);
+        }
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String action = request.getParameter("action");
+
+        // Re-populate provinces for all POST requests
+        List<Province> provinces = List.of(Province.getList());
+        request.setAttribute("provinces", provinces);
+
+        String selectedProvinceId = request.getParameter("selectedProvinceId");
+        String selectedCityId = request.getParameter("cityId");
+        String selectedSchoolId = request.getParameter("schoolId");
+
+        // Populate cities based on selected province
+        List<City> cities = new ArrayList<>();
+        if (selectedProvinceId != null && !selectedProvinceId.isEmpty()) {
+            int provinceId = Integer.parseInt(selectedProvinceId);
+            cities = List.of(City.getList(provinceId));
+            request.setAttribute("selectedProvinceId", provinceId);
+        }
+        request.setAttribute("cities", cities);
+
+        // Populate schools based on selected city
+        List<School> schools = new ArrayList<>();
+        if ("fillSchools".equals(action) || "show".equals(action)) {
+            if (selectedCityId != null && !selectedCityId.isEmpty()) {
+                int cityId = Integer.parseInt(selectedCityId);
+                schools = School.getList(cityId);
+                request.setAttribute("selectedCityId", cityId);
+            }
+        }
+        request.setAttribute("schools", schools);
+
+        // Handle "Show" action to display report
+        if ("show".equals(action)) {
+            if (selectedSchoolId != null && !selectedSchoolId.isEmpty()) {
+                int schoolId = Integer.parseInt(selectedSchoolId);
+                School school = new School(schoolId);
+                SchoolType schoolType = new SchoolType(school.getType());
+                int userCount = school.getUserCount();
+
+                // Create result object for the table
+                class ReportResult {
+                    private String cityName;
+                    private String schoolType;
+                    private String schoolName;
+                    private int userCount;
+
+                    public ReportResult(String cityName, String schoolType, String schoolName, int userCount) {
+                        this.cityName = cityName;
+                        this.schoolType = schoolType;
+                        this.schoolName = schoolName;
+                        this.userCount = userCount;
+                    }
+
+                    // Getters
+                    public String getCityName() { return cityName; }
+                    public String getSchoolType() { return schoolType; }
+                    public String getSchoolName() { return schoolName; }
+                    public int getUserCount() { return userCount; }
+                }
+
+                String cityName = cities.stream()
+                        .filter(city -> city.getId() == Integer.parseInt(selectedCityId))
+                        .findFirst()
+                        .map(City::getName)
+                        .orElse("");
+                ReportResult result = new ReportResult(cityName, schoolType.getTypeName(), school.getName(), userCount);
+                List<ReportResult> results = new ArrayList<>();
+                results.add(result);
+                request.setAttribute("results", results);
+                request.setAttribute("showTable", true);
+                request.setAttribute("selectedSchoolId", schoolId);
+            } else {
+                request.setAttribute("labelError", "لطفا یک آموزشگاه را انتخاب کنید");
+                request.setAttribute("showTable", false);
+            }
+        } else {
+            request.setAttribute("showTable", false);
         }
 
         request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-user-count.jsp").forward(request, response);

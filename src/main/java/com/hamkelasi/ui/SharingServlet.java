@@ -159,7 +159,7 @@ public class SharingServlet extends HttpServlet {
                 // New post panel
                 if (session.getAttribute("UserID") != null) {
                     boolean isUserRegistered = false;
-                    int userID = Integer.parseInt((String) session.getAttribute("UserID"));
+                    int userID = Integer.parseInt(session.getAttribute("UserID").toString());
                     for (User registeredUser : registeredUsers) {
                         if (userID == registeredUser.getId()) {
                             isUserRegistered = true;
@@ -248,7 +248,7 @@ public class SharingServlet extends HttpServlet {
             schoolYear.add();
             SchoolRegistration registration = new SchoolRegistration();
             registration.setSchoolYearId(schoolYear.getId());
-            registration.setUserId(Integer.parseInt((String) session.getAttribute("UserID")));
+            registration.setUserId(Integer.parseInt(session.getAttribute("UserID").toString()));
             registration.add();
 
             request.setAttribute("labelError", "ثبت داده با موفقیت انجام شد");
@@ -272,7 +272,7 @@ public class SharingServlet extends HttpServlet {
                 if (newPost.isValid()) {
                     SchoolYear schoolYear = new SchoolYear(schoolID, yearID);
                     newPost.setPostDate(LocalDateTime.now());
-                    newPost.setUserId(Integer.parseInt((String) session.getAttribute("UserID")));
+                    newPost.setUserId(Integer.parseInt(session.getAttribute("UserID").toString()));
                     newPost.setSchoolYearId(schoolYear.getId());
                     int result = newPost.add();
                     if (result == 1) {
@@ -293,7 +293,7 @@ public class SharingServlet extends HttpServlet {
             SchoolYear schoolYear = new SchoolYear(schoolID, yearID);
             SchoolRegistration registration = new SchoolRegistration();
             registration.setSchoolYearId(schoolYear.getId());
-            registration.setUserId(Integer.parseInt((String) session.getAttribute("UserID")));
+            registration.setUserId(Integer.parseInt(session.getAttribute("UserID").toString()));
             registration.add();
             request.setAttribute("labelError", "ثبت داده با موفقیت انجام شد");
             doGet(request, response);

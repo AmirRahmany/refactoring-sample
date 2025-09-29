@@ -17,6 +17,6 @@ public class Permission extends Base {
     }
 
     public List<Row> getList() {
-        return executeSelect(Types.NULL, "SELECT * FROM Permission", null);
+        return executeQuery( "SELECT * FROM Permission");
     }
 }

@@ -36,7 +36,7 @@ public class Province extends Base {
     }
 
     public List<Row> get(int id) {
-        return executeSelect(Types.NULL, "SELECT * FROM Province WHERE ID = ?",
+        return executeQuery("SELECT * FROM Province WHERE ID = ?",
                 SqlParameter.in(1, Types.INTEGER, id));
     }
 }

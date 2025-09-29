@@ -1,232 +1,221 @@
 package com.hamkelasi.ui.admin.report;
 
-import com.hamkelasi.bll.City;
-import com.hamkelasi.bll.Province;
-import com.hamkelasi.bll.School;
-import com.hamkelasi.bll.SchoolType;
+import com.hamkelasi.bll.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 @WebServlet("/admin/reports/schools/by-post-count")
 public class ReportSchoolPostCountServlet extends HttpServlet {
-    private static final String CSRF_TOKEN_PARAM = "_csrf";
+    private static final long serialVersionUID = 1L;
 
-    private Date convertToDate(String year, String month, String day) throws ParseException {
-        // Convert Persian date to Gregorian (simplified for demo)
-        String dateStr = String.format("%s/%s/%s", year, month, day);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        return sdf.parse(dateStr);
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        boolean isAuthenticated = session.getAttribute("isAuthenticated") != null && (boolean) session.getAttribute("isAuthenticated");
-        boolean isAdmin = session.getAttribute("isAdmin") != null && (boolean) session.getAttribute("isAdmin");
 
-        if (!isAuthenticated || !isAdmin) {
-            request.setAttribute("labelError", "شما مجوز دسترسی به این صفحه را ندارید");
-            request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-post-count.jsp").forward(request, response);
-            return;
+        // Handle cookies for user authentication
+        String userId = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("UserID".equals(cookie.getName())) {
+                    userId = cookie.getValue();
+                    if (session.getAttribute("UserID") == null) {
+                        session.setAttribute("UserID", userId);
+                    }
+                    break;
+                }
+            }
         }
 
-        // Initialize provinces
-        List<Province> provinces = Arrays.asList(Province.getList());
+        boolean isAuthenticated = false;
+        if (session.getAttribute("UserID") != null) {
+            int loggedId = Integer.parseInt(session.getAttribute("UserID").toString());
+            User loggedUser = new User(loggedId);
+            if (loggedUser.getPermission() == 1) {
+                isAuthenticated = true;
+            }
+        }
+
+        if (isAuthenticated) {
+            // Populate provinces on initial load
+            request.setAttribute("isAuthenticated",true);
+            List<Province> provinces = List.of(Province.getList());
+            request.setAttribute("provinces", provinces);
+
+            // Populate cities for the first province (if any)
+            List<City> cities = new ArrayList<>();
+            if (!provinces.isEmpty()) {
+                int provinceId = provinces.get(0).getId();
+                cities = List.of(City.getList(provinceId));
+                request.setAttribute("selectedProvinceId", provinceId);
+            }
+            request.setAttribute("cities", cities);
+
+            // Populate schools for the first city (if any)
+            List<School> schools = new ArrayList<>();
+            if (!cities.isEmpty()) {
+                int cityId = cities.get(0).getId();
+                schools = School.getList(cityId);
+                request.setAttribute("selectedCityId", cityId);
+            }
+            request.setAttribute("schools", schools);
+
+            request.setAttribute("showTable", false);
+            request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-post-count.jsp").forward(request, response);
+        } else {
+            request.setAttribute("errorMessage", "شما مجوز دسترسی به این صفحه را ندارید");
+            request.setAttribute("showReportPanel", false);
+            request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-post-count.jsp").forward(request, response);
+        }
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String action = request.getParameter("action");
+
+        // Re-populate provinces for all POST requests
+        List<Province> provinces = List.of(Province.getList());
         request.setAttribute("provinces", provinces);
 
-        // Initialize cities for the first province
-        int provinceId = provinces.get(0).getId();
-        List<City> cities = List.of(City.getList(provinceId));
-        request.setAttribute("cities", cities);
-        request.setAttribute("selectedProvinceId", provinceId);
+        String selectedProvinceId = request.getParameter("provinceId");
+        String selectedCityId = request.getParameter("cityId");
+        String selectedSchoolId = request.getParameter("schoolId");
 
-        // Initialize schools for the first city
-        int cityId = cities.get(0).getId();
-        List<School> schools = School.getList(cityId);
-        request.setAttribute("schools", schools);
-        request.setAttribute("selectedCityId", cityId);
-        request.setAttribute("isAuthenticated", true);
-
-        request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-post-count.jsp").forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        boolean isAuthenticated = session.getAttribute("isAuthenticated") != null && (boolean) session.getAttribute("isAuthenticated");
-        boolean isAdmin = session.getAttribute("isAdmin") != null && (boolean) session.getAttribute("isAdmin");
-
-        if (!isAuthenticated || !isAdmin) {
-            request.setAttribute("labelError", "شما مجوز دسترسی به این صفحه را ندارید");
-            request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-post-count.jsp").forward(request, response);
-            return;
+        // Populate cities based on selected province
+        List<City> cities = new ArrayList<>();
+        if (selectedProvinceId != null && !selectedProvinceId.isEmpty()) {
+            int provinceId = Integer.parseInt(selectedProvinceId);
+            cities = List.of(City.getList(provinceId));
+            request.setAttribute("selectedProvinceId", provinceId);
         }
+        request.setAttribute("cities", cities);
 
-        // Get request parameters
-        String provinceIdStr = request.getParameter("listProvinces");
-        String cityIdStr = request.getParameter("listCities");
-        String schoolIdStr = request.getParameter("listSchools");
+        // Populate schools based on selected city
+        List<School> schools = new ArrayList<>();
+        if ("fillSchools".equals(action) || "show".equals(action)) {
+            if (selectedCityId != null && !selectedCityId.isEmpty()) {
+                int cityId = Integer.parseInt(selectedCityId);
+                schools = School.getList(cityId);
+                request.setAttribute("selectedCityId", cityId);
+            }
+        }
+        request.setAttribute("schools", schools);
+
+        // Handle date parameters
+        boolean validDate = true;
+        Date startDate = new IranianCalendar().convertToDateTime(1900, 1, 1);
+        Date endDate = new IranianCalendar().convertToDateTime(3000, 12, 30);
+
         String checkStartDate = request.getParameter("checkStartDate");
-        String textStartDay = request.getParameter("textStartDay");
-        String textStartMonth = request.getParameter("textStartMonth");
-        String textStartYear = request.getParameter("textStartYear");
+        if ("on".equals(checkStartDate)) {
+            String startYear = request.getParameter("startYear");
+            String startMonth = request.getParameter("startMonth");
+            String startDay = request.getParameter("startDay");
+            if (startYear != null && !startYear.isEmpty() &&
+                    startMonth != null && !startMonth.isEmpty() &&
+                    startDay != null && !startDay.isEmpty()) {
+                try {
+                    startDate = new IranianCalendar().convertToDateTime(
+                            Integer.parseInt(startYear),
+                            Integer.parseInt(startMonth),
+                            Integer.parseInt(startDay)
+                    );
+                    request.setAttribute("startYear", startYear);
+                    request.setAttribute("startMonth", startMonth);
+                    request.setAttribute("startDay", startDay);
+                } catch (IllegalArgumentException ex) {
+                    validDate = false;
+                }
+            } else {
+                validDate = false;
+            }
+        }
+
         String checkEndDate = request.getParameter("checkEndDate");
-        String textEndDay = request.getParameter("textEndDay");
-        String textEndMonth = request.getParameter("textEndMonth");
-        String textEndYear = request.getParameter("textEndYear");
-        String buttonFillCities = request.getParameter("buttonFillCities");
-        String buttonFillSchools = request.getParameter("buttonFillSchools");
-        String buttonShow = request.getParameter("buttonShow");
-        String csrfToken = request.getParameter(CSRF_TOKEN_PARAM);
-
-        // CSRF validation
-        String sessionCsrfToken = (String) session.getAttribute(CSRF_TOKEN_PARAM);
-        if (csrfToken == null || !csrfToken.equals(sessionCsrfToken)) {
-            request.setAttribute("labelError", "خطای امنیتی: توکن CSRF نامعتبر است");
-            request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-post-count.jsp").forward(request, response);
-            return;
-        }
-
-        // Initialize provinces
-        List<Province> provinces = Arrays.asList(Province.getList());
-        request.setAttribute("provinces", provinces);
-        int provinceId = provinceIdStr != null ? Integer.parseInt(provinceIdStr) : provinces.get(0).getId();
-        request.setAttribute("selectedProvinceId", provinceId);
-
-        // Initialize cities
-        List<City> cities = List.of(City.getList(provinceId));
-        request.setAttribute("cities", cities);
-        int cityId = cityIdStr != null ? Integer.parseInt(cityIdStr) : cities.get(0).getId();
-        request.setAttribute("selectedCityId", cityId);
-
-        // Initialize schools
-        List<School> schools = School.getList(cityId);
-        request.setAttribute("schools", schools);
-        request.setAttribute("isAuthenticated", true);
-
-        if (buttonFillCities != null) {
-            // Handle "نمایش شهرها" button
-            request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-post-count.jsp").forward(request, response);
-            return;
-        }
-
-        if (buttonFillSchools != null) {
-            // Handle "نمایش مدارس" button
-            request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-post-count.jsp").forward(request, response);
-            return;
-        }
-
-        if (buttonShow != null) {
-            // Handle "نمایش" button
-            if (schoolIdStr == null || schoolIdStr.trim().isEmpty()) {
-                request.setAttribute("labelError", "لطفاً یک آموزشگاه را انتخاب کنید");
-                request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-post-count.jsp").forward(request, response);
-                return;
-            }
-
-            int schoolId = Integer.parseInt(schoolIdStr);
-            request.setAttribute("selectedSchoolId", schoolId);
-
-            // Validate dates
-            boolean validDate = true;
-            Date startDate = null;
-            Date endDate = null;
-
-            if ("on".equals(checkStartDate)) {
-                request.setAttribute("checkStartDate", true);
-                request.setAttribute("textStartDay", textStartDay);
-                request.setAttribute("textStartMonth", textStartMonth);
-                request.setAttribute("textStartYear", textStartYear);
-                if (textStartDay.isEmpty() || textStartMonth.isEmpty() || textStartYear.isEmpty()) {
-                    request.setAttribute("startDateError", "تمام فیلدهای تاریخ شروع الزامی است");
+        if ("on".equals(checkEndDate)) {
+            String endYear = request.getParameter("endYear");
+            String endMonth = request.getParameter("endMonth");
+            String endDay = request.getParameter("endDay");
+            if (endYear != null && !endYear.isEmpty() &&
+                    endMonth != null && !endMonth.isEmpty() &&
+                    endDay != null && !endDay.isEmpty()) {
+                try {
+                    endDate = new IranianCalendar().convertToDateTime(
+                            Integer.parseInt(endYear),
+                            Integer.parseInt(endMonth),
+                            Integer.parseInt(endDay)
+                    );
+                    request.setAttribute("endYear", endYear);
+                    request.setAttribute("endMonth", endMonth);
+                    request.setAttribute("endDay", endDay);
+                } catch (IllegalArgumentException ex) {
                     validDate = false;
-                } else {
-                    try {
-                        int day = Integer.parseInt(textStartDay);
-                        int month = Integer.parseInt(textStartMonth);
-                        int year = Integer.parseInt(textStartYear);
-                        if (day < 1 || day > 30 || month < 1 || month > 12 || year < 1300 || year > 1500) {
-                            request.setAttribute("startDateError", "مقادیر تاریخ شروع نامعتبر است");
-                            validDate = false;
-                        } else {
-                            startDate = convertToDate(textStartYear, textStartMonth, textStartDay);
-                        }
-                    } catch (NumberFormatException | ParseException e) {
-                        request.setAttribute("startDateError", "فرمت تاریخ شروع نامعتبر است");
-                        validDate = false;
-                    }
                 }
             } else {
-                try {
-                    startDate = convertToDate("1300", "01", "01"); // Default Persian date
-                } catch (ParseException e) {
-                    validDate = false;
-                }
-            }
-
-            if ("on".equals(checkEndDate)) {
-                request.setAttribute("checkEndDate", true);
-                request.setAttribute("textEndDay", textEndDay);
-                request.setAttribute("textEndMonth", textEndMonth);
-                request.setAttribute("textEndYear", textEndYear);
-                if (textEndDay.isEmpty() || textEndMonth.isEmpty() || textEndYear.isEmpty()) {
-                    request.setAttribute("endDateError", "تمام فیلدهای تاریخ پایان الزامی است");
-                    validDate = false;
-                } else {
-                    try {
-                        int day = Integer.parseInt(textEndDay);
-                        int month = Integer.parseInt(textEndMonth);
-                        int year = Integer.parseInt(textEndYear);
-                        if (day < 1 || day > 30 || month < 1 || month > 12 || year < 1300 || year > 1500) {
-                            request.setAttribute("endDateError", "مقادیر تاریخ پایان نامعتبر است");
-                            validDate = false;
-                        } else {
-                            endDate = convertToDate(textEndYear, textEndMonth, textEndDay);
-                        }
-                    } catch (NumberFormatException | ParseException e) {
-                        request.setAttribute("endDateError", "فرمت تاریخ پایان نامعتبر است");
-                        validDate = false;
-                    }
-                }
-            } else {
-                try {
-                    endDate = convertToDate("1500", "12", "30"); // Default Persian date
-                } catch (ParseException e) {
-                    validDate = false;
-                }
-            }
-
-            if (validDate) {
-                // Generate report
-                School school = schools.stream().filter(s -> s.getId() == schoolId).findFirst().orElse(null);
-                if (school != null) {
-                    SchoolType schoolType = new SchoolType();
-                    City city = cities.stream().filter(c -> c.getId() == cityId).findFirst().orElse(null);
-                    int postCount = new School(schoolId).getPostCount(schoolId,startDate,endDate);
-
-                    request.setAttribute("showResultTable", true);
-                    request.setAttribute("cityName", city != null ? city.getName() : "");
-                    request.setAttribute("schoolType", schoolType.getTypeName());
-                    request.setAttribute("schoolName", school.getName());
-                    request.setAttribute("postCount", postCount);
-                }
+                validDate = false;
             }
         }
 
+        // Handle "Show" action to display report
+        if ("show".equals(action) && validDate) {
+            if (selectedSchoolId != null && !selectedSchoolId.isEmpty()) {
+                int schoolId = Integer.parseInt(selectedSchoolId);
+                School school = new School(schoolId);
+                SchoolType schoolType = new SchoolType(school.getType());
+                int postCount = school.getPostCount(schoolId, startDate, endDate);
+
+                // Create result object for the table
+                class ReportResult {
+                    private String cityName;
+                    private String schoolType;
+                    private String schoolName;
+                    private int postCount;
+
+                    public ReportResult(String cityName, String schoolType, String schoolName, int postCount) {
+                        this.cityName = cityName;
+                        this.schoolType = schoolType;
+                        this.schoolName = schoolName;
+                        this.postCount = postCount;
+                    }
+
+                    public String getCityName() { return cityName; }
+                    public String getSchoolType() { return schoolType; }
+                    public String getSchoolName() { return schoolName; }
+                    public int getPostCount() { return postCount; }
+                }
+
+                String cityName = cities.stream()
+                        .filter(city -> city.getId() == Integer.parseInt(selectedCityId))
+                        .findFirst()
+                        .map(City::getName)
+                        .orElse("");
+                ReportResult result = new ReportResult(cityName, schoolType.getTypeName(), school.getName(), postCount);
+                List<ReportResult> results = new ArrayList<>();
+                results.add(result);
+                request.setAttribute("results", results);
+                request.setAttribute("showTable", true);
+                request.setAttribute("selectedSchoolId", schoolId);
+                request.setAttribute("checkStartDate", checkStartDate);
+                request.setAttribute("checkEndDate", checkEndDate);
+            } else {
+                request.setAttribute("errorMessage", "لطفا یک آموزشگاه را انتخاب کنید");
+                request.setAttribute("showTable", false);
+            }
+        } else if ("show".equals(action)) {
+            request.setAttribute("errorMessage", "لطفا تاریخ‌های معتبر را وارد کنید");
+            request.setAttribute("showTable", false);
+            request.setAttribute("checkStartDate", checkStartDate);
+            request.setAttribute("checkEndDate", checkEndDate);
+        } else {
+            request.setAttribute("showTable", false);
+        }
+
+        request.setAttribute("isAuthenticated",true);
         request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-post-count.jsp").forward(request, response);
     }
 }

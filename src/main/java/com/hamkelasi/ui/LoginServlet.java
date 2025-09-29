@@ -1,12 +1,10 @@
 package com.hamkelasi.ui;
 
 
+import com.hamkelasi.bll.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
@@ -23,6 +21,7 @@ public class LoginServlet extends HttpServlet {
         String rememberMe = request.getParameter("CheckRemember");
         String csrfToken = request.getParameter(CSRF_TOKEN_PARAM);
 
+
         // Get session and CSRF token
         HttpSession session = request.getSession();
         String sessionCsrfToken = (String) session.getAttribute(CSRF_TOKEN_PARAM);
@@ -31,12 +30,11 @@ public class LoginServlet extends HttpServlet {
         boolean hasErrors = false;
 
         // CSRF validation
-        if (csrfToken == null || !csrfToken.equals(sessionCsrfToken)) {
+       /* if (csrfToken == null || !csrfToken.equals(sessionCsrfToken)) {
             request.setAttribute("loginError", "خطای امنیتی: توکن CSRF نامعتبر است");
             hasErrors = true;
-        }
+        }*/
 
-        // Validate input
         if (username == null || username.trim().isEmpty()) {
             request.setAttribute("usernameError", "نام کاربری الزامی است");
             hasErrors = true;
@@ -49,11 +47,17 @@ public class LoginServlet extends HttpServlet {
 
         // If no input errors, validate credentials
         if (!hasErrors) {
+            User user = new User();
+            final int result = user.login(username, password);
             // Simple in-memory validation (replace with actual authentication logic)
-            if (isValidCredentials(username, password)) {
+            if (result == 0) {
                 // Set session attributes for authenticated user
                 session.setAttribute("isAuthenticated", true);
                 session.setAttribute("userName", username);
+                session.setAttribute("UserID", user.getId());
+                Cookie userIdCookie = new Cookie("UserID", String.valueOf(user.getId()));
+                userIdCookie.setMaxAge(30 * 24 * 60 * 60); // 1 month in seconds
+                response.addCookie(userIdCookie);
 
                 // Set admin status (example: user "admin" is an admin)
                 session.setAttribute("isAdmin", username.equals("admin"));
@@ -68,25 +72,13 @@ public class LoginServlet extends HttpServlet {
                 // Redirect to Index.jsp on successful login
                 response.sendRedirect(request.getContextPath() + "/home");
                 return;
-            } else {
+            }
+            if (result == 2) {
                 request.setAttribute("loginError", "نام کاربری یا رمز عبور اشتباه است");
                 hasErrors = true;
             }
         }
+        request.getRequestDispatcher("/WEB-INF/templates/index.jsp").forward(request, response);
 
-        // If errors, forward back to the referring page with error attributes
-        String referer = request.getHeader("Referer");
-        if (referer != null && !referer.isEmpty()) {
-            request.getRequestDispatcher(referer).forward(request, response);
-        } else {
-            // Fallback to Index.jsp if referer is not available
-            request.getRequestDispatcher("/home").forward(request, response);
-        }
-    }
-
-    // Simple in-memory credential validation (replace with database or authentication service)
-    private boolean isValidCredentials(String username, String password) {
-        // Example: accept "admin" with password "password123"
-        return "admin".equals(username) && "password123".equals(password);
     }
 }

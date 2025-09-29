@@ -2,6 +2,7 @@ package com.hamkelasi.ui.unit;
 
 import com.hamkelasi.bll.refactored.permissions.Permissions;
 import com.hamkelasi.bll.refactored.registration.RegisterUserDTO;
+import com.hamkelasi.bll.utils.TimeUtils;
 import com.hamkelasi.ui.refactored.RegistrationPresenter;
 import com.hamkelasi.ui.test_double.*;
 import com.tngtech.jgiven.Stage;
@@ -82,13 +83,13 @@ public class RegistrationSteps extends Stage<RegistrationSteps> {
     }
 
     public void currentTimeIs(String dateTime) {
-        final DateTimeFormatter formatter = getDateTimeFormatter();
+        final DateTimeFormatter formatter = TimeUtils.getDateTimeFormatter();
         final LocalDateTime localDateTime = LocalDateTime.parse(dateTime, formatter);
         clock.timeTravelTo(localDateTime);
     }
 
     public void registerDateOfUserSetTo(String expectedDateTime) {
-        final LocalDateTime expectedTime = LocalDateTime.parse(expectedDateTime, getDateTimeFormatter());
+        final LocalDateTime expectedTime = LocalDateTime.parse(expectedDateTime, TimeUtils.getDateTimeFormatter());
         final RegisterUserDTO registeredDto = userService.getRegisteredDto();
         final LocalDateTime actualDate = registeredDto.registerDate;
         assertThat(actualDate).isEqualTo(expectedTime);
@@ -117,15 +118,11 @@ public class RegistrationSteps extends Stage<RegistrationSteps> {
     }
 
     public void cookieFilledWithExpireDateOf(String dateTime) {
-        final LocalDateTime expiredDateTime = LocalDateTime.parse(dateTime, getDateTimeFormatter());
+        final LocalDateTime expiredDateTime = LocalDateTime.parse(dateTime, TimeUtils.getDateTimeFormatter());
 
 
         assertThat(expiredDateTime.getSecond()).isEqualTo(cookie.getExpireDateOf("UserID"));
 
-    }
-
-    private static DateTimeFormatter getDateTimeFormatter() {
-        return DateTimeFormatter.ofPattern("yyyy-MM-dd' 'HH:mm:ss");
     }
 
     public void userRedirectToSuccessfulPage() {
@@ -170,4 +167,5 @@ public class RegistrationSteps extends Stage<RegistrationSteps> {
         fakeUploader.setFileName(defaultImage);
         view.setProfileImage(fakeUploader);
     }
+
 }

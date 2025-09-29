@@ -173,7 +173,7 @@ public class ProfileServlet extends HttpServlet {
         String action = request.getParameter("action");
         int userID = Integer.parseInt(request.getParameter("userID"));
         HttpSession session = request.getSession();
-        int sessionUserId = Integer.parseInt((String) session.getAttribute("UserID"));
+        int sessionUserId = Integer.parseInt( session.getAttribute("UserID").toString());
         Friendship friendship = new Friendship();
         String redirectUrl = request.getRequestURI() + "?ID=" + userID;
 

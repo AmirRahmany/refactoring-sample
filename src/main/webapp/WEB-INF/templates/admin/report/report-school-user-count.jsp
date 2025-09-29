@@ -132,13 +132,13 @@
                     </c:if>
                     
                     <c:if test="${isAuthenticated}">
-                        <form action="${pageContext.request.contextPath}/reportSchoolUserCount" method="post" id="reportForm">
+                        <form action="${pageContext.request.contextPath}/admin/reports/schools/by-user-count" method="post" id="reportForm">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <table class="form-table">
                                 <tr>
                                     <td>استان :</td>
                                     <td>
-                                        <select name="listProvinces" id="listProvinces" class="form-control">
+                                        <select name="selectedProvinceId" id="listProvinces" class="form-control">
                                             <c:forEach var="province" items="${provinces}">
                                                 <option value="${province.id}" ${province.id == selectedProvinceId ? 'selected' : ''}>${province.name}</option>
                                             </c:forEach>
@@ -151,7 +151,7 @@
                                 <tr>
                                     <td>شهر :</td>
                                     <td>
-                                        <select name="listCities" id="listCities" class="form-control">
+                                        <select name="cityId" id="listCities" class="form-control">
                                             <c:forEach var="city" items="${cities}">
                                                 <option value="${city.id}" ${city.id == selectedCityId ? 'selected' : ''}>${city.name}</option>
                                             </c:forEach>
@@ -164,7 +164,7 @@
                                 <tr>
                                     <td>آموزشگاه :</td>
                                     <td colspan="2">
-                                        <select name="listSchools" id="listSchools" class="form-control">
+                                        <select name="schoolId" id="listSchools" class="form-control">
                                             <c:forEach var="school" items="${schools}">
                                                 <option value="${school.id}" ${school.id == selectedSchoolId ? 'selected' : ''}>${school.name}</option>
                                             </c:forEach>
@@ -173,13 +173,14 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2" class="text-right">
+                                    <input type="hidden" name="action" value="show"/>
                                         <button type="submit" name="buttonShow" class="green-button">نمایش</button>
                                     </td>
                                 </tr>
                             </table>
                         </form>
 
-                        <c:if test="${showResultTable}">
+                        <c:if test="${showTable}">
                             <table class="table-result">
                                 <tr class="header-row">
                                     <th>نام شهر</th>

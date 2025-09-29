@@ -1,5 +1,6 @@
 package com.hamkelasi.bll;
 
+import com.hamkelasi.bll.utils.TimeUtils;
 import com.hamkelasi.dal.refactored.AdoUserRepository;
 import com.hamkelasi.dal.refactored.UserRepository;
 import com.hamkelasi.dal.Base;
@@ -249,7 +250,7 @@ public class User {
                 this.email = dt.getFirst().get(6).toString();
                 this.website = dt.getFirst().get(7).toString();
                 this.permission = Integer.parseInt(dt.getFirst().get(8).toString());
-                this.registerDate = LocalDateTime.parse(dt.getFirst().get("registerDate").toString());
+                this.registerDate = LocalDateTime.parse(dt.getFirst().get("registerDate").toString(), TimeUtils.getDateTimeFormatter());
                 this.isPmActivate = Boolean.parseBoolean(dt.getFirst().get("isPmActivate").toString());
 
                 return 0; //یوزرنیم و پسورد درست است

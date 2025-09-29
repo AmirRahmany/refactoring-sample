@@ -126,18 +126,18 @@
         <div id="content">
             <div class="post">
                 <div class="entry">
-                    <c:if test="${not empty labelError}">
-                        <span class="error-big">${labelError}</span>
+                    <c:if test="${not empty errorMessage}">
+                        <span class="error-big">${errorMessage}</span>
                     </c:if>
                     
                     <c:if test="${isAuthenticated}">
-                        <form action="${pageContext.request.contextPath}/reportSchoolCount" method="post" id="reportForm">
+                        <form action="${pageContext.request.contextPath}/admin/reports/schools/by-count" method="post" id="reportForm">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <table class="form-table">
                                 <tr>
                                     <td>استان :</td>
                                     <td>
-                                        <select name="listProvinces" id="listProvinces" class="form-control" onchange="this.form.submit()">
+                                        <select name="selectProvinceId" id="listProvinces" class="form-control" onchange="this.form.submit()">
                                             <c:forEach var="province" items="${provinces}">
                                                 <option value="${province.id}" ${province.id == selectedProvinceId ? 'selected' : ''}>${province.name}</option>
                                             </c:forEach>
@@ -153,7 +153,7 @@
                                         <label for="checkCity">شهر :</label>
                                     </td>
                                     <td>
-                                        <select name="listCities" id="listCities" class="form-control">
+                                        <select name="cityId" id="listCities" class="form-control">
                                             <c:forEach var="city" items="${cities}">
                                                 <option value="${city.id}" ${city.id == selectedCityId ? 'selected' : ''}>${city.name}</option>
                                             </c:forEach>
@@ -162,6 +162,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2" class="text-right">
+                                    <input type="hidden" name="action" value="show"/>
                                         <button type="submit" name="buttonShow" class="green-button">نمایش</button>
                                     </td>
                                 </tr>
