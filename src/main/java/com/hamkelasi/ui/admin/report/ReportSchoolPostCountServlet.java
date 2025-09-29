@@ -70,6 +70,7 @@ public class ReportSchoolPostCountServlet extends HttpServlet {
         } else {
             request.setAttribute("errorMessage", "شما مجوز دسترسی به این صفحه را ندارید");
             request.setAttribute("showReportPanel", false);
+            request.setAttribute("isAuthenticated",true);
             request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-post-count.jsp").forward(request, response);
         }
     }

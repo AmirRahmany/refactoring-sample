@@ -29,7 +29,13 @@
                         <a class="nav-link" href="/register">ثبت نام</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn btn-secondary ms-2" href="/login">ورود/خروج</a>
+                    <c:if test="${isAuthenticated}">
+                        <a class="nav-link btn btn-secondary ms-2" href="/logout">خروج</a>
+                    </c:if>
+                    <c:if test="${not isAuthenticated}">
+                        <a class="nav-link btn btn-secondary ms-2" href="/home">ورود/خروج</a>
+                    </c:if>
+
                     </li>
                 </ul>
             </div>

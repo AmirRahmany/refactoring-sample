@@ -64,10 +64,12 @@ public class ReportSchoolUserCountServlet extends HttpServlet {
             request.setAttribute("schools", schools);
 
             request.setAttribute("showResultTable", true);
+            request.setAttribute("isAuthenticated",true);
             request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-user-count.jsp").forward(request, response);
         } else {
             request.setAttribute("labelError", "شما مجوز دسترسی به این صفحه را ندارید");
             request.setAttribute("showReportPanel", false);
+            request.setAttribute("isAuthenticated",false);
             request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-user-count.jsp").forward(request, response);
         }
     }

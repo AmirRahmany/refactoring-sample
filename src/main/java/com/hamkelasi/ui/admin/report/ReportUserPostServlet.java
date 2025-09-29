@@ -63,6 +63,7 @@ public class ReportUserPostServlet extends HttpServlet {
 
         if (!isAuthenticated || !isAdmin) {
             request.setAttribute("labelError", "شما مجوز دسترسی به این صفحه را ندارید");
+            request.setAttribute("isAuthenticated", false);
             request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-user-post.jsp").forward(request, response);
             return;
         }
@@ -76,7 +77,6 @@ public class ReportUserPostServlet extends HttpServlet {
         }
         request.setAttribute("users", users);
         request.setAttribute("isAuthenticated", true);
-
         request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-user-post.jsp").forward(request, response);
     }
 

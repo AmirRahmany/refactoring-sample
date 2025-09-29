@@ -64,6 +64,7 @@ public class ReportSchoolCountServlet extends HttpServlet {
         } else {
             request.setAttribute("errorMessage", "شما مجوز دسترسی به این صفحه را ندارید");
             request.setAttribute("showReportPanel", false);
+            request.setAttribute("isAuthenticated",false);
             request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-school-count.jsp").forward(request, response);
         }
     }

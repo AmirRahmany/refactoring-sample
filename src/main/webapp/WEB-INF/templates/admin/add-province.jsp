@@ -111,7 +111,7 @@
                     </c:if>
 
                     <c:choose>
-                        <c:when test="${isAuthenticated}">
+                        <c:when test="${panelVisible}">
                             <form action="${pageContext.request.contextPath}/admin/provinces/add" method="post">
                                 <table class="form-table">
                                     <tr>
@@ -132,11 +132,6 @@
                                 </table>
                             </form>
                         </c:when>
-                        <c:otherwise>
-                            <div class="alert alert-danger">
-                                شما مجوز دسترسی به این صفحه را ندارید
-                            </div>
-                        </c:otherwise>
                     </c:choose>
                 </div>
             </div>

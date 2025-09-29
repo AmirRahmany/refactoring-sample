@@ -38,6 +38,7 @@ public class LogoutServlet extends HttpServlet {
             request.setAttribute("labelError", "کاربر عزیز شما هنوز وارد سایت نشده اید");
         }
 
+        session.removeAttribute("isAuthenticated");
         // Forward to JSP
         request.getRequestDispatcher("/WEB-INF/templates/logout.jsp").forward(request, response);
     }

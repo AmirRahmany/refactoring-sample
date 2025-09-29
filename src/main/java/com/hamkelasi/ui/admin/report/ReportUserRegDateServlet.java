@@ -56,6 +56,7 @@ public class ReportUserRegDateServlet extends HttpServlet {
 
         if (!isAuthenticated || !isAdmin) {
             request.setAttribute("labelError", "شما مجوز دسترسی به این صفحه را ندارید");
+            request.setAttribute("isAuthenticated", false);
             request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-user-reg-date.jsp").forward(request, response);
             return;
         }
@@ -87,6 +88,7 @@ public class ReportUserRegDateServlet extends HttpServlet {
 
         if (!isAuthenticated || !isAdmin) {
             request.setAttribute("labelError", "شما مجوز دسترسی به این صفحه را ندارید");
+            request.setAttribute("isAuthenticated", false);
             request.getRequestDispatcher("/WEB-INF/templates/admin/report/report-user-reg-date.jsp").forward(request, response);
             return;
         }

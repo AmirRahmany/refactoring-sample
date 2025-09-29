@@ -106,6 +106,7 @@
                     </c:if>
 
                     <!-- Add City Form -->
+                    <c:if test="${panelVisible}">
                     <div id="panelAddCity">
                         <form action="${pageContext.request.contextPath}/admin/cities/add" method="post">
                             <table class="form-table">
@@ -141,6 +142,7 @@
                             </table>
                         </form>
                     </div>
+                    </c:if>
                 </div>
             </div>
         </div>
